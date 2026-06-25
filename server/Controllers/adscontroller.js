@@ -68,7 +68,7 @@ export const getAllAds = async (req, res) => {
       FROM "Ads" a
       LEFT JOIN "Product" p ON a.product = p.product_id
       LEFT JOIN "Shop" s ON p.shop = s.shop_id
-      ORDER BY a.product DESC
+      ORDER BY a.chancing DESC
     `);
 
     const sum = await db.query('SELECT COUNT(*) FROM "Ads"');
