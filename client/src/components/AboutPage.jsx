@@ -3,6 +3,7 @@ import {
   MapPin, Users, Store, Package, Star, ArrowRight,
   Shield, ChevronDown, Mail, Phone
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 /* ─── data ─────────────────────────────────────── */
 const STATS = [
@@ -273,12 +274,12 @@ const AboutPage = () => {
             Que vous soyez acheteur ou vendeur, votre place est ici. Rejoignez des milliers de Camerounais qui font confiance à Yamo Market.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="/" className="group bg-white text-green-800 font-bold text-sm px-8 py-3.5 rounded-2xl hover:bg-green-50 transition-all shadow-2xl shadow-green-900/30 flex items-center gap-2">
+            <Link to="/products" className="group bg-white text-green-800 font-bold text-sm px-8 py-3.5 rounded-2xl hover:bg-green-50 transition-all shadow-2xl shadow-green-900/30 flex items-center gap-2">
               Explorer les produits <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a href="/my-shop" className="border border-white/30 text-white font-semibold text-sm px-8 py-3.5 rounded-2xl hover:bg-white/10 transition-colors flex items-center gap-2">
+            </Link>
+            <Link to="/user" className="border border-white/30 text-white font-semibold text-sm px-8 py-3.5 rounded-2xl hover:bg-white/10 transition-colors flex items-center gap-2">
               <Store size={15} /> Ouvrir ma boutique
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -319,7 +320,7 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
+      {/* ── FOOTER ── 
       <footer className="bg-green-900">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
@@ -336,6 +337,7 @@ const AboutPage = () => {
           </div>
         </div>
       </footer>
+      */}
     </div>
   );
 };

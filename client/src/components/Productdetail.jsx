@@ -545,7 +545,7 @@ const ProductDetail = () => {
               </h1>
               <div className="flex flex-wrap items-center gap-2 mt-3">
                 <span className="flex items-center gap-1 bg-orange-400 text-white text-xs font-semibold px-3 py-0.5 rounded-full">
-                  <BadgeCheck size={11} className="text-yellow-200" /> TrustWorthy
+                  <BadgeCheck size={11} className="text-yellow-200" /> Crédible
                 </span>
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-orange-600">
                   Valide

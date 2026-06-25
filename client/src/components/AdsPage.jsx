@@ -3,6 +3,7 @@ import {
   ChevronLeft, ChevronRight, ExternalLink, Zap,
   Tag, MapPin, BadgeCheck, Eye, ArrowRight, X
 } from 'lucide-react';
+import { Link } from 'react-router-dom'
 
 /* ─── Mock ad data ───────────────────────────────── */
 /* Each ad has:
@@ -124,56 +125,65 @@ const HeroCarousel = ({ ads }) => {
       {/* background image with crossfade */}
       {ads.map((a, i) => (
         <div
-          key={a.id}
+          key={a?.id}
           className="absolute inset-0 transition-opacity duration-700"
           style={{ opacity: i === idx ? 1 : 0 }}
         >
           <img
-            src={a.m_img}
-            alt={a.title}
+            src={a?.m_img}
+            alt={a?.title}
             className="w-full h-full object-cover"
             draggable={false}
           />
           {/* gradient overlay */}
-          <div className={`absolute inset-0 bg-gradient-to-r ${a.accent}`} />
+          <div className={`absolute inset-0 bg-gradient-to-r ${a?.accent}`} />
         </div>
       ))}
 
       {/* content */}
-      <div className="relative z-10 h-full flex flex-col justify-between p-6 sm:p-10">
+      <div className="relative z-10 h-full flex flex-col justify-between p-4 sm:p-10">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2 flex-wrap">
-            <Pill label={ad.pill} className="bg-white/15 border border-white/30 text-white backdrop-blur-sm" />
-            <span className="text-white/70 text-xs font-medium border border-white/20 px-2.5 py-0.5 rounded-full backdrop-blur-sm">
-              {ad.tag}
+            <span className="text-white/70 text-[10px] sm:text-xs font-medium border border-white/20 px-2 sm:px-2.5 py-0.5 rounded-full backdrop-blur-sm">
+              {ad?.tag}
             </span>
           </div>
-          <span className="text-white/60 text-[10px] flex items-center gap-1 bg-black/20 px-2 py-1 rounded-full backdrop-blur-sm">
-            <BadgeCheck size={10} className="text-emerald-400" /> Annonce officielle
+          <span className="text-white/60 text-[9px] sm:text-[10px] flex items-center gap-1 bg-black/20 px-1.5 sm:px-2 py-1 rounded-full backdrop-blur-sm">
+            <BadgeCheck size={10} className="text-emerald-400" />
+            <span className="">Annonce officielle</span>
           </span>
         </div>
 
-        <div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight max-w-xl">
-            {ad.title}
+        <div className='mx-4'>
+          <h2 className="text-xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight max-w-xl">
+            {ad?.title}
           </h2>
-          <p className="text-white/80 text-sm sm:text-base mt-2 max-w-md leading-relaxed">
-            {ad.subtitle}
+          <p className="hidden sm:block text-white/80 text-sm sm:text-base max-w-md leading-relaxed">
+            {ad?.slogan}
           </p>
 
-          <div className="flex flex-wrap items-center gap-4 mt-5">
-            <div>
-              <p className="text-white/50 text-[10px] uppercase tracking-wider">À partir de</p>
-              <p className="text-2xl font-black text-white leading-none mt-0.5">{ad.price}</p>
+          {/* Mobile: price + CTA stacked compactly, shop info below.
+              Desktop layout (sm:flex-row, sm:items-center, sm:gap-4) left untouched. */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-4 mt-5">
+            <div className="flex items-center justify-between sm:block gap-3">
+              <div>
+                <p className="text-white/50 text-[9px] sm:text-[10px] uppercase tracking-wider">À partir de</p>
+                <span className='flex items-center justify-center gap-0.5'><p className="text-lg sm:text-2xl font-black text-white leading-none">{ad?.price}</p><p className='text-lg sm:text-2xl font-black text-white'>XAF</p></span>
+              </div>
+
+              <Link to={`/product/${ad?.product}`}
+                className="sm:hidden flex items-center gap-1.5 bg-white text-green-800 font-bold text-xs px-4 py-2.5 rounded-xl active:scale-[0.97] transition-all shadow-lg shadow-black/20 flex-shrink-0">
+                Voir <ArrowRight size={13} />
+              </Link>
             </div>
 
-            <a href={ad.link}
-              className="flex items-center gap-2 bg-white text-green-800 font-bold text-sm px-6 py-3 rounded-2xl hover:bg-green-50 transition-all shadow-xl shadow-black/20 active:scale-[0.97]">
-              {ad.cta} <ArrowRight size={15} />
+            <a href={ad?.link}
+              className="hidden sm:flex items-center gap-2 bg-white text-green-800 font-bold text-sm px-6 py-3 rounded-2xl hover:bg-green-50 transition-all shadow-xl shadow-black/20 active:scale-[0.97]">
+              Voir le produit <ArrowRight size={15} />
             </a>
 
-            <div className="text-white/60 text-xs flex items-center gap-1">
-              <MapPin size={10} /> {ad.shop} • {ad.region}
+            <div className="text-white/60 text-[10px] sm:text-xs flex items-center gap-1">
+              <MapPin size={10} /> {ad?.shop_name} • {ad?.town}
             </div>
           </div>
         </div>
@@ -181,21 +191,23 @@ const HeroCarousel = ({ ads }) => {
 
       {/* arrows */}
       <button onClick={() => go(idx - 1)}
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/25 hover:bg-black/40 backdrop-blur-sm rounded-xl flex items-center justify-center text-white transition-all z-20"
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-9 sm:h-9 bg-black/25 hover:bg-black/40 backdrop-blur-sm rounded-xl flex items-center justify-center text-white transition-all z-20"
         aria-label="Précédent">
-        <ChevronLeft size={18} />
+        <ChevronLeft size={16} className="sm:hidden" />
+        <ChevronLeft size={18} className="hidden sm:block" />
       </button>
       <button onClick={() => go(idx + 1)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/25 hover:bg-black/40 backdrop-blur-sm rounded-xl flex items-center justify-center text-white transition-all z-20"
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-9 sm:h-9 bg-black/25 hover:bg-black/40 backdrop-blur-sm rounded-xl flex items-center justify-center text-white transition-all z-20"
         aria-label="Suivant">
-        <ChevronRight size={18} />
+        <ChevronRight size={16} className="sm:hidden" />
+        <ChevronRight size={18} className="hidden sm:block" />
       </button>
 
       {/* dot indicators */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20">
+      <div className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20">
         {ads.map((_, i) => (
           <button key={i} onClick={() => setIdx(i)}
-            className={`rounded-full transition-all duration-300 ${i === idx ? 'w-6 h-2 bg-white' : 'w-2 h-2 bg-white/40 hover:bg-white/60'}`}
+            className={`rounded-full transition-all duration-300 ${i === idx ? 'w-5 sm:w-6 h-1.5 sm:h-2 bg-white' : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/40 hover:bg-white/60'}`}
             aria-label={`Slide ${i + 1}`}
           />
         ))}
@@ -219,28 +231,31 @@ const HeroCarousel = ({ ads }) => {
 
 /* ─── Medium banner (wide rectangular) ──────────── */
 const MediumBanner = ({ ad }) => (
-  <a href={ad.link}
+  <Link to={`/product/${ad?.product}`}
     className="group relative rounded-2xl overflow-hidden flex-shrink-0 block"
     style={{ aspectRatio: '3/1' }}>
     <img src={ad.m_img} alt={ad.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-    <div className={`absolute inset-0 bg-gradient-to-r ${ad.accent}`} />
+    <div className={`absolute inset-0 bg-gradient-to-r ${ad?.accent}`} />
     <div className="absolute inset-0 p-5 flex flex-col justify-between z-10">
-      <Pill label={ad.pill} className="bg-white/15 border border-white/30 text-white w-fit" />
+      <span className='bg-white/15 border border-white/30 text-white w-fit rounded-full text-xs font-semibold px-2'>{ad.tag}</span>
       <div>
-        <p className="text-white font-extrabold text-lg leading-tight">{ad.title}</p>
-        <div className="flex items-center gap-3 mt-2">
-          <span className="text-white font-bold text-sm">{ad.price}</span>
-          <span className="text-white/60 text-xs">{ad.shop}</span>
+        <p className="text-white font-extrabold text-lg leading-tight">{ad?.title}</p>
+        <div className="flex gap-3">
+          <span className='flex items-center justify-center gap-0.5'><p className="text-lg sm:text-2xl font-black text-white leading-none mt-0.5">{ad?.price}</p><p className='text-lg sm:text-2xl font-black text-white'>XAF</p></span>
+          <span className="sm:mt-2.5 mt-1 text-white/60 text-sm font-semibold ">{ad?.shop_name} • {ad?.town}</span>
         </div>
       </div>
     </div>
     <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all z-10">
       <ExternalLink size={13} />
     </div>
-  </a>
+  </Link>
 );
 
 /* ─── Small square card ──────────────────────────── */
+/* Mobile: button moved into its own full-width row at the bottom of the card
+   instead of squeezing inline next to the price (desktop layout untouched
+   via sm: prefix). */
 const SmallCard = ({ ad }) => {
   const pillColors = {
     Nouveau: 'bg-emerald-500 text-white',
@@ -249,80 +264,84 @@ const SmallCard = ({ ad }) => {
     Sale:    'bg-amber-400 text-white',
   };
   return (
-    <a href={ad.link}
+    <Link to={`/product/${ad?.product}`}
       className="group relative bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 block">
       <div className="relative h-36 overflow-hidden">
         <img src={ad.m_img} alt={ad.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-        <span className={`absolute top-2.5 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full ${pillColors[ad.pill] || 'bg-gray-500 text-white'}`}>
-          {ad.pill}
-        </span>
+        <span className="absolute top-2.5 left-2.5 text-white/60 text-[9px] sm:text-[10px] flex items-center gap-1 bg-black/20 px-1.5 sm:px-2 py-1 rounded-full backdrop-blur-sm">
+            <BadgeCheck size={10} className="text-emerald-400" />
+            <span className="sm:inline hidden">Annonce officielle</span>
+          </span>
         <span className="absolute top-2.5 right-2.5 text-[9px] text-white/80 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
           {ad.tag}
         </span>
       </div>
       <div className="p-3">
         <p className="font-semibold text-gray-800 text-sm truncate">{ad.title}</p>
-        <p className="text-[10px] text-gray-400 flex items-center gap-1 mt-0.5 truncate">
-          <MapPin size={9} /> {ad.shop}
+        <p className="text-[10px] text-gray-400 flex items-center font-semibold gap-1 mt-0.5 truncate">
+          <MapPin size={9} /> {ad.region} • {ad.town}
         </p>
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-green-700 font-bold text-sm">{ad.price}</span>
-          <span className="text-[10px] text-green-700 border border-green-200 hover:bg-green-600 hover:text-white px-2.5 py-1 rounded-lg transition-all font-medium">
+
+        {/* Mobile: price on its own line, button full-width below.
+            Desktop (sm:): original inline row, untouched. */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-1 gap-2 sm:gap-0">
+          <p className="text-md sm:text-lg font-black text-green-600 leading-none mt-0.5">{ad?.price} XAF</p>
+          <span className="text-center sm:text-[10px] text-xs text-green-700 border border-green-200 hover:bg-green-600 hover:text-white px-2.5 py-1.5 sm:py-1 rounded-lg transition-all font-medium w-full sm:w-auto">
             Voir
           </span>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 
 /* ─── Inline strip banner ────────────────────────── */
 const StripBanner = ({ ad }) => (
-  <a href={ad.link}
+  <Link to={`/product/${ad?.product}`}
     className="group relative w-full rounded-2xl overflow-hidden flex items-center block"
     style={{ height: '110px' }}>
-    <img src={ad.m_img} alt={ad.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-    <div className={`absolute inset-0 bg-gradient-to-r ${ad.accent}`} />
+    <img src={ad?.m_img} alt={ad?.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
     <div className="relative z-10 px-6 flex items-center justify-between w-full">
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <Pill label={ad.pill} className="bg-white/20 border border-white/30 text-white" />
-          <span className="text-white/60 text-[10px]">{ad.tag}</span>
+          <span className="text-white/60 text-[9px] sm:text-[10px] flex items-center gap-1 bg-black/20 px-1.5 sm:px-2 py-1 rounded-full backdrop-blur-sm">
+            <BadgeCheck size={10} className="text-emerald-400" />
+            <span className="">Annonce officielle</span>
+          </span>
+          <span className="text-white/60 text-[10px]">{ad?.tag}</span>
         </div>
-        <p className="text-white font-extrabold text-lg leading-tight">{ad.title}</p>
-        <p className="text-white/70 text-xs mt-0.5">{ad.shop} • {ad.region}</p>
+        <p className="text-white font-extrabold text-lg leading-tight">{ad?.title}</p>
+        <p className="text-white/70 font-semibold text-xs mt-0.5">{ad?.shop_name} • {ad?.town}</p>
       </div>
       <div className="flex flex-col items-end gap-2 flex-shrink-0">
-        <span className="text-white font-black text-xl">{ad.price}</span>
+        <span className="text-white font-black text-xl">{ad?.price} XAF</span>
         <span className="flex items-center gap-1.5 bg-white text-green-800 text-xs font-bold px-4 py-2 rounded-xl group-hover:bg-green-50 transition-colors shadow-lg">
-          {ad.cta} <ArrowRight size={12} />
+          Voir <ArrowRight size={12} />
         </span>
       </div>
     </div>
-  </a>
+  </Link>
 );
 
 /* ─── Main Page ──────────────────────────────────── */
 const AdsPage = () => {
-  const [ads, setAds] = useState(ADS);
-  const [smallAds, setSmallAds] = useState(SMALL_ADS);
+  const [ads, setAds] = useState([]);
+  const [smallAds, setSmallAds] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  /* Uncomment to fetch from API:
   useEffect(() => {
     const fetchAds = async () => {
       setLoading(true);
       try {
-        const res = await fetch('http://localhost:5050/api/market/getads');
-        const data = await res.json();
-        setAds(data.featured || ADS);
-        setSmallAds(data.cards || SMALL_ADS);
+        const res = await fetch('http://localhost:5050/api/market/getallads');
+        const result = await res.json();
+        setAds(result.data || ADS);
+        setSmallAds(result.data || SMALL_ADS);
       } catch { } finally { setLoading(false); }
     };
     fetchAds();
   }, []);
-  */
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-16">
@@ -359,14 +378,14 @@ const AdsPage = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {ads.slice(0, 2).map(ad => (
-              <MediumBanner key={ad.id} ad={ad} />
+              <MediumBanner key={ad.ads_id} ad={ad} />
             ))}
           </div>
         </section>
 
         {/* ── Full-width strip ── */}
         <section>
-          <StripBanner ad={ads[2]} />
+          <StripBanner ad={ads[0]} />
         </section>
 
         {/* ── 4-column small cards ── */}
@@ -377,14 +396,14 @@ const AdsPage = () => {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {smallAds.map(ad => (
-              <SmallCard key={ad.id} ad={ad} />
+              <SmallCard key={ad.ads_id} ad={ad} />
             ))}
           </div>
         </section>
 
         {/* ── Second strip ── */}
         <section>
-          <StripBanner ad={ads[3]} />
+          <StripBanner ad={ads[1]} />
         </section>
 
         {/* ── Bottom 3-column medium banners ── */}
@@ -394,8 +413,8 @@ const AdsPage = () => {
             <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">Sélection de la semaine</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {ads.slice(2, 5).map(ad => (
-              <MediumBanner key={ad.id} ad={ad} />
+            {ads.slice(0, 3).map(ad => (
+              <MediumBanner key={ad.ads_id} ad={ad} />
             ))}
           </div>
         </section>

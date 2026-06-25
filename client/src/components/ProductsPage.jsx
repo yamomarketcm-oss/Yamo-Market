@@ -91,7 +91,7 @@ const ProductCard = ({ p, viewMode }) => {
             className="absolute top-3 right-3 flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 shadow-lg shadow-black/10 text-white text-[11px] font-semibold tracking-wide"
           >
             <BadgeCheck size={13} className="text-emerald-400" />
-            Verified
+            Vérifié
           </span>
         )}
       </div>
@@ -129,7 +129,7 @@ const ProductCard = ({ p, viewMode }) => {
         <div className={`flex items-center justify-between ${isList ? 'mt-2' : 'mt-3'}`}>
           <div className='ml-1'>
             <span className="text-green-700 font-bold text-sm">{fmtPrice(p.price)}</span>
-            <span className="text-xs text-gray-400 ml-1">XAF</span>
+            <span className="text-xs font-semibold text-gray-400 ml-0.5">XAF</span>
           </div>
           <div className="flex items-center">
             <Link to={`/product/${p.product_id}`}>

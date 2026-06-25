@@ -16,6 +16,7 @@ import UserRoute from './PermissionRoute/UserRoute';
 import ProductsPage from './components/ProductsPage';
 import AdsPage from './components/AdsPage';
 import ClientLayout from './components/ClientLayout';
+import AdminRoute from './PermissionRoute/AdminRoute';
 
 function AppRoutes() {
 
@@ -36,7 +37,9 @@ function AppRoutes() {
         <Route path="/my-shop/:shop_id" element={<ClientLayout><MyShopPage /></ClientLayout>} />
       </Route> 
       <Route path="/about" element={<ClientLayout><AboutPage /></ClientLayout>} />
-      <Route path="/admin" element={<AdminDashboard />} />
+      <Route element={<AdminRoute />}>
+        <Route path="/admin" element={<AdminDashboard />} />
+      </Route>
      </Routes>
   );
 }

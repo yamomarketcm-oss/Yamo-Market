@@ -309,7 +309,7 @@ const ProfileDropdown = ({ user, onClose }) => {
 
   const menuItems = [
     { icon: <User size={15} />, label: 'Mon profil', to: '/user' },
-    { icon: <Store size={15} />, label: 'Ma boutique', to:`/my-shop/${myshop?.shop_id}` },
+    ...(user?.status ? [{ icon: <Store size={15} />, label: 'Ma boutique', to: `/my-shop/${myshop?.shop_id}` }] : []),
   ];
 
   return (
@@ -509,7 +509,7 @@ const Navbar = () => {
 
                 {[
                   { icon: <User size={15} />, label: 'Mon profil', to: '/user' },
-                  { icon: <Store size={15} />, label: 'Ma boutique', to: `/my-shop/${myshop?.shop_id}` },
+                  ...(currentUser?.status ? [{ icon: <Store size={15} />, label: 'Ma boutique', to: `/my-shop/${myshop?.shop_id}` }] : []),
                 ].map(item => (
                   <Link key={item.to} to={item.to} onClick={() => setOpen(false)}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/70 hover:text-white hover:bg-white/10 transition-all">

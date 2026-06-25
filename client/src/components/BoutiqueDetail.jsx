@@ -421,7 +421,7 @@ const BoutiqueDetail = () => {
                   <MapPin size={11} /> {shopDetail.region}, {shopDetail.town}
                 </span>
                 <span className="text-green-200 text-xs flex items-center gap-1">
-                  <Clock size={11} /> Most TrustWorthy
+                  <Clock size={11} /> Référence Fiable
                 </span>
               </div>
             </div>
