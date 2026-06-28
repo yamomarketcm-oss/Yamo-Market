@@ -5,7 +5,7 @@ import {
   getProductClicks,
   getAdsClicks,
   getAdminClicks,
-} from '../controllers/clickLogController.js';
+} from '../Controllers/clickLogController.js';
 import { requireAdmin, requireAuth } from "../middleware.js"
 
 const router = Router();
