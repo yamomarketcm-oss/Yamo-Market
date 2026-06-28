@@ -811,7 +811,7 @@ const UserProfile = () => {
     const fetchShop = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`https://yamo-market-server.vercel.app//api/market/myshop`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/myshop`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
