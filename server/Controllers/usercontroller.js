@@ -5,15 +5,28 @@ import jwt from 'jsonwebtoken'
 export const createuser = async (req, res, next) => {
 
     try {
-        const { username, email, phone, password, created_at } = req.body;
+        const { username, email, phone, password } = req.body;
 
             // Validate input
         if (!username || !email || !phone || !password) {
           return res.status(400).json({ message: 'All fields are required' });
         }
+
+        const existing = await db.query(
+          'SELECT * FROM "User" WHERE email = $1 OR phone = $2',
+          [email, phone]
+        );
+
+        if (existing.rows.length) {
+          return res.status(409).json({
+            message: 'Email or phone already exists'
+          });
+        }
         
         // Hash password
         const hashedPassword = await bcryptjs.hash(password, 10);
+
+        const created_at = new Date();
         
         const result = await db.query(
           'INSERT INTO "User" (username, email, phone, password, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
@@ -31,7 +44,7 @@ export const login = async (req, res) => {
     
     // Input validation
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+      return res.status(400).json({ message: 'Email and Password are required' });
     }
     
     // Query the database for the user
