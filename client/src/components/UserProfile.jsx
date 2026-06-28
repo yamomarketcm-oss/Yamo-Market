@@ -39,7 +39,7 @@ const VerifyModal = ({ onClose }) => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/profile`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ const VerifyModal = ({ onClose }) => {
 
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`http://localhost:5050/api/market/updateuser/${updateUser.user_id}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/updateuser/${updateUser.user_id}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...updateUser, review: 'review' }),
@@ -468,7 +468,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
 
       const token = localStorage.getItem('market_token');
       // Replace with your actual API endpoint
-      const response = await fetch('http://localhost:5050/api/market/registershop', {
+      const response = await fetch('https://yamo-market-server.vercel.app/api/market/registershop', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -791,7 +791,7 @@ const UserProfile = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/profile`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -812,7 +812,7 @@ const UserProfile = () => {
     const fetchShop = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/myshop`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app//api/market/myshop`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -834,7 +834,7 @@ const UserProfile = () => {
 
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`http://localhost:5050/api/market/updateuser/${user2.user_id}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/updateuser/${user2.user_id}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify(user2),
@@ -864,7 +864,7 @@ const UserProfile = () => {
     const token = localStorage.getItem('market_token');
 
     const res = await fetch(
-      `http://localhost:5050/api/market/updatepassword`,
+      `https://yamo-market-server.vercel.app/api/market/updatepassword`,
       {
         method: 'PUT',
         headers: {

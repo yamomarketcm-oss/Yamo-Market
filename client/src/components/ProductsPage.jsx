@@ -59,7 +59,7 @@ const ProductCard = ({ p, viewMode }) => {
 
   const handleClick = async () => {
     try {
-      const res = await fetch('http://localhost:5050/api/market/click-log', {
+      const res = await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clict_type: 'product', shoplead_ip: p.product_id, vendor:p.product_id, shop: p.shop }),
@@ -195,7 +195,7 @@ const ProductsPage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await fetch('http://localhost:5050/api/market/getallproducts', {
+        const res = await fetch('https://yamo-market-server.vercel.app/api/market/getallproducts', {
           headers: { 'Content-Type': 'application/json' },
         });
         if (!res.ok) throw new Error('API error');

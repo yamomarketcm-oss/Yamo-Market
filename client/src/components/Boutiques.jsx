@@ -39,21 +39,6 @@ const SORT_OPTIONS = [
   { value: 'newest', label: 'Plus récentes' },
 ];
 
-const BOUTIQUES = [
-  { id: 1, name: 'TechShop Douala', tagline: 'Votre destination tech', icon: '💻', category: 'Électronique', region: 'Littoral', town: 'Douala', rating: 4.8, reviews: 312, sales: 1240, products: 48, followers: 890, verified: true, responseTime: '< 1h', joined: '2022', badge: 'Top vendeur' },
-  { id: 2, name: 'Mode Afrique', tagline: 'La mode africaine moderne', icon: '👗', category: 'Mode', region: 'Centre', town: 'Yaoundé', rating: 4.6, reviews: 198, sales: 870, products: 134, followers: 1200, verified: true, responseTime: '< 2h', joined: '2021', badge: 'Top vendeur' },
-  { id: 3, name: 'Beauté Prestige', tagline: 'Produits beauté authentiques', icon: '✨', category: 'Beauté', region: 'Ouest', town: 'Bafoussam', rating: 4.9, reviews: 445, sales: 2100, products: 86, followers: 2300, verified: true, responseTime: '< 30min', joined: '2020', badge: 'Premium' },
-  { id: 4, name: 'Déco Yaoundé', tagline: 'Meublez votre intérieur', icon: '🪴', category: 'Maison', region: 'Centre', town: 'Yaoundé', rating: 4.5, reviews: 87, sales: 340, products: 62, followers: 430, verified: false, responseTime: '< 3h', joined: '2023', badge: null },
-  { id: 5, name: 'SportZone CM', tagline: 'Équipements sportifs pro', icon: '⚽', category: 'Sport', region: 'Littoral', town: 'Douala', rating: 4.4, reviews: 156, sales: 520, products: 95, followers: 670, verified: true, responseTime: '< 2h', joined: '2022', badge: null },
-  { id: 6, name: 'ElectroPlus Bamenda', tagline: 'High-tech à Bamenda', icon: '🔌', category: 'Électronique', region: 'Nord-Ouest', town: 'Bamenda', rating: 4.3, reviews: 72, sales: 210, products: 38, followers: 290, verified: false, responseTime: '< 4h', joined: '2023', badge: null },
-  { id: 7, name: 'Cuisine & Saveurs', tagline: 'Épices et produits locaux', icon: '🌶️', category: 'Alimentation', region: 'Centre', town: 'Yaoundé', rating: 4.7, reviews: 234, sales: 1800, products: 210, followers: 1650, verified: true, responseTime: '< 1h', joined: '2021', badge: 'Top vendeur' },
-  { id: 8, name: 'AutoParts Douala', tagline: 'Pièces auto certifiées', icon: '🔧', category: 'Auto', region: 'Littoral', town: 'Douala', rating: 4.5, reviews: 118, sales: 460, products: 312, followers: 540, verified: true, responseTime: '< 2h', joined: '2022', badge: null },
-  { id: 9, name: 'GlamourShop Limbe', tagline: 'Beauté & bien-être', icon: '💄', category: 'Beauté', region: 'Sud-Ouest', town: 'Limbe', rating: 4.6, reviews: 143, sales: 620, products: 74, followers: 780, verified: true, responseTime: '< 1h', joined: '2022', badge: null },
-  { id: 10, name: 'MaisonPlus Garoua', tagline: 'Déco et ameublement', icon: '🛋️', category: 'Maison', region: 'Nord', town: 'Garoua', rating: 4.2, reviews: 49, sales: 180, products: 41, followers: 210, verified: false, responseTime: '< 5h', joined: '2023', badge: null },
-  { id: 11, name: 'FashionHub Buea', tagline: 'Mode tendance anglophone', icon: '🧥', category: 'Mode', region: 'Sud-Ouest', town: 'Buea', rating: 4.4, reviews: 91, sales: 330, products: 58, followers: 420, verified: true, responseTime: '< 2h', joined: '2022', badge: null },
-  { id: 12, name: 'TechVision Kribi', tagline: 'Tech et numérique', icon: '📱', category: 'Électronique', region: 'Sud', town: 'Kribi', rating: 4.1, reviews: 38, sales: 140, products: 27, followers: 160, verified: false, responseTime: '< 6h', joined: '2024', badge: null },
-];
-
 /* ─── sub-components ──────────────────────────────── */
 const StarRow = ({ rating, size = 12 }) => (
   <div className="flex items-center gap-0.5">
@@ -68,7 +53,7 @@ const BoutiqueCard = ({ b, viewMode }) => {
 
   const handleClick = async () => {
     try {
-      const res = await fetch('http://localhost:5050/api/market/click-log', {
+      const res = await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clict_type: 'shop', shoplead_ip:b.shop_id, vendor:b.shop_id, shop: b.shop_id }),
@@ -165,7 +150,7 @@ const Boutiques = () => {
       const fetchBoutiques = async () => {
         setLoading(true);
         try {
-          const res = await fetch('http://localhost:5050/api/market/getshops', {
+          const res = await fetch('https://yamo-market-server.vercel.app/api/market/getshops', {
             headers: { 'Content-Type': 'application/json' },
           });
           if (!res.ok) throw new Error('API error');

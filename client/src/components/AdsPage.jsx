@@ -39,7 +39,7 @@ const HeroCarousel = ({ ads }) => {
 
   const handleClick = async () => {
     try {
-      const res = await fetch('http://localhost:5050/api/market/click-log', {
+      const res = await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clict_type: 'ads', shoplead_ip: ad.product, vendor:ad.product, shop: ad.shop }),
@@ -272,7 +272,7 @@ const AdsPage = () => {
     const fetchAds = async () => {
       setLoading(true);
       try {
-        const res = await fetch('http://localhost:5050/api/market/getallads');
+        const res = await fetch('https://yamo-market-server.vercel.app/api/market/getallads');
         const result = await res.json();
         setAds(result.data || ADS);
         setSmallAds(result.data || SMALL_ADS);
@@ -283,7 +283,7 @@ const AdsPage = () => {
 
   const handleClick = async (product) => {
   try {
-    await fetch('http://localhost:5050/api/market/click-log', {
+    await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

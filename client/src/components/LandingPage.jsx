@@ -109,7 +109,7 @@ const LandingPage = () => {
       const fetchProducts = async () => {
         setLoading(true);
         try {
-          const res = await fetch('http://localhost:5050/api/market/getallproducts', {
+          const res = await fetch('https://yamo-market-server.vercel.app/api/market/getallproducts', {
             headers: { 'Content-Type': 'application/json' },
           });
           if (!res.ok) throw new Error('API error');
@@ -130,7 +130,7 @@ const LandingPage = () => {
       const fetchShop = async () => {
         setLoading(true);
         try {
-          const res = await fetch('http://localhost:5050/api/market/getshops', {
+          const res = await fetch('https://yamo-market-server.vercel.app/api/market/getshops', {
             headers: { 'Content-Type': 'application/json' },
           });
           if (!res.ok) throw new Error('API error');
@@ -152,7 +152,7 @@ const LandingPage = () => {
 
  const handleClick = async (product) => {
   try {
-    await fetch('http://localhost:5050/api/market/click-log', {
+    await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const LandingPage = () => {
 
 const handleClick2 = async (shop) => {
   try {
-    await fetch('http://localhost:5050/api/market/click-log', {
+    await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

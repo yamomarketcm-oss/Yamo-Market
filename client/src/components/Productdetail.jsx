@@ -475,7 +475,7 @@ const ProductDetail = () => {
     const fetch_ = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5050/api/market/getproduct/${product_id}`);
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getproduct/${product_id}`);
         if (!res.ok) throw new Error('Failed to fetch product');
         const result = await res.json();
         setProduct(result);
@@ -490,7 +490,7 @@ const ProductDetail = () => {
 
   const handleClick = async (product) => {
   try {
-    await fetch('http://localhost:5050/api/market/click-log', {
+    await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

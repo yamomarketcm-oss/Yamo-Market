@@ -237,7 +237,7 @@ const AddProductModal = ({ shopId, onClose, onSuccess }) => {
       const token = localStorage.getItem('market_token');
 
       // imageUrl already uploaded to Cloudinary — send as plain JSON
-      const res = await fetch('http://localhost:5050/api/market/createproduct', {
+      const res = await fetch('https://yamo-market-server.vercel.app/api/market/createproduct', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -332,7 +332,7 @@ const EditProductModal = ({ product, shopId, onClose, onSuccess }) => {
     try {
       const token = localStorage.getItem('market_token');
 
-      const res = await fetch(`http://localhost:5050/api/market/updateproduct/${product.product_id}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/updateproduct/${product.product_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -502,7 +502,7 @@ const MyShopPage = () => {
     const fetchShop = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/getshop/${shop_id}`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getshop/${shop_id}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Failed to fetch shop');
@@ -519,7 +519,7 @@ const MyShopPage = () => {
       const fetchProfile = async () => {
         try {
           const token = localStorage.getItem('market_token');
-          const res = await fetch(`http://localhost:5050/api/market/profile`, {
+          const res = await fetch(`https://yamo-market-server.vercel.app/api/market/profile`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -540,7 +540,7 @@ const MyShopPage = () => {
     const fetchShopProduct = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/shop-product/${shop_id}`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/shop-product/${shop_id}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Failed to fetch shop');
@@ -620,7 +620,7 @@ const MyShopPage = () => {
     setProducts(ps => ps.map(p => p.product_id === product_id ? { ...p, status: newStatus } : p));
     try {
       const token = localStorage.getItem('market_token');
-      await fetch(`http://localhost:5050/api/market/updateproduct/${product_id}`, {
+      await fetch(`https://yamo-market-server.vercel.app/api/market/updateproduct/${product_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ ...product, status: newStatus }),
@@ -636,7 +636,7 @@ const MyShopPage = () => {
     setDeleteLoading(true);
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`http://localhost:5050/api/market/deleteproduct/${deleteTarget.shop}/${deleteTarget.product_id}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/deleteproduct/${deleteTarget.shop}/${deleteTarget.product_id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });

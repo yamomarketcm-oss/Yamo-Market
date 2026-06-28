@@ -182,7 +182,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/getallproducts`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getallproducts`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -231,7 +231,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('market_token');
-      const response = await fetch('http://localhost:5050/api/market/createads', {
+      const response = await fetch('https://yamo-market-server.vercel.app/api/market/createads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -414,7 +414,7 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('market_token');
-      const response = await fetch(`http://localhost:5050/api/market/updatead/${ad.ads_id}`, {
+      const response = await fetch(`https://yamo-market-server.vercel.app/api/market/updatead/${ad.ads_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -618,7 +618,7 @@ const AdminDashboard = () => {
         const fetchUsers = async () => {
           try {
             const token = localStorage.getItem('market_token');
-            const res = await fetch(`http://localhost:5050/api/market/getallusers`, {
+            const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getallusers`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -640,7 +640,7 @@ const AdminDashboard = () => {
         const fetchAllshops = async () => {
           try {
             const token = localStorage.getItem('market_token');
-            const res = await fetch(`http://localhost:5050/api/market/getshops`, {
+            const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getshops`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -662,7 +662,7 @@ const AdminDashboard = () => {
         const fetchProducts = async () => {
           try {
             const token = localStorage.getItem('market_token');
-            const res = await fetch(`http://localhost:5050/api/market/getallproducts`, {
+            const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getallproducts`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -684,7 +684,7 @@ const AdminDashboard = () => {
         const fetchAds = async () => {
           try {
             const token = localStorage.getItem('market_token');
-            const res = await fetch(`http://localhost:5050/api/market/getallads`, {
+            const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getallads`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -737,7 +737,7 @@ const AdminDashboard = () => {
   const verifyUser = async (user, status, review) => {
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`http://localhost:5050/api/market/updateuser/${user.user_id}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/updateuser/${user.user_id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -759,7 +759,7 @@ const AdminDashboard = () => {
   const deleteShop = async (shopId) => {
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`http://localhost:5050/api/market/deleteshop/${shopId}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/deleteshop/${shopId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -774,7 +774,7 @@ const AdminDashboard = () => {
   const deleteProduct = async (productId) => {
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`http://localhost:5050/api/market/deleteproduct/${productId}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/deleteproduct/${productId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -789,7 +789,7 @@ const AdminDashboard = () => {
   const deleteUser = async (userId) => {
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`http://localhost:5050/api/market/deleteuser/${userId}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/deleteuser/${userId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -809,7 +809,7 @@ const AdminDashboard = () => {
   const deleteAd = async (adId) => {
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`http://localhost:5050/api/market/deletead/${adId}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/deletead/${adId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -1399,9 +1399,9 @@ const AdminDashboard = () => {
           const token = localStorage.getItem('market_token');
           const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
           const [shopRes, productRes, adsRes] = await Promise.all([
-            fetch('http://localhost:5050/api/market/admin?clict_type=shop',    { headers }),
-            fetch('http://localhost:5050/api/market/admin?clict_type=product', { headers }),
-            fetch('http://localhost:5050/api/market/admin?clict_type=ads',     { headers }),
+            fetch('https://yamo-market-server.vercel.app/api/market/admin?clict_type=shop',    { headers }),
+            fetch('https://yamo-market-server.vercel.app/api/market/admin?clict_type=product', { headers }),
+            fetch('https://yamo-market-server.vercel.app/api/market/admin?clict_type=ads',     { headers }),
           ]);
           const [s, p, a] = await Promise.all([shopRes.json(), productRes.json(), adsRes.json()]);
           setShopData(s.data    || []);
@@ -1425,7 +1425,7 @@ const AdminDashboard = () => {
         const route = type === 'shop'    ? `shop/${id}`
                     : type === 'product' ? `product/${id}`
                     :                      `ads/${id}`;
-        const res = await fetch(`http://localhost:5050/api/market/${route}?months=6`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/${route}?months=6`, {
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         });
         const result = await res.json();

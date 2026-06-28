@@ -56,7 +56,7 @@ const ProductCard = ({ p, viewMode, onFav, favs }) => {
 
   const handleClick = async () => {
     try {
-      const res = await fetch('http://localhost:5050/api/market/click-log', {
+      const res = await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clict_type: 'product', shoplead_ip: p.product_id, vendor:p.product_id, shop: p.shop }),
@@ -361,7 +361,7 @@ const BoutiqueDetail = () => {
   useEffect(() => {
     const fetchShop = async () => {
       try {
-        const res = await fetch(`http://localhost:5050/api/market/getshop/${shop_id}`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getshop/${shop_id}`, {
           headers: { 'Content-Type': 'application/json' },
         });
         if (!res.ok) throw new Error('Failed to fetch shop');
@@ -376,7 +376,7 @@ const BoutiqueDetail = () => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/shop-product/${shop_id}`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/shop-product/${shop_id}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Failed to fetch products');
