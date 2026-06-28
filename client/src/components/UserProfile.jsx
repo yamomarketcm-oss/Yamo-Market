@@ -759,7 +759,6 @@ const StatCard = ({ icon, value, label, color }) => (
 
 /* ─── Main page ───────────────────────────────────── */
 const UserProfile = () => {
-  const [user, setUser] = useState(USER);
   const [user2, setUser2] = useState({});
   const [shop, setShop] = useState({});
   const [modal, setModal] = useState(null); // 'verify' | 'shop' | null
