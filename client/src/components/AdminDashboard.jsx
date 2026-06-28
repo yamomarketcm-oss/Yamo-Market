@@ -1082,7 +1082,12 @@ const AdminDashboard = () => {
                   <td className="px-4 py-3 text-xs text-gray-500">{u.email}</td>
                   <td className="px-4 py-3 text-xs text-gray-500">{u.phone}</td>
                   <td className="">
-                    <span className={`text-[10px] font-bold px-4 flex justify-center items-center w-fit rounded-full ${u.review === 'rejected' ? 'bg-red-200 text-red-700' : 'bg-gray-200 text-gray-600'}`}>
+                   <span className={`text-[10px] font-bold px-4 flex justify-center items-center w-fit rounded-full ${  u.review === 'rejected'
+                      ? 'bg-red-200 text-red-700'
+                      : u.review === 'approved'
+                      ? 'bg-green-200 text-green-700'
+                      : 'bg-gray-200 text-gray-600'}`
+                    }>
                       {u.review}
                     </span>
                   </td>
@@ -1382,7 +1387,7 @@ const AdminDashboard = () => {
     </div>
   );
 
- const ClicksTab = () => {
+  const ClicksTab = () => {
     const [shopData,    setShopData]    = useState([]);
     const [productData, setProductData] = useState([]);
     const [adsData,     setAdsData]     = useState([]);
@@ -1459,9 +1464,9 @@ const AdminDashboard = () => {
         {/* ── summary cards ── */}
         <div className="grid grid-cols-3 gap-4">
           {[
-            { label: 'Clics boutiques (mois)',  value: shopData.reduce((s,r)=>s+r.total_clicks,0),    icon: <Store size={16} />,              color: 'bg-blue-100 text-blue-600'   },
-            { label: 'Clics produits (mois)',   value: productData.reduce((s,r)=>s+r.total_clicks,0), icon: <Package size={16} />,            color: 'bg-green-100 text-green-700' },
-            { label: 'Clics annonces (mois)',   value: adsData.reduce((s,r)=>s+r.total_clicks,0),     icon: <Megaphone size={16} />,          color: 'bg-violet-100 text-violet-700'},
+            { label: 'Clics boutiques (mois)',  value: '',    icon: <Store size={16} />,              color: 'bg-blue-100 text-blue-600'   },
+            { label: 'Clics produits (mois)',   value: '', icon: <Package size={16} />,            color: 'bg-green-100 text-green-700' },
+            { label: 'Clics annonces (mois)',   value: '',     icon: <Megaphone size={16} />,          color: 'bg-violet-100 text-violet-700'},
           ].map(s => (
             <div key={s.label} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${s.color}`}>{s.icon}</div>
@@ -1498,15 +1503,15 @@ const AdminDashboard = () => {
           <div className="flex gap-6 mb-5 p-3 bg-gray-50 rounded-xl">
             <div>
               <p className="text-[10px] text-gray-400 uppercase tracking-wide">Total clics</p>
-              <p className="text-lg font-extrabold text-gray-900">{loading ? '—' : totalClicks.toLocaleString()}</p>
+              <p className="text-lg font-extrabold text-gray-900">{''}</p>
             </div>
             <div>
               <p className="text-[10px] text-gray-400 uppercase tracking-wide">IPs uniques</p>
-              <p className="text-lg font-extrabold text-gray-900">{loading ? '—' : totalUnique.toLocaleString()}</p>
+              <p className="text-lg font-extrabold text-gray-900">{''}</p>
             </div>
             <div>
               <p className="text-[10px] text-gray-400 uppercase tracking-wide">Entrées</p>
-              <p className="text-lg font-extrabold text-gray-900">{loading ? '—' : activeData.length}</p>
+              <p className="text-lg font-extrabold text-gray-900">{''}</p>
             </div>
           </div>
  
@@ -1532,6 +1537,22 @@ const AdminDashboard = () => {
                 const pct = Math.round((r.total_clicks / maxClicks) * 100);
                 const id  = r.shoplead_ip;
                 const isSelected = detailTarget?.id === id && detailTarget?.type === activeType;
+ 
+                /* resolve display name and image from joined fields */
+                const displayName = activeType === 'shop'
+                  ? (r.shop_name   ?? `Boutique #${id}`)
+                  : activeType === 'product'
+                  ? (r.product_name ?? `Produit #${id}`)
+                  : (r.title        ?? `Annonce #${id}`);
+ 
+                const displaySub = activeType === 'shop'
+                  ? [r.category, r.town, r.region].filter(Boolean).join(' · ')
+                  : activeType === 'product'
+                  ? [r.shop_name, r.price ? `${Number(r.price).toLocaleString('fr-FR')} XAF` : null].filter(Boolean).join(' · ')
+                  : [r.slogan, r.product_name].filter(Boolean).join(' · ');
+ 
+                const displayImg = r.m_img ?? r.shop_image ?? null;
+ 
                 return (
                   <div key={id}>
                     <button
@@ -1543,17 +1564,34 @@ const AdminDashboard = () => {
                         {/* rank */}
                         <span className="text-[11px] font-bold text-gray-400 w-5 flex-shrink-0">#{i + 1}</span>
  
-                        {/* id + bar */}
+                        {/* image thumbnail */}
+                        {displayImg ? (
+                          <img src={displayImg} alt={displayName}
+                            className="w-9 h-9 rounded-lg object-cover flex-shrink-0 border border-gray-100" />
+                        ) : (
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                            activeType === 'shop' ? 'bg-blue-100 text-blue-600' :
+                            activeType === 'product' ? 'bg-amber-100 text-amber-600' :
+                            'bg-violet-100 text-violet-600'
+                          }`}>
+                            {activeType === 'shop' ? <Store size={14} /> :
+                             activeType === 'product' ? <Package size={14} /> :
+                             <Megaphone size={14} />}
+                          </div>
+                        )}
+ 
+                        {/* name + bar */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-xs font-semibold text-gray-700">
-                              {activeType === 'shop' ? 'Boutique' : activeType === 'product' ? 'Produit' : 'Annonce'} #{id}
-                            </span>
+                          <div className="flex items-center justify-between mb-0.5">
+                            <span className="text-xs font-semibold text-gray-800 truncate">{displayName}</span>
                             <span className="text-[10px] text-gray-400 flex-shrink-0 ml-2">
                               {r.unique_ips} IP · {r.total_clicks} clics
                             </span>
                           </div>
-                          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                          {displaySub && (
+                            <p className="text-[10px] text-gray-400 truncate mb-1">{displaySub}</p>
+                          )}
+                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full transition-all duration-500 ${activeStyle.color}`}
                               style={{ width: `${pct}%` }}
@@ -1628,11 +1666,21 @@ const AdminDashboard = () => {
                             {activeType === 'shop' && detailTarget.data.product_clicks?.length > 0 && (
                               <div className="mt-4">
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-2">Top produits ce mois</p>
-                                <div className="space-y-1.5">
+                                <div className="space-y-2">
                                   {detailTarget.data.product_clicks.slice(0, 5).map(p => (
-                                    <div key={p.product_id} className="flex items-center justify-between text-xs">
-                                      <span className="text-gray-600 font-medium">Produit #{p.product_id}</span>
-                                      <span className="text-gray-400">{p.total_clicks} clics · {p.unique_ips} IPs</span>
+                                    <div key={p.product_id} className="flex items-center gap-2.5">
+                                      {p.m_img ? (
+                                        <img src={p.m_img} alt={p.product_name} className="w-7 h-7 rounded-lg object-cover flex-shrink-0 border border-gray-100" />
+                                      ) : (
+                                        <div className="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+                                          <Package size={11} className="text-amber-600" />
+                                        </div>
+                                      )}
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-xs font-semibold text-gray-700 truncate">{p.product_name ?? `Produit #${p.product_id}`}</p>
+                                        {p.price && <p className="text-[10px] text-gray-400">{Number(p.price).toLocaleString('fr-FR')} FCFA</p>}
+                                      </div>
+                                      <span className="text-[10px] text-gray-400 flex-shrink-0">{p.total_clicks} clics · {p.unique_ips} IPs</span>
                                     </div>
                                   ))}
                                 </div>
@@ -1641,11 +1689,21 @@ const AdminDashboard = () => {
                             {activeType === 'shop' && detailTarget.data.ad_clicks?.length > 0 && (
                               <div className="mt-3">
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-2">Top annonces ce mois</p>
-                                <div className="space-y-1.5">
+                                <div className="space-y-2">
                                   {detailTarget.data.ad_clicks.slice(0, 5).map(a => (
-                                    <div key={a.ads_id} className="flex items-center justify-between text-xs">
-                                      <span className="text-gray-600 font-medium">Annonce #{a.ads_id}</span>
-                                      <span className="text-gray-400">{a.total_clicks} clics · {a.unique_ips} IPs</span>
+                                    <div key={a.ads_id} className="flex items-center gap-2.5">
+                                      {a.m_img ? (
+                                        <img src={a.m_img} alt={a.title} className="w-7 h-7 rounded-lg object-cover flex-shrink-0 border border-gray-100" />
+                                      ) : (
+                                        <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
+                                          <Megaphone size={11} className="text-violet-600" />
+                                        </div>
+                                      )}
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-xs font-semibold text-gray-700 truncate">{a.title ?? `Annonce #${a.ads_id}`}</p>
+                                        {a.product_name && <p className="text-[10px] text-gray-400 truncate">{a.product_name}</p>}
+                                      </div>
+                                      <span className="text-[10px] text-gray-400 flex-shrink-0">{a.total_clicks} clics · {a.unique_ips} IPs</span>
                                     </div>
                                   ))}
                                 </div>
