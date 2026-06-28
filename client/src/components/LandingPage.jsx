@@ -32,11 +32,12 @@ const badgeColor = (b) => ({
   Local:'bg-green-700', Promo:'bg-violet-500',
 }[b] || 'bg-gray-400');
 
-const ProductCard = ({ p, onFav, favs }) => (
+const ProductCard = ({ p, onFav, favs, Click }) => (
+
   <div className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-green-200 hover:shadow-xl hover:shadow-green-100/60 transition-all duration-300 flex flex-col">
    <Link to={`/product/${p.product_id}`}>
     <div className={`relative sm:h-48 h-40 bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center`}>
-        <img src={p.m_img} alt={p.name} className="w-full h-full object-cover" />
+        <img src={p.m_img} onClick={Click} alt={p.name} className="w-full h-full object-cover" />
         {p.tag && (
           <span className={`absolute top-3 left-3 ${badgeColor(p.tag)} text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full tracking-wide`}>
             {p.tag}
@@ -55,10 +56,10 @@ const ProductCard = ({ p, onFav, favs }) => (
         <ShoppingBag size={10} /> {p.shop_name}
       </p>
       <h3 className="font-semibold text-gray-800 text-sm leading-snug truncate">{p.product_name}</h3>
-      <p className="text-xs text-gray-500 line-clamp-2">{p.desc}</p>
+      <p className="text-xs text-gray-500 line-clamp-1">{p.desc}</p>
       <div className="pt-3 flex items-center justify-between">
         <span className="text-green-700 font-bold text-base">{p.price} <span className="text-xs font-normal text-gray-400">XAF</span></span>
-        <Link to={`/product/${p.product_id}`}>
+        <Link to={`/product/${p.product_id}`} onClick={Click}>
           <button className="text-xs font-medium text-green-700 border border-green-200 hover:bg-green-600 hover:text-white hover:border-green-600 px-3 py-1.5 rounded-lg transition-all duration-200">
             Voir
           </button>
@@ -68,8 +69,8 @@ const ProductCard = ({ p, onFav, favs }) => (
   </div>
 );
 
-const BoutiqueCard = ({ b }) => (
-  <Link to={`/boutique/${b.shop_id}`}>
+const BoutiqueCard = ({ b, Click }) => (
+  <Link to={`/boutique/${b.shop_id}`} onClick={Click}>
   <div className="group bg-white rounded-2xl border border-gray-100 hover:border-green-200 hover:shadow-lg hover:shadow-green-100/50 transition-all duration-300 p-4 flex items-center gap-3 cursor-pointer">
     <div className={`w-16 h-16 rounded-xl ${b.color} flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-105 transition-transform`}>
       <img src={b.profile} className='w-16 h-16 rounded-xl' />
@@ -149,10 +150,51 @@ const LandingPage = () => {
   const toggleFav = (id) =>
     setFavs(f => f.includes(id) ? f.filter(x => x !== id) : [...f, id]);
 
+ const handleClick = async (product) => {
+  try {
+    await fetch('http://localhost:5050/api/market/click-log', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        clict_type: 'product', shoplead_ip: product.product_id, vendor: product.product_id, shop: product.shop
+      }),
+    });
+  } catch (err) {
+    console.log('Could not submit update.', err);
+  }
+};
+
+const handleClick2 = async (shop) => {
+  try {
+    await fetch('http://localhost:5050/api/market/click-log', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+       clict_type: 'shop', shoplead_ip: shop.shop_id, vendor: shop.shop_id, shop: shop.shop_id
+      }),
+    });
+  } catch (err) {
+    console.log('Could not submit update.', err);
+  }
+};
+
   const filtered = products.filter(p =>
     (activeCategory === 'All' || p.product_category === activeCategory) &&
     p.product_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const randomProducts = [...filtered];
+
+for (let i = randomProducts.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [randomProducts[i], randomProducts[j]] = [randomProducts[j], randomProducts[i]];
+}
+
+const HomeProducts = randomProducts.slice(0, 4);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -298,10 +340,10 @@ const LandingPage = () => {
 
         {/* Grid */}
         {
-          filtered.length > 0 ? (
+          HomeProducts.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-5">
-              {filtered.map(p => (
-                <ProductCard key={p.id} p={p} onFav={toggleFav} favs={favs} />
+              {HomeProducts.map(p => (
+                <ProductCard key={p.product_id} p={p} Click={() => handleClick(p)} onFav={toggleFav} favs={favs} />
               ))}
             </div>
           ) : (
@@ -354,7 +396,7 @@ const LandingPage = () => {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {shop.map(b => <BoutiqueCard key={b.shop_id} b={b} />)}
+            {shop.map(b => <BoutiqueCard key={b.shop_id} b={b} Click={() => handleClick2(b)} />)}
           </div>
         </div>
       </section>

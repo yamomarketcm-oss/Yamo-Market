@@ -53,13 +53,26 @@ const badgeColor = (b) => ({
 
 /* ─── Product Card ───────────────────────────────── */
 const ProductCard = ({ p, viewMode, onFav, favs }) => {
+
+  const handleClick = async () => {
+    try {
+      const res = await fetch('http://localhost:5050/api/market/click-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clict_type: 'product', shoplead_ip: p.product_id, vendor:p.product_id, shop: p.shop }),
+      });
+    } catch (err) {
+      console.log('Could not submit update.', 'error');
+    }
+  };
+
   const isList = viewMode === 'list';
   return (
-    <Link to={`/product/${p.product_id}`}>
+    <Link to={`/product/${p.product_id}`} onClick={handleClick}>
       <div className={`group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 cursor-pointer ${isList ? 'flex items-center gap-4 p-3' : 'flex flex-col'}`}>
         <div className={`relative bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center flex-shrink-0 ${isList ? 'w-20 h-20 rounded-xl' : 'h-44'}`}>
           {p.m_img
-            ? <img src={p.m_img} alt={p.product_name} className={`${isList ? 'rounded-xl' : ''} w-full h-full object-cover`} />
+            ? <img src={p.m_img}  alt={p.product_name} className={`${isList ? 'rounded-xl' : ''} w-full h-full object-cover`} />
             : <span className={`select-none group-hover:scale-110 transition-transform duration-300 ${isList ? 'text-4xl' : 'text-6xl'}`}>🛍️</span>
           }
           {p.tag && !isList && (
@@ -377,7 +390,7 @@ const BoutiqueDetail = () => {
   const toggleFav = id => setFavs(f => f.includes(id) ? f.filter(x => x !== id) : [...f, id]);
 
   const filtered = shopProducts.filter(p =>
-    (activeCategory === 'Tous' || p.product_category === activeCategory) &&
+    (activeCategory === 'Tous' || p.category === activeCategory) &&
     (p.product_name || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 

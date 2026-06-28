@@ -15,17 +15,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Toast } from './Toastcomponent';
 
 /* ─── mock user ───────────────────────────────────── */
-const USER = {
-  name: 'Jean-Paul Mbarga',
-  email: 'jeanpaul@exemple.cm',
-  phone: '+237 6 55 44 33 22',
-  city: 'Yaoundé',
-  region: 'Centre',
-  joined: 'Mars 2024',
-  avatar: null,
-  verified: false,
-  stats: { orders: 12, wishlist: 34, reviews: 8, viewed: 120 },
-};
+
 
 /* ─── Backdrop ────────────────────────────────────── */
 const Backdrop = ({ onClick }) => (

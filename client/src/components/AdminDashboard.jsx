@@ -6,49 +6,10 @@ import {
   TrendingUp, ShoppingBag, BadgeCheck, Clock, Filter,
   MoreVertical, RefreshCw, FileText, Megaphone, Menu,
   ArrowUpRight, ArrowDownRight, Activity, Ban, Image as ImageIcon,
-  Calendar, Link as LinkIcon, ToggleLeft, ToggleRight, Phone, Mail, MapPin, CreditCard
+  Calendar, Link as LinkIcon, ToggleLeft, ToggleRight, Phone, Mail, MapPin, CreditCard,
+  Fingerprint,
+  MousePointerClick
 } from 'lucide-react';
-
-
-const PENDING_USERS = [
-  { id: 1, username: 'Jean-Paul Mbarga',  email: 'jeanpaul@cm.com',  phone: '+237 655 443 322', region: 'Centre',   town: 'Yaoundé',  joined: '2024-05-10', doc: 'CNI', doc_number: '101-99887766-A12', doc_front: 'https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=600', doc_back: 'https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=600', selfie: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=300', address: 'Quartier Mvog-Mbi, Yaoundé', status: 'pending'  },
-  { id: 2, username: 'Amélie Tchamba',    email: 'amelie@cm.com',    phone: '+237 677 221 100', region: 'Littoral', town: 'Douala',   joined: '2024-05-11', doc: 'Passeport', doc_number: 'CM0245781', doc_front: 'https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=600', doc_back: 'https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=600', selfie: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=300', address: 'Bonapriso, Douala', status: 'pending' },
-  { id: 3, username: 'Rodrigue Kameni',  email: 'rodrigue@cm.com',  phone: '+237 699 881 234', region: 'Ouest',    town: 'Bafoussam',joined: '2024-05-12', doc: 'CNI', doc_number: '109-44556677-B03', doc_front: 'https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=600', doc_back: 'https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=600', selfie: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=300', address: 'Marché A, Bafoussam', status: 'pending'  },
-  { id: 4, username: 'Marie Nguele',      email: 'marie@cm.com',     phone: '+237 655 001 234', region: 'Centre',   town: 'Mbalmayo', joined: '2024-05-13', doc: 'CNI', doc_number: '102-33221144-C09', doc_front: 'https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=600', doc_back: 'https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=600', selfie: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=300', address: 'Centre Ville, Mbalmayo', status: 'pending'  },
-];
-
-const ALL_USERS = [
-  { id: 1, username: 'Jean-Paul Mbarga',  email: 'jeanpaul@cm.com',  region: 'Centre',   joined: '2024-03-10', status: true,  role: 'user'  },
-  { id: 2, username: 'Amélie Tchamba',    email: 'amelie@cm.com',    region: 'Littoral', joined: '2024-03-12', status: false, role: 'user'  },
-  { id: 3, username: 'Rodrigue Kameni',  email: 'rodrigue@cm.com',  region: 'Ouest',    joined: '2024-04-01', status: true,  role: 'seller'},
-  { id: 4, username: 'Marie Nguele',      email: 'marie@cm.com',     region: 'Centre',   joined: '2024-04-15', status: false, role: 'user'  },
-  { id: 5, username: 'Paul Etame',        email: 'paul@cm.com',      region: 'Sud',      joined: '2024-05-01', status: true,  role: 'seller'},
-];
-
-const ALL_SHOPS = [
-  { id: 1, shop_name: 'TechShop Douala', owner: 'Rodrigue Kameni', region: 'Littoral', category: 'Électronique', products: 48, joined: '2022-01-10', status: true  },
-  { id: 2, shop_name: 'Mode Afrique',    owner: 'Amélie Tchamba',  region: 'Centre',   category: 'Mode',         products: 134,joined: '2021-06-15', status: true  },
-  { id: 3, shop_name: 'TechVision Kribi',owner: 'Patrice Essoh',   region: 'Sud',      category: 'Électronique', products: 12, joined: '2024-05-09', status: false },
-];
-
-const PRODUCTS = [
-  { id: 1,  name: 'Casque Bluetooth X200',        shop_name: 'TechShop Douala', category: 'Électronique', price: 15000,  stock: 24,  image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200', status: true,  added: '2024-05-01' },
-  { id: 2,  name: 'Robe Wax Élégance',             shop_name: 'Mode Afrique',    category: 'Mode',         price: 25000,  stock: 8,   image: 'https://images.unsplash.com/photo-1612722432474-b971cdcea546?w=200', status: true,  added: '2024-05-03' },
-  { id: 3,  name: 'Smartphone Tecno Spark 10',     shop_name: 'TechShop Douala', category: 'Électronique', price: 95000,  stock: 5,   image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=200', status: true,  added: '2024-05-05' },
-  { id: 4,  name: 'Sac à main cuir',               shop_name: 'Mode Afrique',    category: 'Mode',         price: 18000,  stock: 0,   image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=200', status: false, added: '2024-05-06' },
-  { id: 5,  name: 'Chargeur rapide 65W',           shop_name: 'TechVision Kribi',category: 'Électronique', price: 8000,   stock: 40,  image: 'https://images.unsplash.com/photo-1583863788434-e62bd6a4cb45?w=200', status: true,  added: '2024-05-08' },
-  { id: 6,  name: 'Montre connectée Sport',        shop_name: 'TechVision Kribi',category: 'Électronique', price: 32000,  stock: 11,  image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200', status: true,  added: '2024-05-10' },
-  { id: 7,  name: 'Ensemble traditionnel homme',   shop_name: 'Mode Afrique',    category: 'Mode',         price: 45000,  stock: 3,   image: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=200', status: true,  added: '2024-05-12' },
-  { id: 8,  name: 'Enceinte portable JBL clone',   shop_name: 'TechShop Douala', category: 'Électronique', price: 12000,  stock: 18,  image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200', status: false, added: '2024-05-14' },
-];
-
-const AD_PLACEMENTS = ['Bannière accueil', 'Carrousel promo', 'Page catégorie', 'Pop-up'];
-
-const ADS = [
-  { id: 1, title: 'Promo Smartphone -20%', placement: 'Bannière accueil', link: 'https://yamomarket.cm/promo-smartphone', image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=300', start: '2024-05-01', end: '2024-06-01', status: true  },
-  { id: 2, title: 'Soldes Mode Afrique',    placement: 'Carrousel promo',  link: 'https://yamomarket.cm/soldes-mode',     image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=300', start: '2024-05-10', end: '2024-05-31', status: true  },
-  { id: 3, title: 'Nouveaux arrivages Tech',link: 'https://yamomarket.cm/tech-nouveautes', placement: 'Page catégorie',  image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=300', start: '2024-04-20', end: '2024-05-05', status: false },
-];
 
 const ACTIVITY_LOG = [
   { id: 1, action: 'Utilisateur vérifié',    subject: 'Nos Utilisateur',  time: '',  type: 'verify'  },
@@ -614,6 +575,7 @@ const NAV = [
   { key: 'shops',         label: 'Boutiques',            icon: <Store size={16} />          },
   { key: 'products',      label: 'Produits',             icon: <Package size={16} />        },
   { key: 'ads',           label: 'Annonces',             icon: <Megaphone size={16} />      },
+  { key: 'clicklogs',      label: 'Click',                icon: <Fingerprint size={16} />       },
   { key: 'activity',      label: 'Activité',             icon: <Activity size={16} />       },
   { key: 'settings',      label: 'Paramètres',           icon: <Settings size={16} />       },
 ];
@@ -1420,6 +1382,291 @@ const AdminDashboard = () => {
     </div>
   );
 
+ const ClicksTab = () => {
+    const [shopData,    setShopData]    = useState([]);
+    const [productData, setProductData] = useState([]);
+    const [adsData,     setAdsData]     = useState([]);
+    const [loading,     setLoading]     = useState(true);
+    const [activeType,  setActiveType]  = useState('shop');
+    const [detailTarget, setDetailTarget] = useState(null); // { type, id, data }
+    const [detailLoading, setDetailLoading] = useState(false);
+ 
+    /* fetch all three admin summaries in parallel */
+    useEffect(() => {
+      const fetchAll = async () => {
+        setLoading(true);
+        try {
+          const token = localStorage.getItem('market_token');
+          const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+          const [shopRes, productRes, adsRes] = await Promise.all([
+            fetch('http://localhost:5050/api/market/admin?clict_type=shop',    { headers }),
+            fetch('http://localhost:5050/api/market/admin?clict_type=product', { headers }),
+            fetch('http://localhost:5050/api/market/admin?clict_type=ads',     { headers }),
+          ]);
+          const [s, p, a] = await Promise.all([shopRes.json(), productRes.json(), adsRes.json()]);
+          setShopData(s.data    || []);
+          setProductData(p.data || []);
+          setAdsData(a.data     || []);
+        } catch (err) {
+          console.error('[ClicksTab]', err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchAll();
+    }, []);
+ 
+    /* fetch detail (monthly) for a specific target */
+    const fetchDetail = async (type, id) => {
+      setDetailLoading(true);
+      setDetailTarget({ type, id, data: null });
+      try {
+        const token = localStorage.getItem('market_token');
+        const route = type === 'shop'    ? `shop/${id}`
+                    : type === 'product' ? `product/${id}`
+                    :                      `ads/${id}`;
+        const res = await fetch(`http://localhost:5050/api/market/${route}?months=6`, {
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        });
+        const result = await res.json();
+        setDetailTarget({ type, id, data: result });
+      } catch (err) {
+        console.error('[fetchDetail]', err.message);
+      } finally {
+        setDetailLoading(false);
+      }
+    };
+ 
+    const activeData = activeType === 'shop' ? shopData : activeType === 'product' ? productData : adsData;
+ 
+    /* total unique IPs across all entries of selected type */
+    const totalUnique = activeData.reduce((sum, r) => sum + (r.unique_ips || 0), 0);
+    const totalClicks = activeData.reduce((sum, r) => sum + (r.total_clicks || 0), 0);
+ 
+    /* bar width % relative to max */
+    const maxClicks = Math.max(...activeData.map(r => r.total_clicks), 1);
+ 
+    const TYPE_TABS = [
+      { key: 'shop',    label: 'Boutiques',  color: 'bg-blue-600',   light: 'bg-blue-50 text-blue-700 border-blue-200'   },
+      { key: 'product', label: 'Produits',   color: 'bg-green-600',  light: 'bg-green-50 text-green-700 border-green-200' },
+      { key: 'ads',     label: 'Annonces',   color: 'bg-violet-600', light: 'bg-violet-50 text-violet-700 border-violet-200' },
+    ];
+    const activeStyle = TYPE_TABS.find(t => t.key === activeType);
+ 
+    return (
+      <div className="p-6 space-y-6">
+ 
+        {/* ── summary cards ── */}
+        <div className="grid grid-cols-3 gap-4">
+          {[
+            { label: 'Clics boutiques (mois)',  value: shopData.reduce((s,r)=>s+r.total_clicks,0),    icon: <Store size={16} />,              color: 'bg-blue-100 text-blue-600'   },
+            { label: 'Clics produits (mois)',   value: productData.reduce((s,r)=>s+r.total_clicks,0), icon: <Package size={16} />,            color: 'bg-green-100 text-green-700' },
+            { label: 'Clics annonces (mois)',   value: adsData.reduce((s,r)=>s+r.total_clicks,0),     icon: <Megaphone size={16} />,          color: 'bg-violet-100 text-violet-700'},
+          ].map(s => (
+            <div key={s.label} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${s.color}`}>{s.icon}</div>
+              <p className="text-2xl font-extrabold text-gray-900 leading-none">
+                {loading ? '—' : s.value.toLocaleString()}
+              </p>
+              <p className="text-xs text-gray-400 mt-1">{s.label}</p>
+            </div>
+          ))}
+        </div>
+ 
+        {/* ── type selector ── */}
+        <div className="bg-white border border-gray-100 rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+            <div>
+              <h2 className="font-bold text-gray-900 text-sm">Détail par cible</h2>
+              <p className="text-xs text-gray-400 mt-0.5">Mois en cours — clics uniques par IP</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {TYPE_TABS.map(t => (
+                <button key={t.key} onClick={() => { setActiveType(t.key); setDetailTarget(null); }}
+                  className={`text-xs font-bold px-4 py-2 rounded-xl border transition-all ${
+                    activeType === t.key
+                      ? `${t.color} text-white border-transparent shadow-md`
+                      : 'bg-gray-50 text-gray-500 border-gray-200 hover:border-gray-300'
+                  }`}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+ 
+          {/* ── totals row ── */}
+          <div className="flex gap-6 mb-5 p-3 bg-gray-50 rounded-xl">
+            <div>
+              <p className="text-[10px] text-gray-400 uppercase tracking-wide">Total clics</p>
+              <p className="text-lg font-extrabold text-gray-900">{loading ? '—' : totalClicks.toLocaleString()}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-400 uppercase tracking-wide">IPs uniques</p>
+              <p className="text-lg font-extrabold text-gray-900">{loading ? '—' : totalUnique.toLocaleString()}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-400 uppercase tracking-wide">Entrées</p>
+              <p className="text-lg font-extrabold text-gray-900">{loading ? '—' : activeData.length}</p>
+            </div>
+          </div>
+ 
+          {/* ── bar list ── */}
+          {loading ? (
+            <div className="space-y-3">
+              {[1,2,3,4,5].map(i => (
+                <div key={i} className="animate-pulse flex items-center gap-3">
+                  <div className="h-3 bg-gray-100 rounded-full w-24 flex-shrink-0" />
+                  <div className="h-6 bg-gray-100 rounded-xl flex-1" />
+                  <div className="h-3 bg-gray-100 rounded-full w-16 flex-shrink-0" />
+                </div>
+              ))}
+            </div>
+          ) : activeData.length === 0 ? (
+            <div className="text-center py-12">
+              <MousePointerClick size={36} className="text-gray-200 mx-auto mb-3" />
+              <p className="text-gray-500 font-semibold text-sm">Aucun clic enregistré ce mois-ci</p>
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {activeData.map((r, i) => {
+                const pct = Math.round((r.total_clicks / maxClicks) * 100);
+                const id  = r.shoplead_ip;
+                const isSelected = detailTarget?.id === id && detailTarget?.type === activeType;
+                return (
+                  <div key={id}>
+                    <button
+                      onClick={() => isSelected ? setDetailTarget(null) : fetchDetail(activeType, id)}
+                      className={`w-full text-left rounded-xl border transition-all p-3 ${
+                        isSelected ? 'border-green-300 bg-green-50' : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
+                      }`}>
+                      <div className="flex items-center gap-3">
+                        {/* rank */}
+                        <span className="text-[11px] font-bold text-gray-400 w-5 flex-shrink-0">#{i + 1}</span>
+ 
+                        {/* id + bar */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-xs font-semibold text-gray-700">
+                              {activeType === 'shop' ? 'Boutique' : activeType === 'product' ? 'Produit' : 'Annonce'} #{id}
+                            </span>
+                            <span className="text-[10px] text-gray-400 flex-shrink-0 ml-2">
+                              {r.unique_ips} IP · {r.total_clicks} clics
+                            </span>
+                          </div>
+                          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all duration-500 ${activeStyle.color}`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                        </div>
+ 
+                        {/* chevron */}
+                        <ChevronRight size={14} className={`flex-shrink-0 transition-transform ${isSelected ? 'rotate-90 text-green-600' : 'text-gray-300'}`} />
+                      </div>
+                    </button>
+ 
+                    {/* ── inline monthly detail ── */}
+                    {isSelected && (
+                      <div className="mt-1 mx-1 bg-white border border-green-100 rounded-xl p-4">
+                        {detailLoading ? (
+                          <div className="flex items-center gap-2 text-xs text-gray-400 py-2">
+                            <RefreshCw size={12} className="animate-spin" /> Chargement du détail…
+                          </div>
+                        ) : detailTarget?.data ? (
+                          <>
+                            {/* this month highlight */}
+                            <div className="flex gap-6 mb-4">
+                              <div>
+                                <p className="text-[10px] text-gray-400 uppercase tracking-wide">Ce mois</p>
+                                <p className="text-xl font-extrabold text-gray-900">
+                                  {(detailTarget.data.this_month?.total_clicks ?? detailTarget.data.shop_clicks?.total_clicks ?? 0).toLocaleString()}
+                                  <span className="text-xs font-normal text-gray-400 ml-1">clics</span>
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-[10px] text-gray-400 uppercase tracking-wide">IPs uniques</p>
+                                <p className="text-xl font-extrabold text-gray-900">
+                                  {(detailTarget.data.this_month?.unique_ips ?? detailTarget.data.shop_clicks?.unique_ips ?? 0).toLocaleString()}
+                                </p>
+                              </div>
+                              {detailTarget.data.vs_last_month?.change_pct !== null && detailTarget.data.vs_last_month?.change_pct !== undefined && (
+                                <div>
+                                  <p className="text-[10px] text-gray-400 uppercase tracking-wide">vs mois dernier</p>
+                                  <p className={`text-xl font-extrabold ${detailTarget.data.vs_last_month.change_pct >= 0 ? 'text-green-600' : 'text-rose-500'}`}>
+                                    {detailTarget.data.vs_last_month.change_pct >= 0 ? '+' : ''}{detailTarget.data.vs_last_month.change_pct}%
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+ 
+                            {/* monthly breakdown table */}
+                            {(detailTarget.data.monthly || detailTarget.data.monthly_totals || []).length > 0 && (
+                              <>
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-2">Historique mensuel</p>
+                                <div className="space-y-1.5">
+                                  {(detailTarget.data.monthly || detailTarget.data.monthly_totals || []).map(m => {
+                                    const mMax = Math.max(...(detailTarget.data.monthly || detailTarget.data.monthly_totals).map(x => x.total_clicks), 1);
+                                    const mPct = Math.round((m.total_clicks / mMax) * 100);
+                                    return (
+                                      <div key={m.month} className="flex items-center gap-3">
+                                        <span className="text-[10px] text-gray-500 font-medium w-16 flex-shrink-0">{m.month}</span>
+                                        <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                          <div className={`h-full rounded-full ${activeStyle.color}`} style={{ width: `${mPct}%` }} />
+                                        </div>
+                                        <span className="text-[10px] text-gray-400 w-24 text-right flex-shrink-0">
+                                          {m.total_clicks} clics · {m.unique_ips} IPs
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </>
+                            )}
+ 
+                            {/* shop: product + ad breakdown */}
+                            {activeType === 'shop' && detailTarget.data.product_clicks?.length > 0 && (
+                              <div className="mt-4">
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-2">Top produits ce mois</p>
+                                <div className="space-y-1.5">
+                                  {detailTarget.data.product_clicks.slice(0, 5).map(p => (
+                                    <div key={p.product_id} className="flex items-center justify-between text-xs">
+                                      <span className="text-gray-600 font-medium">Produit #{p.product_id}</span>
+                                      <span className="text-gray-400">{p.total_clicks} clics · {p.unique_ips} IPs</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {activeType === 'shop' && detailTarget.data.ad_clicks?.length > 0 && (
+                              <div className="mt-3">
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-2">Top annonces ce mois</p>
+                                <div className="space-y-1.5">
+                                  {detailTarget.data.ad_clicks.slice(0, 5).map(a => (
+                                    <div key={a.ads_id} className="flex items-center justify-between text-xs">
+                                      <span className="text-gray-600 font-medium">Annonce #{a.ads_id}</span>
+                                      <span className="text-gray-400">{a.total_clicks} clics · {a.unique_ips} IPs</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <p className="text-xs text-gray-400 py-2">Aucune donnée disponible.</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
 
   const TAB_META = {
     overview:      { title: 'Vue d\'ensemble',       sub: 'Activité globale de YamoMarket' },
@@ -1430,6 +1677,7 @@ const AdminDashboard = () => {
     ads:           { title: 'Annonces publicitaires',     sub: 'Gérer les banners et promotions' },
     activity:      { title: 'Journal d\'activité',        sub: 'Toutes les actions administratives' },
     settings:      { title: 'Paramètres',                 sub: 'Configuration de la plateforme' },
+    clicklogs:        { title: 'Statistiques Clics',         sub: 'Clics par boutique, produit et annonce — mois en cours' },
   };
 
   const renderTab = () => {
@@ -1441,6 +1689,7 @@ const AdminDashboard = () => {
     if (activeTab === 'ads')            return <AdsTab />;
     if (activeTab === 'activity')       return <ActivityTab />;
     if (activeTab === 'settings')       return <SettingsTab />;
+    if (activeTab === 'clicklogs')       return <ClicksTab />;
     return (
       <div className="p-6 text-center py-20 text-gray-400">
         <Package size={36} className="mx-auto mb-3 opacity-30" />

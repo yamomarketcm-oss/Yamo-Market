@@ -11,86 +11,8 @@ import { Link } from 'react-router-dom'
    link, shop, region, m_img (banner image from Cloudinary),
    accent (tailwind bg color for overlays), pill (badge label)
 */
-const ADS = [
-  {
-    id: 1,
-    title: 'Smartphone Pro Max X12',
-    subtitle: 'L\'écran AMOLED 6,7" qui redéfinit le premium africain.',
-    tag: 'Électronique',
-    pill: '🔥 Offre limitée',
-    cta: 'Voir le produit',
-    link: '/product/1',
-    shop: 'TechShop Douala',
-    region: 'Littoral',
-    price: '85 000 XAF',
-    accent: 'from-green-900/80 via-green-800/60 to-transparent',
-    m_img: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=900&q=80',
-  },
-  {
-    id: 2,
-    title: 'Collection Mode Afrique',
-    subtitle: 'Robes en coton local — élégance et authenticité réunies.',
-    tag: 'Mode',
-    pill: '✨ Nouveau',
-    cta: 'Découvrir la collection',
-    link: '/boutique/2',
-    shop: 'Mode Afrique',
-    region: 'Centre',
-    price: 'Dès 12 500 XAF',
-    accent: 'from-emerald-900/80 via-emerald-800/50 to-transparent',
-    m_img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80',
-  },
-  {
-    id: 3,
-    title: 'Parfums Oud Prestige',
-    subtitle: 'Senteurs orientales authentiques. Livrées partout au Cameroun.',
-    tag: 'Beauté',
-    pill: '🌹 Bestseller',
-    cta: 'Commander maintenant',
-    link: '/product/5',
-    shop: 'Beauté Prestige',
-    region: 'Ouest',
-    price: '18 000 XAF',
-    accent: 'from-teal-900/80 via-teal-800/50 to-transparent',
-    m_img: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  },
-  {
-    id: 4,
-    title: 'Déco Intérieure Yaoundé',
-    subtitle: 'Meubles artisanaux en bois local. Pièces uniques, made in Cameroun.',
-    tag: 'Maison',
-    pill: '🪴 Local',
-    cta: 'Explorer la boutique',
-    link: '/boutique/4',
-    shop: 'Déco Yaoundé',
-    region: 'Centre',
-    price: 'Dès 8 500 XAF',
-    accent: 'from-green-900/80 via-green-700/50 to-transparent',
-    m_img: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=900&q=80',
-  },
-  {
-    id: 5,
-    title: 'Laptop UltraSlim 14"',
-    subtitle: 'Légèreté professionnelle. Puissance i7. Stock très limité.',
-    tag: 'Électronique',
-    pill: '⚡ Stock limité',
-    cta: 'Voir l\'offre',
-    link: '/product/9',
-    shop: 'TechShop Douala',
-    region: 'Littoral',
-    price: '320 000 XAF',
-    accent: 'from-slate-900/90 via-slate-800/60 to-transparent',
-    m_img: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=900&q=80',
-  },
-];
 
 /* Small ads (sidebar / grid cards) */
-const SMALL_ADS = [
-  { id: 10, title: 'Sneakers Urban Run', tag: 'Sport', price: '35 000 XAF', shop: 'SportZone CM', pill: 'Nouveau', m_img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80', link: '/product/6' },
-  { id: 11, title: 'Casque Studio Pro', tag: 'Audio', price: '22 000 XAF', shop: 'SoundHub',    pill: 'Hot',     m_img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80', link: '/product/3' },
-  { id: 12, title: 'Épices locales',     tag: 'Alimentation', price: '4 500 XAF',  shop: 'Cuisine & Saveurs', pill: 'Local', m_img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&q=80', link: '/product/10' },
-  { id: 13, title: 'Sac cuir artisanal', tag: 'Mode', price: '28 000 XAF', shop: 'Mode Afrique', pill: 'Sale',  m_img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80', link: '/product/8' },
-];
 
 /* ─── Pill badge ─────────────────────────────────── */
 const Pill = ({ label, className = '' }) => (
@@ -114,6 +36,18 @@ const HeroCarousel = ({ ads }) => {
   }, [paused, ads.length]);
 
   const ad = ads[idx];
+
+  const handleClick = async () => {
+    try {
+      const res = await fetch('http://localhost:5050/api/market/click-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clict_type: 'ads', shoplead_ip: ad.product, vendor:ad.product, shop: ad.shop }),
+      });
+    } catch (err) {
+      console.log('Could not submit update.', 'error');
+    }
+  };
 
   return (
     <div
@@ -172,6 +106,7 @@ const HeroCarousel = ({ ads }) => {
               </div>
 
               <Link to={`/product/${ad?.product}`}
+               onClick={handleClick}
                 className="sm:hidden flex items-center gap-1.5 bg-white text-green-800 font-bold text-xs px-4 py-2.5 rounded-xl active:scale-[0.97] transition-all shadow-lg shadow-black/20 flex-shrink-0">
                 Voir <ArrowRight size={13} />
               </Link>
@@ -230,8 +165,9 @@ const HeroCarousel = ({ ads }) => {
 };
 
 /* ─── Medium banner (wide rectangular) ──────────── */
-const MediumBanner = ({ ad }) => (
+const MediumBanner = ({ ad, Click }) => (
   <Link to={`/product/${ad?.product}`}
+    onClick={Click}
     className="group relative rounded-2xl overflow-hidden flex-shrink-0 block"
     style={{ aspectRatio: '3/1' }}>
     <img src={ad.m_img} alt={ad.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -256,7 +192,7 @@ const MediumBanner = ({ ad }) => (
 /* Mobile: button moved into its own full-width row at the bottom of the card
    instead of squeezing inline next to the price (desktop layout untouched
    via sm: prefix). */
-const SmallCard = ({ ad }) => {
+const SmallCard = ({ ad, Click }) => {
   const pillColors = {
     Nouveau: 'bg-emerald-500 text-white',
     Hot:     'bg-rose-500 text-white',
@@ -265,6 +201,7 @@ const SmallCard = ({ ad }) => {
   };
   return (
     <Link to={`/product/${ad?.product}`}
+    onClick={Click}
       className="group relative bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 block">
       <div className="relative h-36 overflow-hidden">
         <img src={ad.m_img} alt={ad.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -297,8 +234,9 @@ const SmallCard = ({ ad }) => {
 };
 
 /* ─── Inline strip banner ────────────────────────── */
-const StripBanner = ({ ad }) => (
+const StripBanner = ({ ad, Click }) => (
   <Link to={`/product/${ad?.product}`}
+    onClick={Click}
     className="group relative w-full rounded-2xl overflow-hidden flex items-center block"
     style={{ height: '110px' }}>
     <img src={ad?.m_img} alt={ad?.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -343,6 +281,22 @@ const AdsPage = () => {
     fetchAds();
   }, []);
 
+  const handleClick = async (product) => {
+  try {
+    await fetch('http://localhost:5050/api/market/click-log', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        clict_type: 'product', shoplead_ip: product.product, vendor: product.product, shop: product.shop
+      }),
+    });
+  } catch (err) {
+    console.log('Could not submit update.', err);
+  }
+};
+
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-16">
 
@@ -378,14 +332,14 @@ const AdsPage = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {ads.slice(0, 2).map(ad => (
-              <MediumBanner key={ad.ads_id} ad={ad} />
+              <MediumBanner key={ad.ads_id} ad={ad} Click={() => handleClick(ad)} />
             ))}
           </div>
         </section>
 
         {/* ── Full-width strip ── */}
         <section>
-          <StripBanner ad={ads[0]} />
+          <StripBanner ad={ads[0]} Click={() => handleClick(ads[0])} />
         </section>
 
         {/* ── 4-column small cards ── */}
@@ -396,14 +350,14 @@ const AdsPage = () => {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {smallAds.map(ad => (
-              <SmallCard key={ad.ads_id} ad={ad} />
+              <SmallCard key={ad.ads_id} ad={ad} Click={() => handleClick(ad)} />
             ))}
           </div>
         </section>
 
         {/* ── Second strip ── */}
         <section>
-          <StripBanner ad={ads[1]} />
+          <StripBanner ad={ads[1]} Click={() => handleClick(ads[1])} />
         </section>
 
         {/* ── Bottom 3-column medium banners ── */}
@@ -414,7 +368,7 @@ const AdsPage = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {ads.slice(0, 3).map(ad => (
-              <MediumBanner key={ad.ads_id} ad={ad} />
+              <MediumBanner key={ad.ads_id} ad={ad} Click={() => handleClick(ad)} />
             ))}
           </div>
         </section>
@@ -423,7 +377,7 @@ const AdsPage = () => {
         <div className="text-center py-6 border-t border-gray-200">
           <p className="text-xs text-gray-400">
             Ces annonces sont gérées directement par l'équipe YamoMarket.{' '}
-            <a href="/contact" className="text-green-600 hover:underline font-medium">Nous contacter pour faire de la publicité</a>
+            <a href="/about#contact" className="text-green-600 hover:underline font-medium">Nous contacter pour faire de la publicité</a>
           </p>
         </div>
       </div>

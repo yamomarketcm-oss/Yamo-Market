@@ -488,6 +488,22 @@ const ProductDetail = () => {
     fetch_();
   }, [product_id]);
 
+  const handleClick = async (product) => {
+  try {
+    await fetch('http://localhost:5050/api/market/click-log', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        clict_type: 'shop', shoplead_ip: product.shop, vendor: product.shop, shop: product.shop
+      }),
+    });
+  } catch (err) {
+    console.log('Could not submit update.', err);
+  }
+};
+
   /* ── loading skeleton ── */
   if (loading) return (
     <div className="min-h-screen pt-16 bg-gray-50">
@@ -602,7 +618,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Shop card */}
-            <Link to={`/boutique/${product.shop}`}>
+            <Link to={`/boutique/${product.shop}`} onClick={() => handleClick(product)} >
             <div className="bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-green-200 transition-colors cursor-pointer group">
               <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-2xl flex-shrink-0">🏪</div>
               <div className="flex-1 min-w-0">

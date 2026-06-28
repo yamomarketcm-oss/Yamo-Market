@@ -28,10 +28,9 @@ const TEAM = [
 ];
 
 const MILESTONES = [
-  { year: '2022', event: 'Fondation de Yamo Market à Yaoundé par une équipe de 3 passionnés du numérique.' },
-  { year: '2023', event: 'Lancement officiel avec 20 boutiques partenaires et 150 produits en ligne.' },
-  { year: '2024', event: 'Extension à Douala et Bafoussam. Passage à 80+ boutiques vérifiées et 12 000 utilisateurs.' },
-  { year: '2025', event: 'Lancement de la livraison express 24h et du programme de fidélité Yamo Plus.' },
+  { year: '2026', event: 'Fondation de Yamo Market à Douala par une équipe de 3 passionnés du numérique.' },
+  { year: '2026', event: 'Lancement officiel avec 20 boutiques partenaires et 150 produits en ligne.' },
+  { year: '2026', event: 'Extension à Douala et Yaounde. Passage à 80+ boutiques vérifiées et 12 000 utilisateurs.' }
 ];
 
 /* ─── animated count-up ─────────────────────────── */
@@ -294,9 +293,9 @@ const AboutPage = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
             {[
-              { icon: <Mail size={18} />, label: 'Email',     val: 'contact@yamomarket.cm',  color: 'bg-green-100 text-green-700'   },
-              { icon: <Phone size={18} />, label: 'Téléphone',val: '+237 6 99 00 11 22',      color: 'bg-emerald-100 text-emerald-700' },
-              { icon: <MapPin size={18} />, label: 'Siège',   val: 'Yaoundé, Cameroun 🇨🇲', color: 'bg-teal-100 text-teal-700'      },
+              { icon: <Mail size={18} />, label: 'Email',     val: 'yamomarketcm@gmail.com',  color: 'bg-green-100 text-green-700'   },
+              { icon: <Phone size={18} />, label: 'Téléphone',val: '+237 6 95 76 09 89',      color: 'bg-emerald-100 text-emerald-700' },
+              { icon: <MapPin size={18} />, label: 'Siège',   val: 'Douala, Cameroun 🇨🇲', color: 'bg-teal-100 text-teal-700'      },
             ].map((c, i) => (
               <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4 hover:shadow-md hover:border-green-200 transition-all">
                 <div className={`w-10 h-10 rounded-xl ${c.color} flex items-center justify-center flex-shrink-0`}>{c.icon}</div>

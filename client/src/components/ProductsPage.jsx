@@ -36,22 +36,6 @@ const REGIONS = [
   'Sud-Ouest', 'Adamaoua', 'Nord', 'Extrême-Nord', 'Est', 'Sud',
 ];
 
-/* ─── mock products ───────────────────────────────── */
-const PRODUCTS = [
-  { id:1,  name:'Smartphone Pro Max X12', price:85000,  category:'Électronique', badge:'New',   region:'Littoral', town:'Douala',    shop:'TechShop Douala',   rating:4.7, reviews:32, views:318, stock:7,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'📱' },
-  { id:2,  name:'Robe élégante coton',    price:12500,  category:'Mode',         badge:'Sale',  region:'Centre',   town:'Yaoundé',   shop:'Mode Afrique',      rating:4.5, reviews:18, views:145, stock:20, verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'👗' },
-  { id:3,  name:'Casque audio sans-fil',  price:22000,  category:'Électronique', badge:null,    region:'Littoral', town:'Douala',    shop:'SoundHub',          rating:4.9, reviews:54, views:201, stock:12, verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🎧' },
-  { id:4,  name:'Fauteuil design bois',   price:45000,  category:'Maison',       badge:'Local', region:'Centre',   town:'Yaoundé',   shop:'Déco Yaoundé',      rating:4.6, reviews:11, views:89,  stock:4,  verified:false, m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🪑' },
-  { id:5,  name:'Parfum Oud Intense',     price:18000,  category:'Beauté',       badge:'Hot',   region:'Ouest',    town:'Bafoussam', shop:'Beauté Prestige',   rating:4.8, reviews:27, views:233, stock:9,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🌹' },
-  { id:6,  name:'Sneakers Urban Run',     price:35000,  category:'Sport',        badge:null,    region:'Littoral', town:'Douala',    shop:'SportZone CM',      rating:4.4, reviews:43, views:176, stock:15, verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'👟' },
-  { id:7,  name:'Montre connectée GT5',   price:55000,  category:'Électronique', badge:'Sale',  region:'Littoral', town:'Douala',    shop:'TechShop Douala',   rating:4.7, reviews:19, views:145, stock:3,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'⌚' },
-  { id:8,  name:'Sac à main cuir',        price:28000,  category:'Mode',         badge:null,    region:'Centre',   town:'Yaoundé',   shop:'Mode Afrique',      rating:4.3, reviews:9,  views:67,  stock:8,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'👜' },
-  { id:9,  name:'Laptop UltraSlim 14"',   price:320000, category:'Électronique', badge:'New',   region:'Littoral', town:'Douala',    shop:'TechShop Douala',   rating:4.8, reviews:22, views:267, stock:3,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'💻' },
-  { id:10, name:'Épices locales assortis', price:4500,  category:'Alimentation', badge:'Local', region:'Centre',   town:'Yaoundé',   shop:'Cuisine & Saveurs', rating:4.7, reviews:38, views:112, stock:50, verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🌶️' },
-  { id:11, name:'Chaussures derby cuir',  price:42000,  category:'Mode',         badge:null,    region:'Sud-Ouest',town:'Buea',      shop:'FashionHub Buea',   rating:4.4, reviews:14, views:88,  stock:6,  verified:false, m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'👞' },
-  { id:12, name:'Tabouret pliant bois',   price:8500,   category:'Maison',       badge:'Promo', region:'Centre',   town:'Mbalmayo', shop:'Déco Yaoundé',      rating:4.2, reviews:7,  views:44,  stock:22, verified:false, m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🪑' },
-];
-
 /* ─── helpers ─────────────────────────────────────── */
 const fmtPrice = (n) => n.toLocaleString('fr-CM');
 
@@ -72,6 +56,19 @@ const StarRow = ({ rating, size = 12 }) => (
 
 /* ─── ProductCard ─────────────────────────────────── */
 const ProductCard = ({ p, viewMode }) => {
+
+  const handleClick = async () => {
+    try {
+      const res = await fetch('http://localhost:5050/api/market/click-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clict_type: 'product', shoplead_ip: p.product_id, vendor:p.product_id, shop: p.shop }),
+      });
+    } catch (err) {
+      console.log('Could not submit update.', 'error');
+    }
+  };
+
   const isList = viewMode === 'list';
   return (
     <div className={`group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 cursor-pointer ${isList ? 'flex items-center gap-4 p-3' : 'flex flex-col'}`}>
@@ -80,7 +77,7 @@ const ProductCard = ({ p, viewMode }) => {
       <Link to={`/product/${p.product_id}`}>
       <div className={`relative bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center flex-shrink-0 ${isList ? 'w-24 h-24 rounded-xl' : 'h-44'}`}>
         {p.m_img
-          ? <img src={p.m_img} alt={p.product_name} className={`${isList && 'rounded-xl'} w-full h-full object-cover`} />
+          ? <img src={p.m_img} onClick={handleClick} alt={p.product_name} className={`${isList && 'rounded-xl'} w-full h-full object-cover`} />
           : <span className={`select-none group-hover:scale-110 transition-transform duration-300 ${isList ? 'text-4xl' : 'text-6xl'}`}>{p.icon}</span>
         }
         {p.tag && !isList && (
@@ -132,7 +129,7 @@ const ProductCard = ({ p, viewMode }) => {
             <span className="text-xs font-semibold text-gray-400 ml-0.5">XAF</span>
           </div>
           <div className="flex items-center">
-            <Link to={`/product/${p.product_id}`}>
+            <Link to={`/product/${p.product_id}`} onClick={handleClick}>
             <button className="text-xs font-medium text-green-700 border border-green-200 hover:bg-green-600 hover:text-white hover:border-green-600 px-3 py-1.5 rounded-lg transition-all">
               Voir
             </button>

@@ -14,7 +14,7 @@ const Footer = () => {
               </div>
               <span className="text-white font-bold text-lg">YamoMarket</span>
             </div>
-            <p className="text-sm sm:w-80 w-40 text-green-300">Le marché digital officiel du Cameroun — local, fiable, rapide.</p>
+            <p className="sm:text-sm text-xs sm:w-80 w-40 text-green-300">Le marché digital officiel du Cameroun — local, fiable, rapide.</p>
           </div>
           <div className='mx-auto'>
             <p className="text-white font-semibold mb-3 text-sm">Liens rapides</p>
@@ -27,9 +27,9 @@ const Footer = () => {
           <div className='mx-auto'>
             <p className="text-white font-semibold mb-3 text-sm">Contact</p>
             <ul className="space-y-2 text-sm text-green-300">
-              <li>yamomarket237@gmail.com</li>
+              <li>yamomarketcm@gmail.com</li>
               <li>+237 695760989</li>
-              <li>Yaoundé, Cameroun</li>
+              <li>Douala, Cameroun</li>
             </ul>
           </div>
         </div>

@@ -418,7 +418,7 @@ const Navbar = () => {
         <nav className="rounded-2xl backdrop-blur-xl bg-green-900/80 border border-white/10 shadow-xl shadow-black/20 px-3 sm:px-5 md:px-6 flex h-14 items-center justify-between gap-4">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
             <div className="w-8 h-8 rounded-xl bg-green-500 flex items-center justify-center shadow-md shadow-green-700/40">
               <ShoppingBag size={15} className="text-white" />
             </div>

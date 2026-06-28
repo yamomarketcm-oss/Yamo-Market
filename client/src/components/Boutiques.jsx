@@ -65,9 +65,22 @@ const StarRow = ({ rating, size = 12 }) => (
 );
 
 const BoutiqueCard = ({ b, viewMode }) => {
+
+  const handleClick = async () => {
+    try {
+      const res = await fetch('http://localhost:5050/api/market/click-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clict_type: 'shop', shoplead_ip:b.shop_id, vendor:b.shop_id, shop: b.shop_id }),
+      });
+    } catch (err) {
+      console.log('Could not submit update.', 'error');
+    }
+  };
+
   const isList = viewMode === 'list';
   return (
-        <Link to={`/boutique/${b.shop_id}`}>
+        <Link to={`/boutique/${b.shop_id}`} onClick={handleClick}>
     <div className={`group bg-white border border-gray-100 rounded-2xl hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 cursor-pointer overflow-hidden ${isList ? 'flex items-center gap-4 p-4' : ''}`}>
       {/* cover / icon */}
       {isList ? (
