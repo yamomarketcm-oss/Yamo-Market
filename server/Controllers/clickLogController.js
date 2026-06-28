@@ -53,7 +53,7 @@ export const logClick = async (req, res) => {
   try {
     /* dedup: same IP + same target within DEDUP_SECONDS → skip */
     const dup = await pool.query(
-      `SELECT shoplead_ip FROM click_logs
+      `SELECT shoplead_ip FROM "click_logs"
        WHERE clict_type  = $1
          AND shoplead_ip = $2
          AND ip_address  = $3
@@ -67,7 +67,7 @@ export const logClick = async (req, res) => {
     }
 
     await pool.query(
-      `INSERT INTO click_logs (shoplead_ip, vendor, shop, clict_type, ip_address)
+      `INSERT INTO "click_logs" (shoplead_ip, vendor, shop, clict_type, ip_address)
        VALUES ($1, $2, $3, $4, $5)`,
       [
         parseInt(shoplead_ip),
@@ -115,39 +115,50 @@ export const getShopClicks = async (req, res) => {
       `SELECT
          COUNT(*)                   AS total_clicks,
          COUNT(DISTINCT ip_address) AS unique_ips
-       FROM click_logs
+       FROM "click_logs"
        WHERE shop       = $1
          AND clict_type = 'shop'
          AND clicked_at >= DATE_TRUNC('month', NOW())`,
       [shopId]
     );
 
-    /* 2. Per-product clicks this month (clict_type = 'product') */
+    /* 2. Per-product clicks this month with product details */
     const productClicks = await pool.query(
       `SELECT
-         shoplead_ip                AS product_id,
-         COUNT(*)                   AS total_clicks,
-         COUNT(DISTINCT ip_address) AS unique_ips
-       FROM click_logs
-       WHERE shop       = $1
-         AND clict_type = 'product'
-         AND clicked_at >= DATE_TRUNC('month', NOW())
-       GROUP BY shoplead_ip
+         cl.shoplead_ip              AS product_id,
+         COUNT(*)                    AS total_clicks,
+         COUNT(DISTINCT cl.ip_address) AS unique_ips,
+         p.product_name,
+         p.price,
+         p.m_img,
+         p.tag
+       FROM "click_logs" cl
+       LEFT JOIN "Product" p ON p.product_id = cl.shoplead_ip
+       WHERE cl.shop       = $1
+         AND cl.clict_type = 'product'
+         AND cl.clicked_at >= DATE_TRUNC('month', NOW())
+       GROUP BY cl.shoplead_ip, p.product_name, p.price, p.m_img, p.tag
        ORDER BY total_clicks DESC`,
       [shopId]
     );
 
-    /* 3. Per-ad clicks this month (clict_type = 'ads') */
+    /* 3. Per-ad clicks this month with ad + product details */
     const adClicks = await pool.query(
       `SELECT
-         shoplead_ip                AS ads_id,
-         COUNT(*)                   AS total_clicks,
-         COUNT(DISTINCT ip_address) AS unique_ips
-       FROM click_logs
-       WHERE shop       = $1
-         AND clict_type = 'ads'
-         AND clicked_at >= DATE_TRUNC('month', NOW())
-       GROUP BY shoplead_ip
+         cl.shoplead_ip              AS ads_id,
+         COUNT(*)                    AS total_clicks,
+         COUNT(DISTINCT cl.ip_address) AS unique_ips,
+         a.title,
+         a.slogan,
+         p.product_name,
+         p.m_img
+       FROM "click_logs" cl
+       LEFT JOIN "Ads"      a ON a.product     = cl.shoplead_ip
+       LEFT JOIN "Product" p ON p.product_id = a.product
+       WHERE cl.shop  = $1
+         AND cl.clict_type = 'ads'
+         AND cl.clicked_at >= DATE_TRUNC('month', NOW())
+       GROUP BY cl.shoplead_ip, a.title, a.slogan, p.product_name, p.m_img
        ORDER BY total_clicks DESC`,
       [shopId]
     );
@@ -158,7 +169,7 @@ export const getShopClicks = async (req, res) => {
          TO_CHAR(DATE_TRUNC('month', clicked_at), 'YYYY-MM') AS month,
          COUNT(*)                                              AS total_clicks,
          COUNT(DISTINCT ip_address)                           AS unique_ips
-       FROM click_logs
+       FROM "click_logs"
        WHERE shop      = $1
          AND clicked_at >= DATE_TRUNC('month', NOW()) - ($2 - 1) * INTERVAL '1 month'
        GROUP BY DATE_TRUNC('month', clicked_at)
@@ -188,28 +199,42 @@ export const getShopClicks = async (req, res) => {
         unique_ips:   parseInt(shopThisMonth.rows[0]?.unique_ips   ?? 0),
       },
 
-      /* per-product breakdown */
+      /* per-product breakdown with details */
       product_clicks: productClicks.rows.map(r => ({
         product_id:   parseInt(r.product_id),
         total_clicks: parseInt(r.total_clicks),
         unique_ips:   parseInt(r.unique_ips),
+        product_name: r.product_name ?? null,
+        price:        r.price        ?? null,
+        m_img:        r.m_img        ?? null,
+        tag:          r.tag          ?? null,
       })),
       top_product_this_month: productClicks.rows[0] ? {
         product_id:   parseInt(productClicks.rows[0].product_id),
         total_clicks: parseInt(productClicks.rows[0].total_clicks),
         unique_ips:   parseInt(productClicks.rows[0].unique_ips),
+        product_name: productClicks.rows[0].product_name ?? null,
+        price:        productClicks.rows[0].price        ?? null,
+        m_img:        productClicks.rows[0].m_img        ?? null,
       } : null,
 
-      /* per-ad breakdown */
+      /* per-ad breakdown with details */
       ad_clicks: adClicks.rows.map(r => ({
         ads_id:       parseInt(r.ads_id),
         total_clicks: parseInt(r.total_clicks),
         unique_ips:   parseInt(r.unique_ips),
+        title:        r.title        ?? null,
+        slogan:       r.slogan       ?? null,
+        product_name: r.product_name ?? null,
+        m_img:        r.m_img        ?? null,
       })),
       top_ad_this_month: adClicks.rows[0] ? {
         ads_id:       parseInt(adClicks.rows[0].ads_id),
         total_clicks: parseInt(adClicks.rows[0].total_clicks),
         unique_ips:   parseInt(adClicks.rows[0].unique_ips),
+        title:        adClicks.rows[0].title        ?? null,
+        product_name: adClicks.rows[0].product_name ?? null,
+        m_img:        adClicks.rows[0].m_img        ?? null,
       } : null,
 
       /* monthly trend chart data */
@@ -249,7 +274,7 @@ export const getProductClicks = async (req, res) => {
          TO_CHAR(DATE_TRUNC('month', clicked_at), 'YYYY-MM') AS month,
          COUNT(*)                                              AS total_clicks,
          COUNT(DISTINCT ip_address)                           AS unique_ips
-       FROM click_logs
+       FROM "click_logs"
        WHERE clict_type  = 'product'
          AND shoplead_ip = $1
          AND clicked_at >= DATE_TRUNC('month', NOW()) - ($2 - 1) * INTERVAL '1 month'
@@ -304,7 +329,7 @@ export const getAdsClicks = async (req, res) => {
          TO_CHAR(DATE_TRUNC('month', clicked_at), 'YYYY-MM') AS month,
          COUNT(*)                                              AS total_clicks,
          COUNT(DISTINCT ip_address)                           AS unique_ips
-       FROM click_logs
+       FROM "click_logs"
        WHERE clict_type  = 'ads'
          AND shoplead_ip = $1
          AND clicked_at >= DATE_TRUNC('month', NOW()) - ($2 - 1) * INTERVAL '1 month'
@@ -338,9 +363,14 @@ export const getAdsClicks = async (req, res) => {
 };
 
 
+
 /* ═══════════════════════════════════════════════════════════════
    GET /api/market/clicks/admin?clict_type=shop|product|ads
-   Platform-wide current-month totals. For admin dashboard.
+   Platform-wide current-month totals with full details joined.
+
+   clict_type=shop    → joins shops table for shop_name, region, town, category
+   clict_type=product → joins products + shops for product_name, price, shop_name, m_img
+   clict_type=ads     → joins ads + products for title, slogan, product_name, m_img
 ═══════════════════════════════════════════════════════════════ */
 export const getAdminClicks = async (req, res) => {
   const { clict_type } = req.query;
@@ -353,32 +383,127 @@ export const getAdminClicks = async (req, res) => {
   }
 
   try {
-    const result = await pool.query(
-      `SELECT
-         shoplead_ip,
-         shop,
-         vendor,
-         COUNT(*)                   AS total_clicks,
-         COUNT(DISTINCT ip_address) AS unique_ips
-       FROM click_logs
-       WHERE clict_type = $1
-         AND clicked_at >= DATE_TRUNC('month', NOW())
-       GROUP BY shoplead_ip, shop, vendor
-       ORDER BY total_clicks DESC`,
-      [clict_type]
-    );
+    let rows;
+
+    if (clict_type === 'shop') {
+      /* ── join shops table ── */
+      const result = await pool.query(
+        `SELECT
+           cl.shoplead_ip,
+           cl.shop,
+           COUNT(*)                   AS total_clicks,
+           COUNT(DISTINCT cl.ip_address) AS unique_ips,
+           s.shop_name,
+           s.region,
+           s.town,
+           s.category,
+           s.profile                  AS shop_image
+         FROM "click_logs" cl
+         LEFT JOIN "Shop" s ON s.shop_id = cl.shoplead_ip
+         WHERE cl.clict_type = 'shop'
+           AND cl.clicked_at >= DATE_TRUNC('month', NOW())
+         GROUP BY cl.shoplead_ip, cl.shop, s.shop_name, s.region, s.town,
+                  s.category, s.profile
+         ORDER BY total_clicks DESC`
+      );
+      rows = result.rows.map(r => ({
+        shoplead_ip:  r.shoplead_ip,
+        shop:         r.shop,
+        total_clicks: r.total_clicks,
+        unique_ips:   r.unique_ips,
+        shop_name:    r.shop_name   ?? null,
+        region:       r.region      ?? null,
+        town:         r.town        ?? null,
+        category:     r.category    ?? null,
+        shop_status:  r.shop_status ?? null,
+        shop_image:   r.shop_image  ?? null,
+      }));
+
+    } else if (clict_type === 'product') {
+      /* ── join products + shops tables ── */
+      const result = await pool.query(
+        `SELECT
+           cl.shoplead_ip,
+           cl.shop,
+           COUNT(*)                      AS total_clicks,
+           COUNT(DISTINCT cl.ip_address) AS unique_ips,
+           p.product_name,
+           p.price,
+           p.tag,
+           p.m_img,
+           s.shop_name,
+           s.region,
+           s.town
+         FROM "click_logs" cl
+         LEFT JOIN "Product" p ON p.product_id = cl.shoplead_ip
+         LEFT JOIN "Shop"   s ON s.shop_id    = cl.shop
+         WHERE cl.clict_type = 'product'
+           AND cl.clicked_at >= DATE_TRUNC('month', NOW())
+         GROUP BY cl.shoplead_ip, cl.shop, p.product_name, p.price, p.tag,
+                  p.m_img, s.shop_name, s.region, s.town
+         ORDER BY total_clicks DESC`
+      );
+      rows = result.rows.map(r => ({
+        shoplead_ip:    r.shoplead_ip,
+        shop:           r.shop,
+        total_clicks:   r.total_clicks,
+        unique_ips:     r.unique_ips,
+        product_name:   r.product_name   ?? null,
+        price:          r.price          ?? null,
+        tag:            r.tag            ?? null,
+        m_img:          r.m_img          ?? null,
+        product_status: r.product_status ?? null,
+        shop_name:      r.shop_name      ?? null,
+        region:         r.region         ?? null,
+        town:           r.town           ?? null,
+      }));
+
+    } else {
+      /* ── clict_type = 'ads': join ads + products ── */
+      const result = await pool.query(
+        `SELECT
+           cl.shoplead_ip,
+           cl.shop,
+           COUNT(*)                      AS total_clicks,
+           COUNT(DISTINCT cl.ip_address) AS unique_ips,
+           a.title,
+           a.slogan,
+           a.chancing,
+           p.product_name,
+           p.price,
+           p.m_img,
+           s.shop_name
+         FROM "click_logs" cl
+         LEFT JOIN "Ads"     a ON a.product     = cl.shoplead_ip
+         LEFT JOIN "Product" p ON p.product_id = a.product
+         LEFT JOIN "Shop"    s ON s.shop_id    = cl.shop
+         WHERE cl.clict_type = 'ads'
+           AND cl.clicked_at >= DATE_TRUNC('month', NOW())
+         GROUP BY cl.shoplead_ip, cl.shop, a.title, a.slogan, a.chancing,
+                  p.product_name, p.price, p.m_img, s.shop_name
+         ORDER BY total_clicks DESC`
+      );
+      rows = result.rows.map(r => ({
+        shoplead_ip:  r.shoplead_ip,
+        shop:         r.shop,
+        total_clicks: r.total_clicks,
+        unique_ips:   r.unique_ips,
+        title:        r.title        ?? null,
+        slogan:       r.slogan       ?? null,
+        chancing:     r.chancing     ?? null,
+        ads_status:   r.ads_status   ?? null,
+        product_name: r.product_name ?? null,
+        price:        r.price        ?? null,
+        m_img:        r.m_img        ?? null,
+        shop_name:    r.shop_name    ?? null,
+      }));
+    }
 
     return res.status(200).json({
       success:    true,
       clict_type,
       month:      new Date().toISOString().slice(0, 7),
-      data:       result.rows.map(r => ({
-        shoplead_ip:  parseInt(r.shoplead_ip),
-        shop:         r.shop   ? parseInt(r.shop)   : null,
-        vendor:       r.vendor ? parseInt(r.vendor) : null,
-        total_clicks: parseInt(r.total_clicks),
-        unique_ips:   parseInt(r.unique_ips),
-      })),
+      data:       rows,
     });
 
   } catch (err) {
