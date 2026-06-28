@@ -686,7 +686,7 @@ const MyShopPage = () => {
           <StatCard icon={<Package   size={18} className="text-green-700"  />} label="Produits"      value={products.length}               color="bg-green-100"  />
           <StatCard icon={<Eye       size={18} className="text-blue-600"   />} label="Vues totales"  value=""                                 color="bg-blue-100"   />
           <StatCard icon={<ShoppingBag size={18} className="text-amber-600"/>} label="Ventes"        value=""                                                  color="bg-amber-100"  />
-          <StatCard icon={<TrendingUp size={18} className="text-emerald-600"/>} label="Revenus"      value=""              sub="+12% ce mois"    color="bg-emerald-100"/>
+          <StatCard icon={<TrendingUp size={18} className="text-emerald-600"/>} label="Revenus"      value=""              sub="% ce mois"    color="bg-emerald-100"/>
         </div>
 
         {/* Product list */}
