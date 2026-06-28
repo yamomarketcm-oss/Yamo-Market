@@ -1,7 +1,6 @@
 import db from '../db.js'
 import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { customAlphabet } from 'nanoid';
 import { v4 as uuidv4 } from 'uuid';
 
 export const createShop = async (req, res, next) => {

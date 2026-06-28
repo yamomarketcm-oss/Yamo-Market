@@ -8,6 +8,7 @@ import userRoute from './Routes/user_route.js'
 import ShopRoute from './Routes/shop_route.js'
 import ProductRoute from './Routes/product_route.js'
 import AdRoute from './Routes/ads_route.js'
+import ClickRoute from './Routes/clickLogRoutes.js'
 
 const { Pool } = pkg
 
@@ -46,4 +47,4 @@ app.listen(5050, () => {
     console.log("Server is on run......!!!")
 })
 
-app.use('/api/market', userRoute, ProductRoute, ShopRoute, AdRoute)
+app.use('/api/market', userRoute, ProductRoute, ShopRoute, AdRoute, ClickRoute)
