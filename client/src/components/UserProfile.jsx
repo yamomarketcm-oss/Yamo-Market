@@ -911,7 +911,8 @@ const UserProfile = () => {
         <div className="absolute bottom-0 left-1/3 w-32 h-32 bg-white/5 rounded-full pointer-events-none" />
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 relative z-10">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+          <div className="flex flex-col sm:flex-row justify-between gap-6">
+           <div className='flex gap-2'>
             {/* avatar */}
             <div className="relative flex-shrink-0">
               <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-green-400 to-emerald-500 border-4 border-white/20 flex items-center justify-center shadow-2xl">
@@ -934,6 +935,7 @@ const UserProfile = () => {
               <p className="text-green-200 text-sm flex items-center gap-1.5"><Mail size={12} /> {user2?.email}</p>
               <p className="text-green-300 text-sm mt-1 flex items-center gap-1"><PhoneCall size={12} />  {user2?.phone}</p>
             </div>
+           </div>
 
             {/* actions */}
             <div className="flex flex-col gap-2.5 flex-shrink-0">
