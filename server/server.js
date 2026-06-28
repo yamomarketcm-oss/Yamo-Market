@@ -37,7 +37,11 @@ const pool = new Pool({
 
    app.use(express.json())
    app.use(cookieParser())
-   app.use(cors())
+   app.use(cors({
+          origin: ["https://yamo-market-online.vercel.app"],
+          method: ["POST", "GET", "PUT", "DELETE"],
+          credentials: "true"
+        }))
 
    app.get('/', (req, res) => {
       res.send('server running....!!!');
