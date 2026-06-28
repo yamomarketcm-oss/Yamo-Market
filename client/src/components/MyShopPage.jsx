@@ -658,7 +658,7 @@ const MyShopPage = () => {
       <div className="max-w-6xl sm:mx-auto mx-2 relative bg-gradient-to-r from-green-700 to-emerald-600 rounded-3xl overflow-hidden p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="absolute right-0 top-0 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
         <div className="flex items-center gap-4 relative z-10">
-          <div className="w-16 h-16 rounded-2xl bg-white/20 border-2 border-white/40 flex items-center justify-center text-3xl flex-shrink-0">💻</div>
+          <img src={shopDetail?.profile} className='w-24 h-20 object-cover rounded-md' />
           <div>
             <h1 className="text-white font-extrabold text-xl">{shopDetail?.shop_name || 'Ma boutique'}</h1>
             <p className="text-green-200 text-xs">{shopDetail?.b_email}</p>
