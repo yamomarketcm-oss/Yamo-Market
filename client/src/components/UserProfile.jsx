@@ -939,7 +939,7 @@ const UserProfile = () => {
 
             {/* actions */}
             <div className="flex flex-col gap-2.5 flex-shrink-0">
-              {user2?.review === NULL || user2?.review === 'rejected' && (
+              {user2?.review === "NULL" || user2?.review === 'rejected' && (
                 <button
                   onClick={() => setModal('verify')}
                   className="flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-amber-900 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all"
