@@ -1235,7 +1235,7 @@ const UserProfile = () => {
                   <Phone size={18} className="text-green-600" />
                   <div>
                     <p className="text-sm font-semibold text-gray-800">SMS 2FA</p>
-                    <p className="text-xs text-gray-400">{user.phone}</p>
+                    <p className="text-xs text-gray-400">{user2.phone}</p>
                   </div>
                 </div>
                 <button className="text-xs font-bold text-green-700 border border-green-200 px-3 py-1.5 rounded-lg hover:bg-green-50 transition-colors">
