@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const res = await fetch('http://localhost:5050/api/market/profile', {
+      const res = await fetch('https://yamo-market-server.vercel.app/api/market/profile', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
