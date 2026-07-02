@@ -1425,7 +1425,7 @@ const AdminDashboard = () => {
         const route = type === 'shop'    ? `shop/${id}`
                     : type === 'product' ? `product/${id}`
                     :                      `ads/${id}`;
-        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/${route}?months=6`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/click/${route}?months=6`, {
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         });
         const result = await res.json();
