@@ -36,7 +36,7 @@ export const getsAdsId = async (req, res) => {
   try {
     // 1. Query the database to get the scorer with team details
     const result = await db.query(`
-    SELECT a.ads_id, a.product, a.title, a.slogan, a.chancing, a.created_at, p.product_name, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.status,
+    SELECT a.ads_id, a.product, a.title, a.slogan, a.chancing, a.created_at, p.product_slug, p.product_name, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.status,
       s.shop_name, s.b_email, s.b_phone, s.bio, s.category AS shop_category, s.profile, s.town, s.region, s.address
       FROM "Ads" a
       LEFT JOIN "Product" p ON a.product = p.product_id
@@ -63,7 +63,7 @@ export const getAllAds = async (req, res) => {
   try {
     // 1. Query the database to get all products
     const result = await db.query(`
-      SELECT a.ads_id, a.product, a.title, a.slogan, a.chancing, a.created_at, p.product_name, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.status,
+      SELECT a.ads_id, a.product, a.title, a.slogan, a.chancing, a.created_at, p.product_slug, p.product_name, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.status,
       s.shop_name, s.b_email, s.b_phone, s.bio, s.category AS shop_category, s.profile, s.town, s.region, s.address
       FROM "Ads" a
       LEFT JOIN "Product" p ON a.product = p.product_id

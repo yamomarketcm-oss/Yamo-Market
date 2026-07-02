@@ -17,10 +17,11 @@ const { Pool } = pkg
 const app = express()
 
 const pool = new Pool({
-   connectionString: 'postgresql://neondb_owner:npg_oISRkA7H0sKu@ep-steep-hall-ai96tbv5-pooler.c-4.us-east-1.aws.neon.tech/Yamo%20Market?sslmode=require&channel_binding=require',
-  ssl: {
-    rejectUnauthorized: false, // Required for Neon
-  },
+   user: process.env.DB_USER || 'postgres',
+   password: process.env.DB_PASSWORD || 'tweet',
+   host: process.env.DB_HOST || 'localhost',
+   port: process.env.DB_PORT || 5432,
+   database: process.env.DB_NAME || 'Transit'
  });
 
  async function testConnection() {
@@ -36,11 +37,7 @@ const pool = new Pool({
 
    app.use(express.json())
    app.use(cookieParser())
-   app.use(cors({
-          origin: ["https://yamo-market-online.vercel.app"],
-          method: ["POST", "GET", "PUT", "DELETE"],
-          credentials: "true"
-        }))
+   app.use(cors())
 
    app.get('/', (req, res) => {
       res.send('server running....!!!');

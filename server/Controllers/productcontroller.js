@@ -22,12 +22,33 @@ export const createProduct = async (req, res) => {
       return res.status(400).json({ error: 'Product Already Exist' });
     }
 
+      const baseSlug = product_name
+              .toLowerCase()
+              .trim()
+              .replace(/\s+/g, "-")
+              .replace(/[^a-z0-9-]/g, "");
+
+            let slug = baseSlug;
+            let counter = 1;
+
+            while (true) {
+              const { rowCount } = await db.query(
+                'SELECT 1 FROM "Product" WHERE product_slug = $1',
+                [slug]
+              );
+
+              if (rowCount === 0) break;
+
+              slug = `${baseSlug}-${counter}`;
+              counter++;
+      }
+
     const created_at = new Date();
 
     // Insert the new player into the Player table
     const result = await db.query(
-      'INSERT INTO "Product" (product_name, "desc", price, shop, m_img, img, tag, category, status, created_at ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
-      [product_name, desc, price, shop, m_img, img, tag, category, status, created_at]
+      'INSERT INTO "Product" (product_slug, product_name, "desc", price, shop, m_img, img, tag, category, status, created_at ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
+      [slug, product_name, desc, price, shop, m_img, img, tag, category, status, created_at]
     );
     
     const newProduct = result.rows[0];  // Assuming `result.rows` contains the inserted product
@@ -45,12 +66,40 @@ export const getsProductId = async (req, res) => {
   try {
     // 1. Query the database to get the scorer with team details
     const result = await db.query(`
-    SELECT p.product_id, p.product_name, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.created_at, p.status,
-      s.shop_name, s.b_email, s.b_phone, s.bio, s.category AS shop_category, s.profile, s.town, s.region, s.address
+    SELECT p.product_id, p.product_name, p.product_slug, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.created_at, p.status,
+      s.shop_name, s.shop_slug, s.b_email, s.b_phone, s.bio, s.category AS shop_category, s.profile, s.town, s.region, s.address
       FROM "Product" p
       LEFT JOIN "Shop" s ON p.shop = s.shop_id 
       WHERE product_id = $1
     `, [product_id]);
+
+    // 2. If no scorer is found, return a 404 response
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // 3. Respond with the scorer data along with the player details
+    res.json(result.rows[0]);
+  } catch (error) {
+    // Error handling
+    console.error('Error retrieving product:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const getsProductSlug = async (req, res) => {
+
+  const { slug } = req.params;
+
+  try {
+    // 1. Query the database to get the scorer with team details
+    const result = await db.query(`
+    SELECT p.product_id, p.product_name, p.product_slug, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.created_at, p.status,
+      s.shop_name, s.shop_slug, s.b_email, s.b_phone, s.bio, s.category AS shop_category, s.profile, s.town, s.region, s.address
+      FROM "Product" p
+      LEFT JOIN "Shop" s ON p.shop = s.shop_id 
+      WHERE product_slug = $1
+    `, [slug]);
 
     // 2. If no scorer is found, return a 404 response
     if (result.rows.length === 0) {
@@ -73,7 +122,7 @@ export const getsProductShopId = async (req, res) => {
   try {
     // 1. Query the database to get the scorer with team details
     const result = await db.query(`
-      SELECT product_id, product_name, "desc", price, shop, m_img, img, tag, category, created_at, status
+      SELECT product_id, product_slug, product_name, "desc", price, shop, m_img, img, tag, category, created_at, status
       FROM "Product" 
       WHERE shop = $1
     `, [shop_id]);
@@ -100,8 +149,8 @@ export const getAllProducts = async (req, res) => {
   try {
     // 1. Query the database to get all products
     const result = await db.query(`
-      SELECT p.product_id, p.product_name, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.created_at, p.status,
-      s.shop_name, s.b_email, s.b_phone, s.bio, s.category AS shop_category, s.profile, s.town, s.region, s.address
+      SELECT p.product_id, p.product_name, p.product_slug, p."desc", p.price, p.shop, p.m_img, p.img, p.tag, p.category AS product_category, p.created_at, p.status,
+      s.shop_name, s.shop_slug, s.b_email, s.b_phone, s.bio, s.category AS shop_category, s.profile, s.town, s.region, s.address
       FROM "Product" p
       LEFT JOIN "Shop" s ON p.shop = s.shop_id
       ORDER BY p.product_id DESC
@@ -133,6 +182,30 @@ export const updateProduct = async (req, res) => {
 
   const { product_name, desc, price, shop, m_img, img, tag, category, status } = req.body;
 
+  const baseSlug = product_name
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
+
+      let slug = baseSlug;
+      let counter = 1;
+
+      while (true) {
+        const { rowCount } = await db.query(
+          `SELECT 1
+          FROM "Product"
+          WHERE product_slug = $1
+            AND product_id <> $2`,
+          [slug, product_id] // productId is the product being updated
+        );
+
+        if (rowCount === 0) break;
+
+        slug = `${baseSlug}-${counter}`;
+        counter++;
+    }
+
   try {
     // 1. First, check if the product_id exists in the product table
     const productResult = await db.query('SELECT * FROM "Product" WHERE product_id = $1', [product_id]);
@@ -149,7 +222,7 @@ export const updateProduct = async (req, res) => {
     // 3. Update the product details
     const updateQuery = `
       UPDATE "Product"
-      SET product_name = $2, "desc" = $3, price = $4, shop = $5, m_img = $6, img = $7, tag = $8, category = $9, status = $10
+      SET product_name = $2, "desc" = $3, price = $4, shop = $5, m_img = $6, img = $7, tag = $8, category = $9, status = $10, product_slug = $11
       WHERE product_id = $1
       RETURNING *;
     `;
@@ -163,7 +236,8 @@ export const updateProduct = async (req, res) => {
       img,
       tag,
       category,
-      status
+      status,
+      slug
     ]);
 
     // 4. Respond with the updated product data

@@ -14,11 +14,11 @@ const router = Router();
 router.post('/click-log',                    logClick);
 
 /* ── SELLER ── */
-router.get('/shop/:shop_id',           requireAuth, getShopClicks);
-router.get('/product/:product_id',     requireAuth, getProductClicks);
-router.get('/ads/:ads_id',             requireAuth, getAdsClicks);
+router.get('/click/shop/:shop_id',           requireAuth, getShopClicks);
+router.get('/click/product/:product_id',     requireAuth, getProductClicks);
+router.get('/click/ads/:ads_id',             requireAuth, getAdsClicks);
 
 /* ── ADMIN ── */
-router.get('/admin',                   requireAuth, getAdminClicks);
+router.get('/click/admin',                   requireAuth, getAdminClicks);
 
 export default router;

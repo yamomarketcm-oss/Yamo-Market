@@ -12,6 +12,27 @@ export const createShop = async (req, res, next) => {
 
         const created_at = new Date();
 
+        const baseSlug = shop_name
+              .toLowerCase()
+              .trim()
+              .replace(/\s+/g, "-")
+              .replace(/[^a-z0-9-]/g, "");
+
+            let slug = baseSlug;
+            let counter = 1;
+
+            while (true) {
+              const { rowCount } = await db.query(
+                'SELECT 1 FROM "Shop" WHERE shop_slug = $1',
+                [slug]
+              );
+
+              if (rowCount === 0) break;
+
+              slug = `${baseSlug}-${counter}`;
+              counter++;
+        }
+
             // Validate input
         if (!shop_name || !b_email || !license_num || !b_phone || !bio || !address || !category || !profile || !region || !town || !created_at) {
           return res.status(400).json({ message: 'All fields are required' });
@@ -36,8 +57,8 @@ export const createShop = async (req, res, next) => {
         }
         
         const result = await db.query(
-          'INSERT INTO "Shop" (shop_name, b_email, license_num, b_phone, bio, category, profile, "user", region, town, address, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *',
-          [shop_name, b_email, license_num, b_phone, bio, category, profile, user, region, town, address, created_at]
+          'INSERT INTO "Shop" (shop_slug, shop_name, b_email, license_num, b_phone, bio, category, profile, "user", region, town, address, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *',
+          [slug, shop_name, b_email, license_num, b_phone, bio, category, profile, user, region, town, address, created_at]
         );
         res.status(201).json(result);
       } catch (error) {
@@ -67,7 +88,7 @@ export const getShop = async ( req, res) => {
   try {
     // 1. Query the database to get all users
     const result = await db.query(`
-      SELECT s.shop_id, s.shop_name, s.b_email, s.license_num, s.b_phone, s.bio, s.category, s.profile, s."user", s.region, s.town, s.address, s.created_at, s.worth,
+      SELECT s.shop_id, s.shop_slug, s.shop_name, s.b_email, s.license_num, s.b_phone, s.bio, s.category, s.profile, s."user", s.region, s.town, s.address, s.created_at, s.worth,
       u.username, u.email, u.phone, u.status
       FROM "Shop" s
       LEFT JOIN "User" u ON s."user" = u.user_id
@@ -99,7 +120,7 @@ export const getShopid = async (req, res) => {
   try {
     // 1. Query the database to get the player with team details
     const result = await db.query(`
-      SELECT s.shop_id, s.shop_name, s.b_email, s.license_num, s.b_phone, s.bio, s.category, s.profile, s."user", s.region, s.town, s.address, s.created_at, s.worth,
+      SELECT s.shop_id, s.shop_slug, s.shop_name, s.b_email, s.license_num, s.b_phone, s.bio, s.category, s.profile, s."user", s.region, s.town, s.address, s.created_at, s.worth,
       u.username, u.email, u.phone, u.status
       FROM "Shop" s
       LEFT JOIN "User" u ON s."user" = u.user_id
@@ -120,10 +141,63 @@ export const getShopid = async (req, res) => {
   }
 }
 
+export const getShopSlug = async (req, res) => {
+
+  const { slug } = req.params;
+
+  try {
+    // 1. Query the database to get the player with team details
+    const result = await db.query(`
+      SELECT s.shop_id, s.shop_slug, s.shop_name, s.b_email, s.license_num, s.b_phone, s.bio, s.category, s.profile, s."user", s.region, s.town, s.address, s.created_at, s.worth,
+      u.username, u.email, u.phone, u.status
+      FROM "Shop" s
+      LEFT JOIN "User" u ON s."user" = u.user_id
+      WHERE s.shop_slug = $1
+    `, [slug]);
+
+    // 2. If no player is found, return a 404 response
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Shop not found' });
+    }
+
+    // 3. Respond with the player data along with the team details
+    res.json(result.rows[0]);
+  } catch (error) {
+    // Error handling
+    console.error('Error retrieving Shop:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+}
+
 export const updateShop = async (req, res) => {
 
   const { shop_id } = req.params;
+
   const { shop_name, b_email, license_num, b_phone, bio, category, profile, user, town, address, worth } = req.body;
+
+    const baseSlug = shop_name
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
+
+      let slug = baseSlug;
+      let counter = 1;
+
+      while (true) {
+        const { rowCount } = await db.query(
+          `SELECT 1
+          FROM "Shop"
+          WHERE shop_slug = $1
+            AND shop_id <> $2`,
+          [slug, shop_id] // shopId is the shop being updated
+        );
+
+        if (rowCount === 0) break;
+
+        slug = `${baseSlug}-${counter}`;
+        counter++;
+    }
 
   try {
 
@@ -138,7 +212,7 @@ export const updateShop = async (req, res) => {
     // 3. Update the player details
     const updateQuery = `
       UPDATE "Shop"
-      SET shop_name = $2, b_email = $3, license_num = $4, b_phone = $5, bio = $6, category = $7, profile = $8, user = $9, town = $10, address = $11, worth = $12
+      SET shop_name = $2, b_email = $3, license_num = $4, b_phone = $5, bio = $6, category = $7, profile = $8, user = $9, town = $10, address = $11, worth = $12, shop_slug = $13
       WHERE shop_id = $1
       RETURNING *;
     `;
@@ -154,7 +228,8 @@ export const updateShop = async (req, res) => {
       user,
       town,
       address,
-      worth
+      worth,
+      slug
     ]);
 
     // 4. Respond with the updated player data
