@@ -182,7 +182,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/getallproducts`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getallproducts`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -231,7 +231,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('market_token');
-      const response = await fetch('http://localhost:5050/api/market/createads', {
+      const response = await fetch('https://yamo-market-server.vercel.app/api/market/createads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -414,7 +414,7 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('market_token');
-      const response = await fetch(`http://localhost:5050/api/market/updatead/${ad.ads_id}`, {
+      const response = await fetch(`https://yamo-market-server.vercel.app/api/market/updatead/${ad.ads_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -574,7 +574,7 @@ const NAV = [
   { key: 'users',         label: 'Utilisateurs',        icon: <Users size={16} />          },
   { key: 'shops',         label: 'Boutiques',            icon: <Store size={16} />          },
   { key: 'products',      label: 'Produits',             icon: <Package size={16} />        },
-  { key: 'ads',           label: 'Annonces',             icon: <Fingerprint size={16} />     },
+  { key: 'ads',           label: 'Annonces',             icon: <Megaphone size={16} />     },
   { key: 'activity',      label: 'Activité',             icon: <Activity size={16} />       },
   { key: 'settings',      label: 'Paramètres',           icon: <Settings size={16} />       },
   { key: 'clicklogs',      label: 'Click',                icon: <Fingerprint size={16} />       },
@@ -750,7 +750,7 @@ const AdminDashboard = () => {
       /* remove from pending list and reflect new status in allUsers */
       setPendingUsers(ps => ps.filter(p => p.user_id !== user.user_id));
       setAllUsers(us => us.map(u => u.user_id === user.user_id ? { ...u, status } : u));
-      showToast(status ? 'Utilisateur approuvÃ© âœ“' : 'Utilisateur refusÃ©', status ? 'success' : 'error');
+      showToast(status ? 'Utilisateur approuve“' : 'Utilisateur refuse', status ? 'success' : 'error');
     } catch (err) {
       showToast('Impossible de traiter la demande.', 'error');
     }
@@ -779,7 +779,7 @@ const AdminDashboard = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw new Error();
-      showToast('Produit supprimÃ©');
+      showToast('Produit supprime');
       setProducts(s => s.filter(p => p.product_id !== productId));
     } catch {
       setToast('Could not remove manager');
@@ -794,7 +794,7 @@ const AdminDashboard = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw new Error();
-      showToast('Utilisateur supprimÃ©');
+      showToast('Utilisateur supprime');
       setAllUsers(s => s.filter(u => u.user_id !== userId));
     } catch {
       setToast('Could not remove manager');
