@@ -6,17 +6,16 @@ const { Pool } = pkg
 dotenv.config()
 
 const db = new Pool({
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'tweet',
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
-    database: process.env.DB_NAME || 'Market'
-  });
+  connectionString: 'postgresql://neondb_owner:npg_oISRkA7H0sKu@ep-steep-hall-ai96tbv5-pooler.c-4.us-east-1.aws.neon.tech/Yamo%20Market?sslmode=require&channel_binding=require',
+  ssl: {
+    rejectUnauthorized: false, // Required for Neon
+  },
+});
  
   async function testConnection() {
     try {
       const client = await db.connect();
-      console.log('Connected to PostgreSQL API database successfully !!!');
+      console.log('Connected to Neon PostgreSQL Successfully !!!');
       client.release();
     } catch (err) {
       console.error('Error connecting to the database:', err.stack);
