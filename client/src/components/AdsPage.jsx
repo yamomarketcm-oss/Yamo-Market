@@ -98,7 +98,7 @@ const HeroCarousel = ({ ads }) => {
           <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-4 mt-5">
             <div className="flex items-center justify-between sm:block gap-3">
               <div>
-                <p className="text-white/50 text-[9px] sm:text-[10px] uppercase tracking-wider">Ã€ partir de</p>
+                <p className="text-white/50 text-[9px] sm:text-[10px] uppercase tracking-wider">A partir de</p>
                 <span className='flex items-center justify-center gap-0.5'><p className="text-lg sm:text-2xl font-black text-white leading-none">{ad?.price}</p><p className='text-lg sm:text-2xl font-black text-white'>XAF</p></span>
               </div>
 
@@ -115,7 +115,7 @@ const HeroCarousel = ({ ads }) => {
              </Link>
 
             <div className="text-white/60 text-[10px] sm:text-xs flex items-center gap-1">
-              <MapPin size={10} /> {ad?.shop_name} â€¢ {ad?.town}
+              <MapPin size={10} /> {ad?.shop_name} . {ad?.town}
             </div>
           </div>
         </div>
@@ -211,7 +211,7 @@ const SmallCard = ({ ad, Click }) => {
       <div className="p-3">
         <p className="font-semibold text-gray-800 text-sm truncate">{ad.title}</p>
         <p className="text-[10px] text-gray-400 flex items-center font-semibold gap-1 mt-0.5 truncate">
-          <MapPin size={9} /> {ad.region} â€¢ {ad.town}
+          <MapPin size={9} /> {ad.region} . {ad.town}
         </p>
 
         {/* Mobile: price on its own line, button full-width below.
@@ -244,7 +244,7 @@ const StripBanner = ({ ad, Click }) => (
           <span className="text-white/60 text-[10px]">{ad?.tag}</span>
         </div>
         <p className="text-white font-extrabold text-lg leading-tight">{ad?.title}</p>
-        <p className="text-white/70 font-semibold text-xs mt-0.5">{ad?.shop_name} â€¢ {ad?.town}</p>
+        <p className="text-white/70 font-semibold text-xs mt-0.5">{ad?.shop_name} . {ad?.town}</p>
       </div>
       <div className="flex flex-col items-end gap-2 flex-shrink-0">
         <span className="text-white font-black text-xl">{ad?.price} XAF</span>
