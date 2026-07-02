@@ -17,11 +17,10 @@ const { Pool } = pkg
 const app = express()
 
 const pool = new Pool({
-   user: process.env.DB_USER || 'postgres',
-   password: process.env.DB_PASSWORD || 'tweet',
-   host: process.env.DB_HOST || 'localhost',
-   port: process.env.DB_PORT || 5432,
-   database: process.env.DB_NAME || 'Transit'
+  connectionString: 'postgresql://neondb_owner:npg_k1VYybEI5JWt@ep-fragrant-pine-a8sdu2n4-pooler.eastus2.azure.neon.tech/mtn_elite_league?sslmode=require&channel_binding=require',
+  ssl: {
+    rejectUnauthorized: false, // Required for Neon
+  },
  });
 
  async function testConnection() {
