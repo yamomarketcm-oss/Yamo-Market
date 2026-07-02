@@ -268,8 +268,8 @@ const AdsPage = () => {
       try {
         const res = await fetch('https://yamo-market-server.vercel.app/api/market/getallads');
         const result = await res.json();
-        setAds(result.data);
-        setSmallAds(result.data);
+        setAds(result.data || []);
+        setSmallAds(result.data || []);
       } catch { } finally { setLoading(false); }
     };
     fetchAds();
@@ -325,7 +325,7 @@ const AdsPage = () => {
             <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">Offres du moment</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-           {ads.slice(0, 2).map(ad => (
+           {ads?.slice(0, 2).map(ad => (
               <MediumBanner key={ad.ads_id} ad={ad} Click={() => handleClick(ad)} />
             ))}
           </div>
