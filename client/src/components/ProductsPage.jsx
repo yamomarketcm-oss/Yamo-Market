@@ -198,7 +198,7 @@ const ProductsPage = () => {
   const [loading, setLoading]     = useState(true);
   const [query, setQuery]         = useState('');
   const [category, setCategory]   = useState('Toutes');
-  const [region, setRegion]       = useState('Toutes les rÃ©gions');
+  const [region, setRegion]       = useState('Toutes les régions');
   const [priceRange, setPriceRange] = useState('Tous les prix');
   const [badge, setBadge]         = useState('Tous');
   const [sortBy, setSort]         = useState('newest');
