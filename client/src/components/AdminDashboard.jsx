@@ -7,7 +7,8 @@ import {
   MoreVertical, RefreshCw, FileText, Megaphone, Menu,
   ArrowUpRight, ArrowDownRight, Activity, Ban, Image as ImageIcon,
   Calendar, Link as LinkIcon, ToggleLeft, ToggleRight, Phone, Mail, MapPin, CreditCard,
-  Fingerprint
+  Fingerprint,
+  MousePointerClick
 } from 'lucide-react';
 
 const ACTIVITY_LOG = [
@@ -1504,7 +1505,7 @@ const AdminDashboard = () => {
               <p className="text-lg font-extrabold text-gray-900">{''}</p>
             </div>
             <div>
-              <p className="text-[10px] text-gray-400 uppercase tracking-wide">EntrÃ©es</p>
+              <p className="text-[10px] text-gray-400 uppercase tracking-wide">Entrées</p>
               <p className="text-lg font-extrabold text-gray-900">{''}</p>
             </div>
           </div>
