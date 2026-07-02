@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+﻿import React, { useState, useMemo, useEffect } from 'react';
 import {
   Search, SlidersHorizontal, X, ChevronDown, Star,
   Heart, Eye, MapPin, ArrowLeft, ShoppingBag,
@@ -8,35 +8,35 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-/* ─── constants ───────────────────────────────────── */
-const CATEGORIES = ['Toutes', 'Électronique', 'Mode', 'Beauté', 'Maison', 'Alimentation', 'Services', 'Autre'];
+/* â”€â”€â”€ constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+const CATEGORIES = ['Toutes', 'Ã‰lectronique', 'Mode', 'BeautÃ©', 'Maison', 'Alimentation', 'Services', 'Autre'];
 
 const PRICE_RANGES = [
   { label: 'Tous les prix', min: 0,      max: Infinity },
   { label: 'Moins de 5 000',  min: 0,    max: 5000     },
-  { label: '5 000 – 20 000',  min: 5000, max: 20000    },
-  { label: '20 000 – 50 000', min: 20000,max: 50000    },
-  { label: '50 000 – 100 000',min: 50000,max: 100000   },
+  { label: '5 000 â€“ 20 000',  min: 5000, max: 20000    },
+  { label: '20 000 â€“ 50 000', min: 20000,max: 50000    },
+  { label: '50 000 â€“ 100 000',min: 50000,max: 100000   },
   { label: 'Plus de 100 000', min: 100000,max: Infinity},
 ];
 
 const SORT_OPTIONS = [
-  { value: 'newest',   label: 'Plus récents'    },
+  { value: 'newest',   label: 'Plus rÃ©cents'    },
   { value: 'popular',  label: 'Plus populaires' },
   { value: 'price_asc',label: 'Prix croissant'  },
-  { value: 'price_desc',label:'Prix décroissant' },
-  { value: 'rating',   label: 'Mieux notés'     },
+  { value: 'price_desc',label:'Prix dÃ©croissant' },
+  { value: 'rating',   label: 'Mieux notÃ©s'     },
 ];
 
 const BADGES = ['Tous', 'New', 'Sale', 'Hot', 'Local', 'Promo'];
 
 const REGIONS = [
-  'Toutes les régions',
+  'Toutes les rÃ©gions',
   'Centre', 'Littoral', 'Ouest', 'Nord-Ouest',
-  'Sud-Ouest', 'Adamaoua', 'Nord', 'Extrême-Nord', 'Est', 'Sud',
+  'Sud-Ouest', 'Adamaoua', 'Nord', 'ExtrÃªme-Nord', 'Est', 'Sud',
 ];
 
-/* ─── helpers ─────────────────────────────────────── */
+/* â”€â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const fmtPrice = (n) => n.toLocaleString('fr-CM');
 
 const badgeColor = (b) => ({
@@ -44,7 +44,7 @@ const badgeColor = (b) => ({
   Local:'bg-green-700', Promo:'bg-violet-500',
 }[b] || 'bg-gray-400');
 
-/* ─── StarRow ─────────────────────────────────────── */
+/* â”€â”€â”€ StarRow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const StarRow = ({ rating, size = 12 }) => (
   <div className="flex items-center gap-0.5">
     {[1,2,3,4,5].map(i => (
@@ -54,7 +54,7 @@ const StarRow = ({ rating, size = 12 }) => (
   </div>
 );
 
-/* ─── ProductCard ─────────────────────────────────── */
+/* â”€â”€â”€ ProductCard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const ProductCard = ({ p, viewMode }) => {
 
   const handleClick = async () => {
@@ -74,7 +74,7 @@ const ProductCard = ({ p, viewMode }) => {
     <div className={`group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 cursor-pointer ${isList ? 'flex items-center gap-4 p-3' : 'flex flex-col'}`}>
 
       {/* image / icon */}
-      <Link to={`/product/${p.product_id}`}>
+      <Link to={`/product/${p.product_slug}`}>
       <div className={`relative bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center flex-shrink-0 ${isList ? 'w-24 h-24 rounded-xl' : 'h-44'}`}>
         {p.m_img
           ? <img src={p.m_img} onClick={handleClick} alt={p.product_name} className={`${isList && 'rounded-xl'} w-full h-full object-cover`} />
@@ -88,7 +88,7 @@ const ProductCard = ({ p, viewMode }) => {
             className="absolute top-3 right-3 flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 shadow-lg shadow-black/10 text-white text-[11px] font-semibold tracking-wide"
           >
             <BadgeCheck size={13} className="text-emerald-400" />
-            Vérifié
+            VÃ©rifiÃ©
           </span>
         )}
       </div>
@@ -129,7 +129,7 @@ const ProductCard = ({ p, viewMode }) => {
             <span className="text-xs font-semibold text-gray-400 ml-0.5">XAF</span>
           </div>
           <div className="flex items-center">
-            <Link to={`/product/${p.product_id}`} onClick={handleClick}>
+            <Link to={`/product/${p.product_slug}`} onClick={handleClick}>
             <button className="text-xs font-medium text-green-700 border border-green-200 hover:bg-green-600 hover:text-white hover:border-green-600 px-3 py-1.5 rounded-lg transition-all">
               Voir
             </button>
@@ -141,7 +141,7 @@ const ProductCard = ({ p, viewMode }) => {
   );
 };
 
-/* ─── Dropdown ────────────────────────────────────── */
+/* â”€â”€â”€ Dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const Dropdown = ({ label, value, options, onChange }) => {
   const [open, setOpen] = useState(false);
   return (
@@ -176,13 +176,13 @@ const Dropdown = ({ label, value, options, onChange }) => {
   );
 };
 
-/* ─── Main Page ───────────────────────────────────── */
+/* â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const ProductsPage = () => {
   const [products, setProducts]   = useState([]);
   const [loading, setLoading]     = useState(true);
   const [query, setQuery]         = useState('');
   const [category, setCategory]   = useState('Toutes');
-  const [region, setRegion]       = useState('Toutes les régions');
+  const [region, setRegion]       = useState('Toutes les rÃ©gions');
   const [priceRange, setPriceRange] = useState('Tous les prix');
   const [badge, setBadge]         = useState('Tous');
   const [sortBy, setSort]         = useState('newest');
@@ -190,7 +190,7 @@ const ProductsPage = () => {
   const [viewMode, setViewMode]   = useState('grid');
   const [showFilters, setShowFilters]   = useState(false);
 
-  /* ── fetch products from API (falls back to mock) ── */
+  /* â”€â”€ fetch products from API (falls back to mock) â”€â”€ */
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -212,32 +212,32 @@ const ProductsPage = () => {
     fetchProducts();
   }, []);
 
-  /* ── resolve selected price range object ── */
+  /* â”€â”€ resolve selected price range object â”€â”€ */
   const priceObj = PRICE_RANGES.find(r => r.label === priceRange);
 
-  /* ── active filter count ── */
+  /* â”€â”€ active filter count â”€â”€ */
   const activeCount = [
     category     !== 'Toutes',
-    region       !== 'Toutes les régions',
+    region       !== 'Toutes les rÃ©gions',
     priceRange   !== 'Tous les prix',
     badge        !== 'Tous',
     verifiedOnly,
   ].filter(Boolean).length;
 
   const clearFilters = () => {
-    setCategory('Toutes'); setRegion('Toutes les régions');
+    setCategory('Toutes'); setRegion('Toutes les rÃ©gions');
     setPriceRange('Tous les prix'); setBadge('Tous');
     setVerifiedOnly(false); setInStockOnly(false); setQuery('');
   };
 
-  /* ── filter ── */
+  /* â”€â”€ filter â”€â”€ */
   const filtered = useMemo(() => {
     let list = products.filter(p => {
       const q = query.toLowerCase();
       return (
         (!q || p.product_name?.toLowerCase().includes(q) || p.shop_name?.toLowerCase().includes(q) || p.town?.toLowerCase().includes(q)) &&
         (category  === 'Toutes'             || p.product_category === category) &&
-        (region    === 'Toutes les régions' || p.region   === region) &&
+        (region    === 'Toutes les rÃ©gions' || p.region   === region) &&
         (p.price   >= priceObj.min && p.price <= priceObj.max) &&
         (badge     === 'Tous'               || p.tag    === badge) &&
         (verifiedOnly === !p.status || p.status)
@@ -250,7 +250,7 @@ const ProductsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* ── Hero ── */}
+      {/* â”€â”€ Hero â”€â”€ */}
       <section className="bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 relative overflow-hidden">
         <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/5 rounded-full pointer-events-none" />
         <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/5 rounded-full pointer-events-none" />
@@ -264,11 +264,11 @@ const ProductsPage = () => {
               </span>
               <h1 className="text-4xl font-extrabold text-white tracking-tight">Nos Produits</h1>
               <p className="text-green-200 mt-2 text-sm max-w-md">
-                Découvrez des centaines de produits locaux — authentiques, vérifiés, livrés partout.
+                DÃ©couvrez des centaines de produits locaux â€” authentiques, vÃ©rifiÃ©s, livrÃ©s partout.
               </p>
             </div>
             <div className="flex gap-6 text-center">
-              {[['340+','Produits'],['80+','Boutiques'],['4.7★','Note moy.']].map(([v,l]) => (
+              {[['340+','Produits'],['80+','Boutiques'],['4.7â˜…','Note moy.']].map(([v,l]) => (
                 <div key={l}>
                   <p className="text-2xl font-bold text-white">{v}</p>
                   <p className="text-green-300 text-xs mt-0.5">{l}</p>
@@ -277,14 +277,14 @@ const ProductsPage = () => {
             </div>
           </div>
 
-          {/* ── Main search bar ── */}
+          {/* â”€â”€ Main search bar â”€â”€ */}
           <div className="mt-8 bg-white rounded-2xl shadow-xl shadow-green-900/20 p-2 flex items-center gap-2">
             <div className="flex-1 flex items-center gap-2 px-3">
               <Search size={18} className="text-gray-400 flex-shrink-0" />
               <input
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Rechercher un produit, boutique, ville…"
+                placeholder="Rechercher un produit, boutique, villeâ€¦"
                 className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none py-2 bg-transparent"
               />
               {query && (
@@ -306,7 +306,7 @@ const ProductsPage = () => {
         </div>
       </section>
 
-      {/* ── Filter panel ── */}
+      {/* â”€â”€ Filter panel â”€â”€ */}
       {showFilters && (
         <div className="bg-white border-b border-gray-200 shadow-sm">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -314,7 +314,7 @@ const ProductsPage = () => {
 
               {/* Region */}
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Région</label>
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">RÃ©gion</label>
                 <Dropdown
                   value={region}
                   options={REGIONS}
@@ -350,7 +350,7 @@ const ProductsPage = () => {
                     onClick={() => setVerifiedOnly(v => !v)}
                     className={`flex items-center justify-between px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${verifiedOnly ? 'bg-green-600 text-white border-green-600' : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-green-400'}`}
                   >
-                    <span className="flex items-center gap-2"><BadgeCheck size={14} /> Vérifiés</span>
+                    <span className="flex items-center gap-2"><BadgeCheck size={14} /> VÃ©rifiÃ©s</span>
                     <div className={`w-8 h-4 rounded-full relative transition-all ${verifiedOnly ? 'bg-white/30' : 'bg-gray-300'}`}>
                       <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-all ${verifiedOnly ? 'left-4' : 'left-0.5'}`} />
                     </div>
@@ -364,10 +364,10 @@ const ProductsPage = () => {
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <span className="text-xs text-gray-400">Filtres actifs :</span>
                 {category   !== 'Toutes'             && <Chip label={category}   onRemove={() => setCategory('Toutes')} />}
-                {region     !== 'Toutes les régions' && <Chip label={region}     onRemove={() => setRegion('Toutes les régions')} icon={<MapPin size={9} />} />}
+                {region     !== 'Toutes les rÃ©gions' && <Chip label={region}     onRemove={() => setRegion('Toutes les rÃ©gions')} icon={<MapPin size={9} />} />}
                 {priceRange !== 'Tous les prix'      && <Chip label={priceRange} onRemove={() => setPriceRange('Tous les prix')} />}
                 {badge      !== 'Tous'               && <Chip label={badge}      onRemove={() => setBadge('Tous')} />}
-                {verifiedOnly && <Chip label="Vérifiés"  onRemove={() => setVerifiedOnly(false)} />}
+                {verifiedOnly && <Chip label="VÃ©rifiÃ©s"  onRemove={() => setVerifiedOnly(false)} />}
                 <button onClick={clearFilters} className="text-xs text-rose-500 hover:text-rose-700 font-medium ml-1 hover:underline">
                   Tout effacer
                 </button>
@@ -377,7 +377,7 @@ const ProductsPage = () => {
         </div>
       )}
 
-      {/* ── Category quick chips ── */}
+      {/* â”€â”€ Category quick chips â”€â”€ */}
       <div className="bg-white border-b border-gray-100 max-w-6xl mx-auto sticky top-[72px] z-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex gap-2 overflow-x-auto">
           {CATEGORIES.map(c => (
@@ -393,7 +393,7 @@ const ProductsPage = () => {
         </div>
       </div>
 
-      {/* ── Results ── */}
+      {/* â”€â”€ Results â”€â”€ */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -402,7 +402,7 @@ const ProductsPage = () => {
               Nos Produit
             </p>
             {query && (
-              <p className="text-xs text-gray-400 mt-0.5">Résultats pour "<span className="text-gray-600 font-medium">{query}</span>"</p>
+              <p className="text-xs text-gray-400 mt-0.5">RÃ©sultats pour "<span className="text-gray-600 font-medium">{query}</span>"</p>
             )}
           </div>
 
@@ -436,14 +436,14 @@ const ProductsPage = () => {
         ) : filtered.length === 0 ? (
           /* empty state */
           <div className="text-center py-24">
-            <p className="text-6xl mb-4">🔍</p>
-            <p className="text-gray-700 font-bold text-lg">Aucun produit trouvé</p>
+            <p className="text-6xl mb-4">ðŸ”</p>
+            <p className="text-gray-700 font-bold text-lg">Aucun produit trouvÃ©</p>
             <p className="text-gray-400 text-sm mt-2 max-w-sm mx-auto">
-              Essayez de modifier vos filtres ou d'élargir votre recherche.
+              Essayez de modifier vos filtres ou d'Ã©largir votre recherche.
             </p>
             <button onClick={clearFilters}
               className="mt-6 bg-green-600 text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-green-700 transition-colors">
-              Réinitialiser les filtres
+              RÃ©initialiser les filtres
             </button>
           </div>
         ) : (
@@ -461,7 +461,7 @@ const ProductsPage = () => {
   );
 };
 
-/* ─── small helper chip ───────────────────────────── */
+/* â”€â”€â”€ small helper chip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const Chip = ({ label, onRemove, icon }) => (
   <span className="flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
     {icon}{label}
@@ -470,3 +470,4 @@ const Chip = ({ label, onRemove, icon }) => (
 );
 
 export default ProductsPage;
+

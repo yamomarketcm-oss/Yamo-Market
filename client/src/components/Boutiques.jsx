@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import {
   Search, MapPin, Star, ChevronRight, BadgeCheck,
   Filter, X, SlidersHorizontal, Store, Users,
@@ -8,38 +8,53 @@ import {
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-/* ─── static data ─────────────────────────────────── */
+/* â”€â”€â”€ static data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const REGIONS = [
-  'Toutes les régions',
+  'Toutes les rÃ©gions',
   'Centre', 'Littoral', 'Ouest', 'Nord-Ouest',
-  'Sud-Ouest', 'Adamaoua', 'Nord', 'Extrême-Nord',
+  'Sud-Ouest', 'Adamaoua', 'Nord', 'ExtrÃªme-Nord',
   'Est', 'Sud',
 ];
 
 const TOWNS = {
-  'Toutes les régions': ['Toutes les villes'],
-  Centre:        ['Toutes les villes', 'Yaoundé', 'Mbalmayo', 'Obala', 'Nanga-Eboko'],
-  Littoral:      ['Toutes les villes', 'Douala', 'Nkongsamba', 'Edéa', 'Loum'],
-  Ouest:         ['Toutes les villes', 'Bafoussam', 'Dschang', 'Mbouda', 'Bangangté'],
+  'Toutes les rÃ©gions': ['Toutes les villes'],
+  Centre:        ['Toutes les villes', 'YaoundÃ©', 'Mbalmayo', 'Obala', 'Nanga-Eboko'],
+  Littoral:      ['Toutes les villes', 'Douala', 'Nkongsamba', 'EdÃ©a', 'Loum'],
+  Ouest:         ['Toutes les villes', 'Bafoussam', 'Dschang', 'Mbouda', 'BangangtÃ©'],
   'Nord-Ouest':  ['Toutes les villes', 'Bamenda', 'Kumbo', 'Wum', 'Nkambe'],
-  'Sud-Ouest':   ['Toutes les villes', 'Buea', 'Limbe', 'Kumba', 'Mamfé'],
-  Adamaoua:      ['Toutes les villes', 'Ngaoundéré', 'Meiganga', 'Tibati'],
+  'Sud-Ouest':   ['Toutes les villes', 'Buea', 'Limbe', 'Kumba', 'MamfÃ©'],
+  Adamaoua:      ['Toutes les villes', 'NgaoundÃ©rÃ©', 'Meiganga', 'Tibati'],
   Nord:          ['Toutes les villes', 'Garoua', 'Guider', 'Figuil'],
-  'Extrême-Nord':['Toutes les villes', 'Maroua', 'Kousseri', 'Mokolo'],
+  'ExtrÃªme-Nord':['Toutes les villes', 'Maroua', 'Kousseri', 'Mokolo'],
   Est:           ['Toutes les villes', 'Bertoua', 'Batouri', 'Abong-Mbang'],
-  Sud:           ['Toutes les villes', 'Ebolowa', 'Kribi', 'Sangmélima'],
+  Sud:           ['Toutes les villes', 'Ebolowa', 'Kribi', 'SangmÃ©lima'],
 };
 
-const CATEGORIES = ['Toutes', 'Électronique', 'Mode', 'Beauté', 'Maison', 'Alimentation', 'Services', 'Sport', 'Auto'];
+const CATEGORIES = ['Toutes', 'Ã‰lectronique', 'Mode', 'BeautÃ©', 'Maison', 'Alimentation', 'Services', 'Sport', 'Auto'];
 
 const SORT_OPTIONS = [
-  { value: 'rating', label: 'Mieux notées' },
+  { value: 'rating', label: 'Mieux notÃ©es' },
   { value: 'sales', label: 'Plus de ventes' },
   { value: 'products', label: 'Plus de produits' },
-  { value: 'newest', label: 'Plus récentes' },
+  { value: 'newest', label: 'Plus rÃ©centes' },
 ];
 
-/* ─── sub-components ──────────────────────────────── */
+const BOUTIQUES = [
+  { id: 1, name: 'TechShop Douala', tagline: 'Votre destination tech', icon: 'ðŸ’»', category: 'Ã‰lectronique', region: 'Littoral', town: 'Douala', rating: 4.8, reviews: 312, sales: 1240, products: 48, followers: 890, verified: true, responseTime: '< 1h', joined: '2022', badge: 'Top vendeur' },
+  { id: 2, name: 'Mode Afrique', tagline: 'La mode africaine moderne', icon: 'ðŸ‘—', category: 'Mode', region: 'Centre', town: 'YaoundÃ©', rating: 4.6, reviews: 198, sales: 870, products: 134, followers: 1200, verified: true, responseTime: '< 2h', joined: '2021', badge: 'Top vendeur' },
+  { id: 3, name: 'BeautÃ© Prestige', tagline: 'Produits beautÃ© authentiques', icon: 'âœ¨', category: 'BeautÃ©', region: 'Ouest', town: 'Bafoussam', rating: 4.9, reviews: 445, sales: 2100, products: 86, followers: 2300, verified: true, responseTime: '< 30min', joined: '2020', badge: 'Premium' },
+  { id: 4, name: 'DÃ©co YaoundÃ©', tagline: 'Meublez votre intÃ©rieur', icon: 'ðŸª´', category: 'Maison', region: 'Centre', town: 'YaoundÃ©', rating: 4.5, reviews: 87, sales: 340, products: 62, followers: 430, verified: false, responseTime: '< 3h', joined: '2023', badge: null },
+  { id: 5, name: 'SportZone CM', tagline: 'Ã‰quipements sportifs pro', icon: 'âš½', category: 'Sport', region: 'Littoral', town: 'Douala', rating: 4.4, reviews: 156, sales: 520, products: 95, followers: 670, verified: true, responseTime: '< 2h', joined: '2022', badge: null },
+  { id: 6, name: 'ElectroPlus Bamenda', tagline: 'High-tech Ã  Bamenda', icon: 'ðŸ”Œ', category: 'Ã‰lectronique', region: 'Nord-Ouest', town: 'Bamenda', rating: 4.3, reviews: 72, sales: 210, products: 38, followers: 290, verified: false, responseTime: '< 4h', joined: '2023', badge: null },
+  { id: 7, name: 'Cuisine & Saveurs', tagline: 'Ã‰pices et produits locaux', icon: 'ðŸŒ¶ï¸', category: 'Alimentation', region: 'Centre', town: 'YaoundÃ©', rating: 4.7, reviews: 234, sales: 1800, products: 210, followers: 1650, verified: true, responseTime: '< 1h', joined: '2021', badge: 'Top vendeur' },
+  { id: 8, name: 'AutoParts Douala', tagline: 'PiÃ¨ces auto certifiÃ©es', icon: 'ðŸ”§', category: 'Auto', region: 'Littoral', town: 'Douala', rating: 4.5, reviews: 118, sales: 460, products: 312, followers: 540, verified: true, responseTime: '< 2h', joined: '2022', badge: null },
+  { id: 9, name: 'GlamourShop Limbe', tagline: 'BeautÃ© & bien-Ãªtre', icon: 'ðŸ’„', category: 'BeautÃ©', region: 'Sud-Ouest', town: 'Limbe', rating: 4.6, reviews: 143, sales: 620, products: 74, followers: 780, verified: true, responseTime: '< 1h', joined: '2022', badge: null },
+  { id: 10, name: 'MaisonPlus Garoua', tagline: 'DÃ©co et ameublement', icon: 'ðŸ›‹ï¸', category: 'Maison', region: 'Nord', town: 'Garoua', rating: 4.2, reviews: 49, sales: 180, products: 41, followers: 210, verified: false, responseTime: '< 5h', joined: '2023', badge: null },
+  { id: 11, name: 'FashionHub Buea', tagline: 'Mode tendance anglophone', icon: 'ðŸ§¥', category: 'Mode', region: 'Sud-Ouest', town: 'Buea', rating: 4.4, reviews: 91, sales: 330, products: 58, followers: 420, verified: true, responseTime: '< 2h', joined: '2022', badge: null },
+  { id: 12, name: 'TechVision Kribi', tagline: 'Tech et numÃ©rique', icon: 'ðŸ“±', category: 'Ã‰lectronique', region: 'Sud', town: 'Kribi', rating: 4.1, reviews: 38, sales: 140, products: 27, followers: 160, verified: false, responseTime: '< 6h', joined: '2024', badge: null },
+];
+
+/* â”€â”€â”€ sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const StarRow = ({ rating, size = 12 }) => (
   <div className="flex items-center gap-0.5">
     {[1,2,3,4,5].map(i => (
@@ -65,7 +80,7 @@ const BoutiqueCard = ({ b, viewMode }) => {
 
   const isList = viewMode === 'list';
   return (
-        <Link to={`/boutique/${b.shop_id}`} onClick={handleClick}>
+        <Link to={`/boutique/${b.shop_slug}`} onClick={handleClick}>
     <div className={`group bg-white border border-gray-100 rounded-2xl hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 cursor-pointer overflow-hidden ${isList ? 'flex items-center gap-4 p-4' : ''}`}>
       {/* cover / icon */}
       {isList ? (
@@ -83,7 +98,7 @@ const BoutiqueCard = ({ b, viewMode }) => {
           )}
           {b.status && (
             <span className="absolute top-3 right-3 bg-white/20 border border-white/30 text-white text-[10px] font-medium px-2 py-0.5 rounded-full backdrop-blur-sm flex items-center gap-1">
-              <BadgeCheck size={10} /> Vérifié
+              <BadgeCheck size={10} /> VÃ©rifiÃ©
             </span>
           )}
         </div>
@@ -132,10 +147,10 @@ const BoutiqueCard = ({ b, viewMode }) => {
   );
 };
 
-/* ─── main component ──────────────────────────────── */
+/* â”€â”€â”€ main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const Boutiques = () => {
   const [query, setQuery]               = useState('');
-  const [selectedRegion, setRegion]     = useState('Toutes les régions');
+  const [selectedRegion, setRegion]     = useState('Toutes les rÃ©gions');
   const [selectedTown, setTown]         = useState('Toutes les villes');
   const [selectedCategory, setCategory] = useState('Toutes');
   const [verifiedOnly, setVerifiedOnly] = useState(false);
@@ -174,14 +189,14 @@ const Boutiques = () => {
   };
 
   const activeFilterCount = [
-    selectedRegion !== 'Toutes les régions',
+    selectedRegion !== 'Toutes les rÃ©gions',
     selectedTown !== 'Toutes les villes',
     selectedCategory !== 'Toutes',
     verifiedOnly,
   ].filter(Boolean).length;
 
   const clearFilters = () => {
-    setRegion('Toutes les régions');
+    setRegion('Toutes les rÃ©gions');
     setTown('Toutes les villes');
     setCategory('Toutes');
     setVerifiedOnly(false);
@@ -192,7 +207,7 @@ const Boutiques = () => {
     let list = boutique.filter(b => {
       const q = query.toLowerCase();
       const matchQuery = !q || b.shop_name.toLowerCase().includes(q) || b.town.toLowerCase().includes(q) || b.region.toLowerCase().includes(q)
-      const matchRegion = selectedRegion === 'Toutes les régions' || b.region === selectedRegion;
+      const matchRegion = selectedRegion === 'Toutes les rÃ©gions' || b.region === selectedRegion;
       const matchTown = selectedTown === 'Toutes les villes' || b.town === selectedTown;
       const matchCat = selectedCategory === 'Toutes' || b.category === selectedCategory;
       const matchVerified = !verifiedOnly || b.status;
@@ -204,13 +219,13 @@ const Boutiques = () => {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* ── Page hero ── */}
+      {/* â”€â”€ Page hero â”€â”€ */}
       <section className="bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 relative overflow-hidden">
         <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/5 rounded-full pointer-events-none" />
         <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/5 rounded-full pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
           <button onClick={() => window.history.back()} className="flex items-center gap-2 text-green-200 hover:text-white text-sm mb-6 transition-colors">
-            <ArrowLeft size={16} /> Retour à l'accueil
+            <ArrowLeft size={16} /> Retour Ã  l'accueil
           </button>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
@@ -219,11 +234,11 @@ const Boutiques = () => {
               </span>
               <h1 className="text-4xl font-extrabold text-white tracking-tight">Nos Boutiques</h1>
               <p className="text-green-200 mt-2 text-sm max-w-md">
-                Découvrez les boutiques locales vérifiées à travers tout le Cameroun.
+                DÃ©couvrez les boutiques locales vÃ©rifiÃ©es Ã  travers tout le Cameroun.
               </p>
             </div>
             <div className="flex gap-6 text-center">
-              {[['80+', 'Boutiques'], ['10', 'Régions'], ['4.6★', 'Note moy.']].map(([v, l]) => (
+              {[['80+', 'Boutiques'], ['10', 'RÃ©gions'], ['4.6â˜…', 'Note moy.']].map(([v, l]) => (
                 <div key={l}>
                   <p className="text-2xl font-bold text-white">{v}</p>
                   <p className="text-green-300 text-xs mt-0.5">{l}</p>
@@ -232,14 +247,14 @@ const Boutiques = () => {
             </div>
           </div>
 
-          {/* ── Main search bar ── */}
+          {/* â”€â”€ Main search bar â”€â”€ */}
           <div className="mt-8 bg-white rounded-2xl shadow-xl shadow-green-900/20 p-2 flex items-center gap-2">
             <div className="flex-1 flex items-center gap-2 px-3">
               <Search size={18} className="text-gray-400 flex-shrink-0" />
               <input
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Rechercher une boutique, ville, catégorie…"
+                placeholder="Rechercher une boutique, ville, catÃ©gorieâ€¦"
                 className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none py-2 bg-transparent"
               />
               {query && (
@@ -263,7 +278,7 @@ const Boutiques = () => {
         </div>
       </section>
 
-      {/* ── Filter panel (collapsible) ── */}
+      {/* â”€â”€ Filter panel (collapsible) â”€â”€ */}
       {showFilters && (
         <div className="bg-white border-b border-gray-200 shadow-sm">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -271,7 +286,7 @@ const Boutiques = () => {
 
               {/* Region dropdown */}
               <div className="relative">
-                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Région</label>
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">RÃ©gion</label>
                 <button
                   onClick={() => { setRegionOpen(o => !o); setTownOpen(false); }}
                   className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 hover:border-green-400 transition-colors"
@@ -302,12 +317,12 @@ const Boutiques = () => {
                 <button
                   onClick={() => { setTownOpen(o => !o); setRegionOpen(false); }}
                   className="w-full flex items-center justify-between px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 hover:border-green-400 transition-colors disabled:opacity-50"
-                  disabled={selectedRegion === 'Toutes les régions'}
+                  disabled={selectedRegion === 'Toutes les rÃ©gions'}
                 >
                   <span className="flex items-center gap-2"><MapPin size={14} className="text-green-600" />{selectedTown}</span>
                   <ChevronDown size={15} className={`text-gray-400 transition-transform ${townOpen ? 'rotate-180' : ''}`} />
                 </button>
-                {townOpen && selectedRegion !== 'Toutes les régions' && (
+                {townOpen && selectedRegion !== 'Toutes les rÃ©gions' && (
                   <div className="absolute z-20 mt-1.5 w-full bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
                     <div className="max-h-48 overflow-y-auto">
                       {(TOWNS[selectedRegion] || []).map(t => (
@@ -326,7 +341,7 @@ const Boutiques = () => {
 
               {/* Category */}
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Catégorie</label>
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">CatÃ©gorie</label>
                 <select
                   value={selectedCategory}
                   onChange={e => setCategory(e.target.value)}
@@ -344,7 +359,7 @@ const Boutiques = () => {
                   className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${verifiedOnly ? 'bg-green-600 text-white border-green-600' : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-green-400'}`}
                 >
                   <span className="flex items-center gap-2">
-                    <BadgeCheck size={15} /> Vendeurs vérifiés
+                    <BadgeCheck size={15} /> Vendeurs vÃ©rifiÃ©s
                   </span>
                   <div className={`w-9 h-5 rounded-full transition-all relative ${verifiedOnly ? 'bg-white/30' : 'bg-gray-300'}`}>
                     <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${verifiedOnly ? 'left-4' : 'left-0.5'}`} />
@@ -357,10 +372,10 @@ const Boutiques = () => {
             {activeFilterCount > 0 && (
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <span className="text-xs text-gray-400">Filtres actifs :</span>
-                {selectedRegion !== 'Toutes les régions' && (
+                {selectedRegion !== 'Toutes les rÃ©gions' && (
                   <span className="flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
                     <MapPin size={10} /> {selectedRegion}
-                    <button onClick={() => { setRegion('Toutes les régions'); setTown('Toutes les villes'); }} className="ml-0.5 hover:text-green-900"><X size={11} /></button>
+                    <button onClick={() => { setRegion('Toutes les rÃ©gions'); setTown('Toutes les villes'); }} className="ml-0.5 hover:text-green-900"><X size={11} /></button>
                   </span>
                 )}
                 {selectedTown !== 'Toutes les villes' && (
@@ -377,7 +392,7 @@ const Boutiques = () => {
                 )}
                 {verifiedOnly && (
                   <span className="flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
-                    <BadgeCheck size={10} /> Vérifiés
+                    <BadgeCheck size={10} /> VÃ©rifiÃ©s
                     <button onClick={() => setVerifiedOnly(false)} className="ml-0.5 hover:text-green-900"><X size={11} /></button>
                   </span>
                 )}
@@ -390,7 +405,7 @@ const Boutiques = () => {
         </div>
       )}
 
-      {/* ── Category quick chips ── */}
+      {/* â”€â”€ Category quick chips â”€â”€ */}
       <div className="bg-white border-b border-gray-100 max-w-6xl mx-auto sticky top-[72px] z-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex gap-2 overflow-x-auto scrollbar-hide">
           {CATEGORIES.map(c => (
@@ -409,7 +424,7 @@ const Boutiques = () => {
         </div>
       </div>
 
-      {/* ── Results ── */}
+      {/* â”€â”€ Results â”€â”€ */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -417,7 +432,7 @@ const Boutiques = () => {
             <p className="text-base font-bold text-gray-900">
               Nos Boutique
             </p>
-            {(selectedRegion !== 'Toutes les régions' || selectedTown !== 'Toutes les villes') && (
+            {(selectedRegion !== 'Toutes les rÃ©gions' || selectedTown !== 'Toutes les villes') && (
               <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
                 <MapPin size={10} />
                 {selectedTown !== 'Toutes les villes' ? selectedTown : selectedRegion}
@@ -446,11 +461,11 @@ const Boutiques = () => {
         </div>
 
         {/* region group headers when no specific region selected */}
-        {selectedRegion === 'Toutes les régions' && !query && selectedCategory === 'Toutes' && !verifiedOnly ? (
+        {selectedRegion === 'Toutes les rÃ©gions' && !query && selectedCategory === 'Toutes' && !verifiedOnly ? (
   loading ? (
     <div className="flex flex-col items-center gap-3 py-24">
       <div className="w-10 h-10 border-4 border-green-200 border-t-green-600 rounded-full animate-spin" />
-      <p className="text-gray-400 text-sm font-medium">Chargement des boutiques…</p>
+      <p className="text-gray-400 text-sm font-medium">Chargement des boutiquesâ€¦</p>
     </div>
   ) :
   /* group by region */
@@ -478,16 +493,16 @@ const Boutiques = () => {
         ) : filtered.length === 0 ? (
           /* empty state */
           <div className="text-center py-24">
-            <p className="text-6xl mb-4">🏪</p>
-            <p className="text-gray-700 font-bold text-lg">Aucune boutique trouvée</p>
+            <p className="text-6xl mb-4">ðŸª</p>
+            <p className="text-gray-700 font-bold text-lg">Aucune boutique trouvÃ©e</p>
             <p className="text-gray-400 text-sm mt-2 max-w-sm mx-auto">
-              Essayez de modifier vos filtres ou d'élargir votre zone de recherche.
+              Essayez de modifier vos filtres ou d'Ã©largir votre zone de recherche.
             </p>
             <button
               onClick={clearFilters}
               className="mt-6 bg-green-600 text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-green-700 transition-colors"
             >
-              Réinitialiser les filtres
+              RÃ©initialiser les filtres
             </button>
           </div>
         ) : (
@@ -505,3 +520,4 @@ const Boutiques = () => {
 };
 
 export default Boutiques;
+

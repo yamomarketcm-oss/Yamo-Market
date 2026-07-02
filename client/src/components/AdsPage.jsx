@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import {
   ChevronLeft, ChevronRight, ExternalLink, Zap,
   Tag, MapPin, BadgeCheck, Eye, ArrowRight, X
 } from 'lucide-react';
 import { Link } from 'react-router-dom'
 
-/* ─── Mock ad data ───────────────────────────────── */
+/* â”€â”€â”€ Mock ad data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /* Each ad has:
    id, title, subtitle, tag, cta (call-to-action label),
    link, shop, region, m_img (banner image from Cloudinary),
@@ -14,14 +14,14 @@ import { Link } from 'react-router-dom'
 
 /* Small ads (sidebar / grid cards) */
 
-/* ─── Pill badge ─────────────────────────────────── */
+/* â”€â”€â”€ Pill badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const Pill = ({ label, className = '' }) => (
   <span className={`inline-flex items-center text-[11px] font-bold px-2.5 py-0.5 rounded-full ${className}`}>
     {label}
   </span>
 );
 
-/* ─── Hero Carousel ──────────────────────────────── */
+/* â”€â”€â”€ Hero Carousel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const HeroCarousel = ({ ads }) => {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -101,24 +101,24 @@ const HeroCarousel = ({ ads }) => {
           <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-4 mt-5">
             <div className="flex items-center justify-between sm:block gap-3">
               <div>
-                <p className="text-white/50 text-[9px] sm:text-[10px] uppercase tracking-wider">À partir de</p>
+                <p className="text-white/50 text-[9px] sm:text-[10px] uppercase tracking-wider">Ã€ partir de</p>
                 <span className='flex items-center justify-center gap-0.5'><p className="text-lg sm:text-2xl font-black text-white leading-none">{ad?.price}</p><p className='text-lg sm:text-2xl font-black text-white'>XAF</p></span>
               </div>
 
-              <Link to={`/product/${ad?.product}`}
+              <Link to={`/product/${ad?.product_slug}`}
                onClick={handleClick}
                 className="sm:hidden flex items-center gap-1.5 bg-white text-green-800 font-bold text-xs px-4 py-2.5 rounded-xl active:scale-[0.97] transition-all shadow-lg shadow-black/20 flex-shrink-0">
                 Voir <ArrowRight size={13} />
               </Link>
             </div>
 
-            <a href={ad?.link}
+            <Link to={`/product/${ad?.product_slug}`}
               className="hidden sm:flex items-center gap-2 bg-white text-green-800 font-bold text-sm px-6 py-3 rounded-2xl hover:bg-green-50 transition-all shadow-xl shadow-black/20 active:scale-[0.97]">
               Voir le produit <ArrowRight size={15} />
-            </a>
+             </Link>
 
             <div className="text-white/60 text-[10px] sm:text-xs flex items-center gap-1">
-              <MapPin size={10} /> {ad?.shop_name} • {ad?.town}
+              <MapPin size={10} /> {ad?.shop_name} â€¢ {ad?.town}
             </div>
           </div>
         </div>
@@ -127,7 +127,7 @@ const HeroCarousel = ({ ads }) => {
       {/* arrows */}
       <button onClick={() => go(idx - 1)}
         className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-9 sm:h-9 bg-black/25 hover:bg-black/40 backdrop-blur-sm rounded-xl flex items-center justify-center text-white transition-all z-20"
-        aria-label="Précédent">
+        aria-label="PrÃ©cÃ©dent">
         <ChevronLeft size={16} className="sm:hidden" />
         <ChevronLeft size={18} className="hidden sm:block" />
       </button>
@@ -164,9 +164,9 @@ const HeroCarousel = ({ ads }) => {
   );
 };
 
-/* ─── Medium banner (wide rectangular) ──────────── */
+/* â”€â”€â”€ Medium banner (wide rectangular) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const MediumBanner = ({ ad, Click }) => (
-  <Link to={`/product/${ad?.product}`}
+  <Link to={`/product/${ad?.product_slug}`}
     onClick={Click}
     className="group relative rounded-2xl overflow-hidden flex-shrink-0 block"
     style={{ aspectRatio: '3/1' }}>
@@ -178,7 +178,7 @@ const MediumBanner = ({ ad, Click }) => (
         <p className="text-white font-extrabold text-lg leading-tight">{ad?.title}</p>
         <div className="flex gap-3">
           <span className='flex items-center justify-center gap-0.5'><p className="text-lg sm:text-2xl font-black text-white leading-none mt-0.5">{ad?.price}</p><p className='text-lg sm:text-2xl font-black text-white'>XAF</p></span>
-          <span className="sm:mt-2.5 mt-1 text-white/60 text-sm font-semibold ">{ad?.shop_name} • {ad?.town}</span>
+          <span className="sm:mt-2.5 mt-1 text-white/60 text-sm font-semibold ">{ad?.shop_name} â€¢ {ad?.town}</span>
         </div>
       </div>
     </div>
@@ -188,7 +188,7 @@ const MediumBanner = ({ ad, Click }) => (
   </Link>
 );
 
-/* ─── Small square card ──────────────────────────── */
+/* â”€â”€â”€ Small square card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 /* Mobile: button moved into its own full-width row at the bottom of the card
    instead of squeezing inline next to the price (desktop layout untouched
    via sm: prefix). */
@@ -200,7 +200,7 @@ const SmallCard = ({ ad, Click }) => {
     Sale:    'bg-amber-400 text-white',
   };
   return (
-    <Link to={`/product/${ad?.product}`}
+    <Link to={`/product/${ad?.product_slug}`}
     onClick={Click}
       className="group relative bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 block">
       <div className="relative h-36 overflow-hidden">
@@ -217,7 +217,7 @@ const SmallCard = ({ ad, Click }) => {
       <div className="p-3">
         <p className="font-semibold text-gray-800 text-sm truncate">{ad.title}</p>
         <p className="text-[10px] text-gray-400 flex items-center font-semibold gap-1 mt-0.5 truncate">
-          <MapPin size={9} /> {ad.region} • {ad.town}
+          <MapPin size={9} /> {ad.region} â€¢ {ad.town}
         </p>
 
         {/* Mobile: price on its own line, button full-width below.
@@ -233,9 +233,9 @@ const SmallCard = ({ ad, Click }) => {
   );
 };
 
-/* ─── Inline strip banner ────────────────────────── */
+/* â”€â”€â”€ Inline strip banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const StripBanner = ({ ad, Click }) => (
-  <Link to={`/product/${ad?.product}`}
+  <Link to={`/product/${ad?.product_slug}`}
     onClick={Click}
     className="group relative w-full rounded-2xl overflow-hidden flex items-center block"
     style={{ height: '110px' }}>
@@ -250,7 +250,7 @@ const StripBanner = ({ ad, Click }) => (
           <span className="text-white/60 text-[10px]">{ad?.tag}</span>
         </div>
         <p className="text-white font-extrabold text-lg leading-tight">{ad?.title}</p>
-        <p className="text-white/70 font-semibold text-xs mt-0.5">{ad?.shop_name} • {ad?.town}</p>
+        <p className="text-white/70 font-semibold text-xs mt-0.5">{ad?.shop_name} â€¢ {ad?.town}</p>
       </div>
       <div className="flex flex-col items-end gap-2 flex-shrink-0">
         <span className="text-white font-black text-xl">{ad?.price} XAF</span>
@@ -262,7 +262,7 @@ const StripBanner = ({ ad, Click }) => (
   </Link>
 );
 
-/* ─── Main Page ──────────────────────────────────── */
+/* â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const AdsPage = () => {
   const [ads, setAds] = useState([]);
   const [smallAds, setSmallAds] = useState([]);
@@ -289,7 +289,7 @@ const AdsPage = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        clict_type: 'product', shoplead_ip: product.product, vendor: product.product, shop: product.shop
+        clict_type: 'ads', shoplead_ip: product.product, vendor: product.product, shop: product.shop
       }),
     });
   } catch (err) {
@@ -300,7 +300,7 @@ const AdsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-16">
 
-      {/* ── Page header ── */}
+      {/* â”€â”€ Page header â”€â”€ */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <div className="flex items-center justify-between flex-wrap mt-2 gap-4">
           <div>
@@ -308,8 +308,8 @@ const AdsPage = () => {
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               <span className="text-xs font-semibold text-green-600 uppercase tracking-widest">Annonces YamoMarket</span>
             </div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Publicités & Promotions</h1>
-            <p className="text-sm text-gray-400 mt-1">Découvrez les meilleures offres sélectionnées par notre équipe.</p>
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">PublicitÃ©s & Promotions</h1>
+            <p className="text-sm text-gray-400 mt-1">DÃ©couvrez les meilleures offres sÃ©lectionnÃ©es par notre Ã©quipe.</p>
           </div>
           <span className="flex items-center gap-1.5 text-xs text-gray-400 bg-white border border-gray-200 px-3 py-1.5 rounded-full">
             <BadgeCheck size={12} className="text-green-600" /> Annonces officielles YamoMarket
@@ -319,12 +319,12 @@ const AdsPage = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
 
-        {/* ── Hero carousel ── */}
+        {/* â”€â”€ Hero carousel â”€â”€ */}
         <section>
           <HeroCarousel ads={ads} />
         </section>
 
-        {/* ── 2-column medium banners ── */}
+        {/* â”€â”€ 2-column medium banners â”€â”€ */}
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Zap size={14} className="text-amber-500" />
@@ -337,16 +337,16 @@ const AdsPage = () => {
           </div>
         </section>
 
-        {/* ── Full-width strip ── */}
+        {/* â”€â”€ Full-width strip â”€â”€ */}
         <section>
           <StripBanner ad={ads[0]} Click={() => handleClick(ads[0])} />
         </section>
 
-        {/* ── 4-column small cards ── */}
+        {/* â”€â”€ 4-column small cards â”€â”€ */}
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Tag size={14} className="text-green-600" />
-            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">À ne pas manquer</h2>
+            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">Ã€ ne pas manquer</h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {smallAds.map(ad => (
@@ -355,16 +355,16 @@ const AdsPage = () => {
           </div>
         </section>
 
-        {/* ── Second strip ── */}
+        {/* â”€â”€ Second strip â”€â”€ */}
         <section>
           <StripBanner ad={ads[1]} Click={() => handleClick(ads[1])} />
         </section>
 
-        {/* ── Bottom 3-column medium banners ── */}
+        {/* â”€â”€ Bottom 3-column medium banners â”€â”€ */}
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Eye size={14} className="text-blue-500" />
-            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">Sélection de la semaine</h2>
+            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">SÃ©lection de la semaine</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {ads.slice(0, 3).map(ad => (
@@ -373,11 +373,11 @@ const AdsPage = () => {
           </div>
         </section>
 
-        {/* ── Sponsor note ── */}
+        {/* â”€â”€ Sponsor note â”€â”€ */}
         <div className="text-center py-6 border-t border-gray-200">
           <p className="text-xs text-gray-400">
-            Ces annonces sont gérées directement par l'équipe YamoMarket.{' '}
-            <a href="/about#contact" className="text-green-600 hover:underline font-medium">Nous contacter pour faire de la publicité</a>
+            Ces annonces sont gÃ©rÃ©es directement par l'Ã©quipe YamoMarket.{' '}
+            <a href="/about#contact" className="text-green-600 hover:underline font-medium">Nous contacter pour faire de la publicitÃ©</a>
           </p>
         </div>
       </div>

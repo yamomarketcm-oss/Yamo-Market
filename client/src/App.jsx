@@ -29,8 +29,8 @@ function AppRoutes() {
       <Route path="/" element={<ClientLayout><LandingPage /></ClientLayout>} />
       <Route path="/boutiques" element={<ClientLayout><Boutiques /></ClientLayout>} />
       <Route path="/products" element={<ClientLayout><ProductsPage /></ClientLayout>} />
-      <Route path="/product/:product_id" element={<ClientLayout><ProductDetail /></ClientLayout>} />
-      <Route path="/boutique/:shop_id" element={<ClientLayout><BoutiqueDetail /></ClientLayout>} />
+      <Route path="/product/:slug" element={<ClientLayout><ProductDetail /></ClientLayout>} />
+      <Route path="/boutique/:slug" element={<ClientLayout><BoutiqueDetail /></ClientLayout>} />
       <Route path="/banner" element={<ClientLayout><AdsPage /></ClientLayout>} />
       <Route element={<UserRoute />}>
         <Route path="/user" element={<ClientLayout><UserProfile /></ClientLayout>} />

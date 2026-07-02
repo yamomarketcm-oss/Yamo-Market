@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   Star, MapPin, ChevronRight, BadgeCheck,
   Search, Heart, MessageCircle, Phone,
@@ -8,24 +8,24 @@ import {
 } from 'lucide-react';
 import { useParams, Link } from 'react-router-dom';
 
-/* ─── static constants ───────────────────────────── */
-const CATEGORIES = ['Tous', 'Électronique', 'Mode', 'Beauté', 'Maison', 'Alimentation', 'Services', 'Autre'];
+/* â”€â”€â”€ static constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+const CATEGORIES = ['Tous', 'Ã‰lectronique', 'Mode', 'BeautÃ©', 'Maison', 'Alimentation', 'Services', 'Autre'];
 
 const REVIEWS = [
   { name: 'Jean-Paul M.', rating: 5, date: 'il y a 2 jours', text: 'Boutique excellente ! Livraison rapide et produits authentiques. Je recommande fortement.' },
-  { name: 'Amélie T.',    rating: 4, date: 'il y a 1 semaine', text: 'Bon service client, réponse rapide. Produit conforme à la description.' },
-  { name: 'Rodrigue K.', rating: 5, date: 'il y a 3 semaines', text: 'TechShop est ma boutique préférée sur Yamo. Toujours satisfait de mes achats !' },
+  { name: 'AmÃ©lie T.',    rating: 4, date: 'il y a 1 semaine', text: 'Bon service client, rÃ©ponse rapide. Produit conforme Ã  la description.' },
+  { name: 'Rodrigue K.', rating: 5, date: 'il y a 3 semaines', text: 'TechShop est ma boutique prÃ©fÃ©rÃ©e sur Yamo. Toujours satisfait de mes achats !' },
 ];
 
-/* Static trust stats shown on every shop — not shop-specific numbers */
+/* Static trust stats shown on every shop â€” not shop-specific numbers */
 const TRUST_STATS = [
-  { icon: <Shield size={15} className="text-green-600" />,   title: 'Vendeur vérifié',    desc: 'Identité et documents vérifiés par notre équipe.' },
-  { icon: <Zap    size={15} className="text-amber-500" />,   title: 'Livraison rapide',   desc: 'Expédition sous 24–48h dans les grandes villes.' },
-  { icon: <BadgeCheck size={15} className="text-blue-500" />,title: 'Produits authentiques', desc: 'Tous les produits sont contrôlés avant mise en ligne.' },
-  { icon: <Users  size={15} className="text-violet-500" />,  title: 'Communauté active',  desc: 'Des milliers d\'acheteurs satisfaits sur YamoMarket.' },
+  { icon: <Shield size={15} className="text-green-600" />,   title: 'Vendeur vÃ©rifiÃ©',    desc: 'IdentitÃ© et documents vÃ©rifiÃ©s par notre Ã©quipe.' },
+  { icon: <Zap    size={15} className="text-amber-500" />,   title: 'Livraison rapide',   desc: 'ExpÃ©dition sous 24â€“48h dans les grandes villes.' },
+  { icon: <BadgeCheck size={15} className="text-blue-500" />,title: 'Produits authentiques', desc: 'Tous les produits sont contrÃ´lÃ©s avant mise en ligne.' },
+  { icon: <Users  size={15} className="text-violet-500" />,  title: 'CommunautÃ© active',  desc: 'Des milliers d\'acheteurs satisfaits sur YamoMarket.' },
 ];
 
-/* ─── helpers ─────────────────────────────────────── */
+/* â”€â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const StarRow = ({ rating, size = 13, showNum = false }) => (
   <div className="flex items-center gap-0.5">
     {[1,2,3,4,5].map(i => (
@@ -38,7 +38,7 @@ const StarRow = ({ rating, size = 13, showNum = false }) => (
 
 const RatingBar = ({ label, pct }) => (
   <div className="flex items-center gap-3 text-xs text-gray-500">
-    <span className="w-3">{label}★</span>
+    <span className="w-3">{label}â˜…</span>
     <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
       <div className="h-full bg-green-500 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
     </div>
@@ -51,7 +51,7 @@ const badgeColor = (b) => ({
   Local:'bg-green-700', Promo:'bg-violet-500',
 }[b] || 'bg-gray-400');
 
-/* ─── Product Card ───────────────────────────────── */
+/* â”€â”€â”€ Product Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const ProductCard = ({ p, viewMode, onFav, favs }) => {
 
   const handleClick = async () => {
@@ -68,12 +68,12 @@ const ProductCard = ({ p, viewMode, onFav, favs }) => {
 
   const isList = viewMode === 'list';
   return (
-    <Link to={`/product/${p.product_id}`} onClick={handleClick}>
+    <Link to={`/product/${p.product_slug}`} onClick={handleClick}>
       <div className={`group bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-green-200 hover:shadow-xl hover:shadow-green-100/50 transition-all duration-300 cursor-pointer ${isList ? 'flex items-center gap-4 p-3' : 'flex flex-col'}`}>
         <div className={`relative bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center flex-shrink-0 ${isList ? 'w-20 h-20 rounded-xl' : 'h-44'}`}>
           {p.m_img
             ? <img src={p.m_img}  alt={p.product_name} className={`${isList ? 'rounded-xl' : ''} w-full h-full object-cover`} />
-            : <span className={`select-none group-hover:scale-110 transition-transform duration-300 ${isList ? 'text-4xl' : 'text-6xl'}`}>🛍️</span>
+            : <span className={`select-none group-hover:scale-110 transition-transform duration-300 ${isList ? 'text-4xl' : 'text-6xl'}`}>ðŸ›ï¸</span>
           }
           {p.tag && !isList && (
             <span className={`absolute top-3 left-3 ${badgeColor(p.tag)} text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full`}>{p.tag}</span>
@@ -106,7 +106,7 @@ const ProductCard = ({ p, viewMode, onFav, favs }) => {
   );
 };
 
-/* ─── Message Modal ──────────────────────────────── */
+/* â”€â”€â”€ Message Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const MessageModal = ({ shop, onClose }) => {
   const [copied, setCopied] = useState(null);
 
@@ -141,11 +141,11 @@ const MessageModal = ({ shop, onClose }) => {
 
                 {/* shop pill */}
                 <div className="mt-2.5 inline-flex items-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl px-3.5 py-2.5 shadow-md shadow-green-200/60 max-w-full">
-                  <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">🏪</div>
+                  <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">ðŸª</div>
                   <div className="min-w-0">
                     <p className="text-sm font-bold text-white leading-tight truncate">{shop?.shop_name || 'Boutique'}</p>
                     <p className="text-[10px] text-green-200 flex items-center gap-0.5 mt-0.5">
-                      <MapPin size={9} className="flex-shrink-0" /> {shop?.region} • {shop?.town}
+                      <MapPin size={9} className="flex-shrink-0" /> {shop?.region} â€¢ {shop?.town}
                     </p>
                   </div>
                 </div>
@@ -183,7 +183,7 @@ const MessageModal = ({ shop, onClose }) => {
                   <Phone size={14} className="text-green-700" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Téléphone</p>
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">TÃ©lÃ©phone</p>
                   <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">
                     {phone || <span className="text-gray-400 font-normal italic">Non disponible</span>}
                   </p>
@@ -211,7 +211,7 @@ const MessageModal = ({ shop, onClose }) => {
             </div>
 
             <p className="text-center text-[10px] text-gray-400 mt-4 leading-relaxed">
-              YamoMarket ne garantit pas les échanges hors plateforme. Restez vigilant.
+              YamoMarket ne garantit pas les Ã©changes hors plateforme. Restez vigilant.
             </p>
           </div>
         </div>
@@ -220,7 +220,7 @@ const MessageModal = ({ shop, onClose }) => {
   );
 };
 
-/* ─── Call Modal ─────────────────────────────────── */
+/* â”€â”€â”€ Call Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const CallModal = ({ shop, onClose }) => {
   const [copied, setCopied] = useState(false);
   const phone = shop?.phone || shop?.b_phone || null;
@@ -254,11 +254,11 @@ const CallModal = ({ shop, onClose }) => {
 
                 {/* shop pill */}
                 <div className="mt-2.5 inline-flex items-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl px-3.5 py-2.5 shadow-md shadow-green-200/60 max-w-full">
-                  <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">🏪</div>
+                  <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">ðŸª</div>
                   <div className="min-w-0">
                     <p className="text-sm font-bold text-white leading-tight truncate">{shop?.shop_name || 'Boutique'}</p>
                     <p className="text-[10px] text-green-200 flex items-center gap-0.5 mt-0.5">
-                      <MapPin size={9} className="flex-shrink-0" /> {shop?.region} • {shop?.town}
+                      <MapPin size={9} className="flex-shrink-0" /> {shop?.region} â€¢ {shop?.town}
                     </p>
                   </div>
                 </div>
@@ -282,12 +282,12 @@ const CallModal = ({ shop, onClose }) => {
                 {/* copy row */}
                 <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 mb-3">
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Numéro</p>
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">NumÃ©ro</p>
                     <p className="text-sm font-bold text-gray-800 truncate">{phone}</p>
                   </div>
                   <button onClick={copy}
                     className={`flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl flex-shrink-0 transition-all ${copied ? 'bg-green-600 text-white' : 'bg-white border border-gray-200 hover:border-green-400 text-gray-600'}`}>
-                    {copied ? <><CheckCircle2 size={13} /> Copié</> : <><Copy size={13} /> Copier</>}
+                    {copied ? <><CheckCircle2 size={13} /> CopiÃ©</> : <><Copy size={13} /> Copier</>}
                   </button>
                 </div>
 
@@ -298,8 +298,8 @@ const CallModal = ({ shop, onClose }) => {
                       <MapPin size={13} className="text-emerald-700" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Région</p>
-                      <p className="text-sm font-bold text-gray-900">{shop?.region || '—'}</p>
+                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">RÃ©gion</p>
+                      <p className="text-sm font-bold text-gray-900">{shop?.region || 'â€”'}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 px-4 py-3">
@@ -308,7 +308,7 @@ const CallModal = ({ shop, onClose }) => {
                     </div>
                     <div>
                       <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Ville</p>
-                      <p className="text-sm font-bold text-gray-900">{shop?.town || '—'}</p>
+                      <p className="text-sm font-bold text-gray-900">{shop?.town || 'â€”'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 px-4 py-3">
@@ -317,7 +317,7 @@ const CallModal = ({ shop, onClose }) => {
                     </div>
                     <div>
                       <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Adresse</p>
-                      <p className="text-sm font-bold text-gray-900 leading-snug">{shop?.address || '—'}</p>
+                      <p className="text-sm font-bold text-gray-900 leading-snug">{shop?.address || 'â€”'}</p>
                     </div>
                   </div>
                 </div>
@@ -327,13 +327,13 @@ const CallModal = ({ shop, onClose }) => {
                 <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
                   <Phone size={24} className="text-gray-400" />
                 </div>
-                <p className="text-gray-500 font-semibold">Numéro non disponible</p>
-                <p className="text-xs text-gray-400 mt-1">Cette boutique n'a pas renseigné de numéro.</p>
+                <p className="text-gray-500 font-semibold">NumÃ©ro non disponible</p>
+                <p className="text-xs text-gray-400 mt-1">Cette boutique n'a pas renseignÃ© de numÃ©ro.</p>
               </div>
             )}
 
             <p className="text-center text-[10px] text-gray-400 mt-4 leading-relaxed">
-              YamoMarket ne garantit pas les échanges hors plateforme. Restez vigilant.
+              YamoMarket ne garantit pas les Ã©changes hors plateforme. Restez vigilant.
             </p>
           </div>
         </div>
@@ -342,9 +342,10 @@ const CallModal = ({ shop, onClose }) => {
   );
 };
 
-/* ─── Main component ─────────────────────────────── */
+/* â”€â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const BoutiqueDetail = () => {
-  const { shop_id } = useParams();
+
+  const { slug } = useParams();
 
   const [shopDetail,    setShopDetail]    = useState({});
   const [shopProducts,  setShopProducts]  = useState([]);
@@ -361,7 +362,7 @@ const BoutiqueDetail = () => {
   useEffect(() => {
     const fetchShop = async () => {
       try {
-        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getshop/${shop_id}`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getshopslug/${slug}`, {
           headers: { 'Content-Type': 'application/json' },
         });
         if (!res.ok) throw new Error('Failed to fetch shop');
@@ -369,14 +370,14 @@ const BoutiqueDetail = () => {
       } catch (err) { console.error('Shop fetch failed:', err); }
     };
     fetchShop();
-  }, [shop_id]);
+  }, [slug]);
 
   /* fetch shop products */
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/shop-product/${shop_id}`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/shop-product/${shopDetail.shop_id}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Failed to fetch products');
@@ -385,7 +386,7 @@ const BoutiqueDetail = () => {
       } catch (err) { console.error('Products fetch failed:', err); }
     };
     fetchProducts();
-  }, [shop_id]);
+  }, [shopDetail.shop_id]);
 
   const toggleFav = id => setFavs(f => f.includes(id) ? f.filter(x => x !== id) : [...f, id]);
 
@@ -397,7 +398,7 @@ const BoutiqueDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* ── Hero / Cover ── */}
+      {/* â”€â”€ Hero / Cover â”€â”€ */}
       <section className="relative pt-12 bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 overflow-hidden">
         <div className="absolute -top-16 -right-16 w-64 h-64 bg-white/5 rounded-full pointer-events-none" />
         <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-white/5 rounded-full pointer-events-none" />
@@ -408,7 +409,7 @@ const BoutiqueDetail = () => {
             <div className="w-24 h-24 rounded-3xl bg-white/15 border-2 border-white/30 overflow-hidden flex-shrink-0 shadow-2xl">
               {shopDetail.profile
                 ? <img src={shopDetail.profile} alt={shopDetail.shop_name} className="w-full h-full object-cover" />
-                : <div className="w-full h-full flex items-center justify-center text-4xl">🏪</div>
+                : <div className="w-full h-full flex items-center justify-center text-4xl">ðŸª</div>
               }
             </div>
 
@@ -417,7 +418,7 @@ const BoutiqueDetail = () => {
               <div className="flex flex-wrap items-center gap-2 mb-2">
                 {shopDetail.status && (
                   <span className="flex items-center gap-1 bg-white/15 border border-white/25 text-white text-xs font-medium px-3 py-1 rounded-full">
-                    <BadgeCheck size={12} /> Vérifié
+                    <BadgeCheck size={12} /> VÃ©rifiÃ©
                   </span>
                 )}
                 {shopDetail.category && (
@@ -434,7 +435,7 @@ const BoutiqueDetail = () => {
                   <MapPin size={11} /> {shopDetail.region}, {shopDetail.town}
                 </span>
                 <span className="text-green-200 text-xs flex items-center gap-1">
-                  <Clock size={11} /> Référence Fiable
+                  <Clock size={11} /> RÃ©fÃ©rence Fiable
                 </span>
               </div>
             </div>
@@ -444,7 +445,7 @@ const BoutiqueDetail = () => {
               <button
                 onClick={() => setFollowing(f => !f)}
                 className='text-sm font-semibold px-5 py-2.5 rounded-xl border transition-all bg-white text-green-800 border-white shadow-lg'> 
-                ✓ Abonné
+                âœ“ AbonnÃ©
               </button>
               <button
                 onClick={() => setShowMessage(true)}
@@ -463,15 +464,15 @@ const BoutiqueDetail = () => {
         </div>
       </section>
 
-      {/* ── Stats bar ── */}
+      {/* â”€â”€ Stats bar â”€â”€ */}
       <div className="bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-4 divide-x divide-gray-100">
             {[
               { icon: <Package    size={16} />, value: '', label: 'Produits'   },
               { icon: <TrendingUp size={16} />, value: '',                     label: 'Ventes'     },
-              { icon: <Users      size={16} />, value: '',                     label: 'Abonnés'    },
-              { icon: <Clock      size={16} />, value: '',                     label: 'Réponse'    },
+              { icon: <Users      size={16} />, value: '',                     label: 'AbonnÃ©s'    },
+              { icon: <Clock      size={16} />, value: '',                     label: 'RÃ©ponse'    },
             ].map(s => (
               <div key={s.label} className="py-5 px-4 flex flex-col items-center text-center">
                 <div className="text-green-600 mb-1">{s.icon}</div>
@@ -483,10 +484,10 @@ const BoutiqueDetail = () => {
         </div>
       </div>
 
-      {/* ── Trust badges ── */}
+      {/* â”€â”€ Trust badges â”€â”€ */}
       <div className="bg-green-50 border-b border-green-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap gap-3">
-          {['Vendeur vérifié', 'Livraison rapide', 'Top vendeur 2024'].map(b => (
+          {['Vendeur vÃ©rifiÃ©', 'Livraison rapide', 'Top vendeur 2024'].map(b => (
             <span key={b} className="flex items-center gap-1.5 text-xs font-medium text-green-800 bg-white border border-green-200 px-3 py-1.5 rounded-full shadow-sm">
               <Shield size={11} className="text-green-600" /> {b}
             </span>
@@ -505,11 +506,11 @@ const BoutiqueDetail = () => {
           <span className="text-gray-600 font-medium">{shopDetail.shop_name}</span>
         </div>
 
-        {/* ── Tabs ── */}
+        {/* â”€â”€ Tabs â”€â”€ */}
         <div className="flex gap-0 border-b border-gray-200 mb-8">
           {[
             { key: 'products', label: `Produits (${shopProducts.length})` },
-            { key: 'about',    label: 'À propos' }
+            { key: 'about',    label: 'Ã€ propos' }
           ].map(t => (
             <button key={t.key} onClick={() => setActiveTab(t.key)}
               className={`px-6 py-3 text-sm font-semibold border-b-2 transition-all ${
@@ -520,14 +521,14 @@ const BoutiqueDetail = () => {
           ))}
         </div>
 
-        {/* ── PRODUCTS TAB ── */}
+        {/* â”€â”€ PRODUCTS TAB â”€â”€ */}
         {activeTab === 'products' && (
           <div>
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="relative flex-1">
                 <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher dans cette boutique…"
+                  placeholder="Rechercher dans cette boutiqueâ€¦"
                   className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-gray-200 focus:border-green-400 rounded-xl outline-none transition-all" />
               </div>
               <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl p-1 self-start">
@@ -555,9 +556,9 @@ const BoutiqueDetail = () => {
 
             {filtered.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-5xl mb-4">🔍</p>
-                <p className="text-gray-500 font-medium">Aucun produit trouvé</p>
-                <p className="text-gray-400 text-sm mt-1">Essayez un autre terme ou catégorie</p>
+                <p className="text-5xl mb-4">ðŸ”</p>
+                <p className="text-gray-500 font-medium">Aucun produit trouvÃ©</p>
+                <p className="text-gray-400 text-sm mt-1">Essayez un autre terme ou catÃ©gorie</p>
               </div>
             ) : (
               <div className={viewMode === 'grid'
@@ -571,7 +572,7 @@ const BoutiqueDetail = () => {
           </div>
         )}
 
-        {/* ── ABOUT TAB ── */}
+        {/* â”€â”€ ABOUT TAB â”€â”€ */}
         {activeTab === 'about' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
@@ -579,7 +580,7 @@ const BoutiqueDetail = () => {
               {/* bio */}
               <div className="bg-white border border-gray-100 rounded-2xl p-6">
                 <h3 className="font-bold text-gray-900 text-base mb-3 flex items-center gap-2">
-                  <Store size={16} className="text-green-600" /> À propos de la boutique
+                  <Store size={16} className="text-green-600" /> Ã€ propos de la boutique
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed">
                   {shopDetail.bio || 'Aucune description disponible pour cette boutique.'}
@@ -594,14 +595,14 @@ const BoutiqueDetail = () => {
                 <ul className="space-y-4">
                   {[
                     { label: 'Adresse',   value: shopDetail.address },
-                    { label: 'Téléphone', value: shopDetail.phone   },
+                    { label: 'TÃ©lÃ©phone', value: shopDetail.phone   },
                     { label: 'Email',     value: shopDetail.b_email },
                     { label: 'Ville',     value: shopDetail.town    },
-                    { label: 'Région',    value: shopDetail.region  },
+                    { label: 'RÃ©gion',    value: shopDetail.region  },
                   ].map(item => (
                     <li key={item.label} className="flex gap-4 text-sm">
                       <span className="text-gray-400 w-20 flex-shrink-0">{item.label}</span>
-                      <span className="text-gray-800 font-medium">{item.value || '—'}</span>
+                      <span className="text-gray-800 font-medium">{item.value || 'â€”'}</span>
                     </li>
                   ))}
                 </ul>
@@ -610,7 +611,7 @@ const BoutiqueDetail = () => {
               {/* map placeholder */}
               <div className="bg-gradient-to-br from-green-50 to-emerald-100 border border-green-100 rounded-2xl h-48 flex flex-col items-center justify-center text-center gap-2">
                 <MapPin size={28} className="text-green-500" />
-                <p className="text-sm font-semibold text-green-800">{shopDetail.address || 'Adresse non renseignée'}</p>
+                <p className="text-sm font-semibold text-green-800">{shopDetail.address || 'Adresse non renseignÃ©e'}</p>
                 <p className="text-xs text-green-600">{shopDetail.region}, {shopDetail.town}</p>
                 <button className="mt-2 text-xs bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors font-medium">
                   Voir sur la carte
@@ -621,7 +622,7 @@ const BoutiqueDetail = () => {
             {/* right sidebar */}
             <div className="space-y-5">
 
-              {/* ── Static trust stats ── */}
+              {/* â”€â”€ Static trust stats â”€â”€ */}
               <div className="bg-white border border-gray-100 rounded-2xl p-5">
                 <h3 className="font-bold text-gray-900 text-sm mb-4">Pourquoi nous faire confiance ?</h3>
                 <div className="space-y-4">
@@ -641,7 +642,7 @@ const BoutiqueDetail = () => {
 
               {/* socials */}
               <div className="bg-white border border-gray-100 rounded-2xl p-5">
-                <h3 className="font-bold text-gray-900 text-sm mb-4">Réseaux sociaux</h3>
+                <h3 className="font-bold text-gray-900 text-sm mb-4">RÃ©seaux sociaux</h3>
                 <div className="flex gap-3">
                   <button className="flex-1 py-2.5 rounded-xl bg-blue-50 text-blue-600 text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-blue-100 transition-colors">
                     <Facebook size={14} /> Facebook
@@ -652,7 +653,7 @@ const BoutiqueDetail = () => {
                 </div>
               </div>
 
-              {/* CTA buttons → open modals */}
+              {/* CTA buttons â†’ open modals */}
               <button
                 onClick={() => setShowMessage(true)}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-4 rounded-2xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2"
@@ -670,7 +671,7 @@ const BoutiqueDetail = () => {
         )}
       </div>
 
-      {/* ── Modals ── */}
+      {/* â”€â”€ Modals â”€â”€ */}
       {showMessage && <MessageModal shop={shopDetail} onClose={() => setShowMessage(false)} />}
       {showCall    && <CallModal    shop={shopDetail} onClose={() => setShowCall(false)}    />}
     </div>
