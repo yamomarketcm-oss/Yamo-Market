@@ -19,7 +19,7 @@ const ShopClickStats = ({ shopId }) => {
       setError('');
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`http://localhost:5050/api/market/click/shop/${shopId}?months=6`, {
+        const res = await fetch(`https://yamo-market-server.vercel.app/market/click/shop/${shopId}?months=6`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Échec du chargement des statistiques');
