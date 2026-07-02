@@ -1,4 +1,4 @@
-﻿import { Menu, X, ShoppingBag, Mail, Lock, User, Eye, EyeOff, ArrowRight, Phone, AlertCircle, CheckCircle2, ChevronDown, LogOut, Settings, Store, LayoutDashboard } from "lucide-react";
+import { Menu, X, ShoppingBag, Mail, Lock, User, Eye, EyeOff, ArrowRight, Phone, AlertCircle, CheckCircle2, ChevronDown, LogOut, Settings, Store, LayoutDashboard } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -11,12 +11,12 @@ const links = [
   { label: "About", link: "/about" },
 ];
 
-/* â”€â”€â”€ Backdrop â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Backdrop ───────────────────────────────────── */
 const Backdrop = ({ onClick }) => (
   <div onClick={onClick} className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" />
 );
 
-/* â”€â”€â”€ Login Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Login Modal ────────────────────────────────── */
 const LoginModal = ({ onClose, onSwitchToRegister }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://yamo-market-server.vercel.app/api/market/login', {
+      const response = await fetch('http://localhost:5050/api/market/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -39,7 +39,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
       if (!response.ok) throw new Error(data.message || 'Login failed');
       localStorage.setItem('market_token', data.token);
       setCurrentUser(data.user);
-      showToast('Connexion rÃ©ussie !', 'success');
+      showToast('Connexion réussie !', 'success');
       setTimeout(() => onClose(), 1500);
     } catch (error) {
       showToast(error.message || 'Login failed', 'error');
@@ -63,8 +63,8 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
                   </div>
                   <span className="font-bold text-gray-900">Yamo<span className="text-green-600">Market</span></span>
                 </div>
-                <h2 className="text-2xl font-extrabold text-gray-900 mt-3">Bon retour ðŸ‘‹</h2>
-                <p className="text-sm text-gray-400 mt-1">Connectez-vous Ã  votre compte</p>
+                <h2 className="text-2xl font-extrabold text-gray-900 mt-3">Bon retour 👋</h2>
+                <p className="text-sm text-gray-400 mt-1">Connectez-vous à votre compte</p>
               </div>
               <button onClick={onClose} className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
                 <X size={16} className="text-gray-500" />
@@ -85,12 +85,12 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Mot de passe</label>
-                  <button className="text-xs text-green-600 hover:underline font-medium">Mot de passe oubliÃ© ?</button>
+                  <button className="text-xs text-green-600 hover:underline font-medium">Mot de passe oublié ?</button>
                 </div>
                 <div className="relative">
                   <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input type={showPassword ? 'text' : 'password'} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                    placeholder="••••••••"
                     className="w-full pl-10 pr-11 py-3 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 focus:bg-white rounded-xl outline-none transition-all text-gray-800 placeholder-gray-400" />
                   <button onClick={() => setShowPassword(s => !s)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                     {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -101,7 +101,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
               <button disabled={loading} onClick={handleLogin}
                 className="w-full bg-green-600 hover:bg-green-700 active:scale-[0.98] disabled:opacity-70 text-white font-bold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2 mt-2">
                 {loading
-                  ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Connexionâ€¦</>
+                  ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Connexion…</>
                   : <><span>Se connecter</span> <ArrowRight size={16} /></>}
               </button>
 
@@ -117,7 +117,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
                   Google
                 </button>
                 <button className="flex items-center justify-center gap-2 border border-gray-200 hover:bg-gray-50 py-2.5 rounded-xl text-sm font-medium text-gray-600 transition-all">
-                  <Phone size={15} className="text-green-600" /> TÃ©lÃ©phone
+                  <Phone size={15} className="text-green-600" /> Téléphone
                 </button>
               </div>
             </div>
@@ -134,7 +134,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
   );
 };
 
-/* â”€â”€â”€ Register Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Register Modal ─────────────────────────────── */
 const RegisterModal = ({ onClose, onSwitchToLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -147,14 +147,14 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://yamo-market-server.vercel.app/api/market/register', {
+      const response = await fetch('http://localhost:5050/api/market/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Registration failed');
-      showToast('Compte crÃ©Ã© avec succÃ¨s !', 'success');
+      showToast('Compte créé avec succès !', 'success');
       setTimeout(() => onSwitchToLogin(), 2500);
     } catch (error) {
       showToast(error.message || 'Registration failed', 'error');
@@ -178,7 +178,7 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
                   </div>
                   <span className="font-bold text-gray-900">Yamo<span className="text-green-600">Market</span></span>
                 </div>
-                <h2 className="text-2xl font-extrabold text-gray-900 mt-3">CrÃ©er un compte âœ¨</h2>
+                <h2 className="text-2xl font-extrabold text-gray-900 mt-3">Créer un compte ✨</h2>
                 <p className="text-sm text-gray-400 mt-1">Rejoignez des milliers d'acheteurs</p>
               </div>
               <button onClick={onClose} className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
@@ -198,7 +198,7 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">TÃ©lÃ©phone</label>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Téléphone</label>
                   <div className="relative">
                     <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input type="tel" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
@@ -223,7 +223,7 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
                 <div className="relative">
                   <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input type={showPassword ? 'text' : 'password'} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-                    placeholder="Min. 8 caractÃ¨res"
+                    placeholder="Min. 8 caractères"
                     className="w-full pl-10 pr-11 py-3 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 focus:bg-white rounded-xl outline-none transition-all text-gray-800 placeholder-gray-400" />
                   <button onClick={() => setShowPassword(s => !s)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
                     {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -242,19 +242,19 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
                 En vous inscrivant, vous acceptez nos{' '}
                 <span className="text-green-600 font-medium cursor-pointer hover:underline">Conditions d'utilisation</span>
                 {' '}et notre{' '}
-                <span className="text-green-600 font-medium cursor-pointer hover:underline">Politique de confidentialitÃ©</span>.
+                <span className="text-green-600 font-medium cursor-pointer hover:underline">Politique de confidentialité</span>.
               </p>
 
               <button disabled={loading} onClick={handleRegister}
                 className="w-full bg-green-600 hover:bg-green-700 active:scale-[0.98] disabled:opacity-70 text-white font-bold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2">
                 {loading
-                  ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> CrÃ©ationâ€¦</>
-                  : <><span>CrÃ©er mon compte</span> <ArrowRight size={16} /></>}
+                  ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Création…</>
+                  : <><span>Créer mon compte</span> <ArrowRight size={16} /></>}
               </button>
             </div>
 
             <p className="text-center text-xs text-gray-400 mt-5">
-              DÃ©jÃ  un compte ?{' '}
+              Déjà un compte ?{' '}
               <button onClick={onSwitchToLogin} className="text-green-600 font-semibold hover:underline">Se connecter</button>
             </p>
           </div>
@@ -265,7 +265,7 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
   );
 };
 
-/* â”€â”€â”€ Profile Dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Profile Dropdown ───────────────────────────── */
 const ProfileDropdown = ({ user, onClose }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -277,7 +277,7 @@ const ProfileDropdown = ({ user, onClose }) => {
       const fetchShop = async () => {
         try {
           const token = localStorage.getItem('market_token');
-          const res = await fetch(`https://yamo-market-server.vercel.app/api/market/myshop`, {
+          const res = await fetch(`http://localhost:5050/api/market/myshop`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -309,7 +309,7 @@ const ProfileDropdown = ({ user, onClose }) => {
 
   const menuItems = [
     { icon: <User size={15} />, label: 'Mon profil', to: '/user' },
-    ...(user?.status ? [{ icon: <Store size={15} />, label: 'Ma boutique', to: `/my-shop/${myshop?.shop_id}` }] : []),
+    { icon: <Store size={15} />, label: 'Ma boutique', to:`/my-shop/${myshop?.shop_id}` },
   ];
 
   return (
@@ -328,11 +328,11 @@ const ProfileDropdown = ({ user, onClose }) => {
             <p className="text-xs text-gray-400 truncate">{user?.email || ''}</p>
             {user?.status ? (
               <span className="inline-flex items-center gap-1 text-[10px] bg-green-100 text-green-700 font-semibold px-2 py-0.5 rounded-full mt-1">
-                <CheckCircle2 size={9} /> VÃ©rifiÃ©
+                <CheckCircle2 size={9} /> Vérifié
               </span>
             ) : (
               <span className="inline-flex items-center gap-1 text-[10px] bg-amber-100 text-amber-600 font-semibold px-2 py-0.5 rounded-full mt-1">
-                <AlertCircle size={9} /> Non vÃ©rifiÃ©
+                <AlertCircle size={9} /> Non vérifié
               </span>
             )}
           </div>
@@ -361,14 +361,14 @@ const ProfileDropdown = ({ user, onClose }) => {
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-500 hover:text-red-700 hover:bg-red-50 transition-all"
         >
           <LogOut size={15} />
-          <span className="font-semibold">Se dÃ©connecter</span>
+          <span className="font-semibold">Se déconnecter</span>
         </button>
       </div>
     </div>
   );
 };
 
-/* â”€â”€â”€ Navbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Navbar ─────────────────────────────────────── */
 const Navbar = () => {
   const [open, setOpen]               = useState(false);
   const [modal, setModal]             = useState(null);
@@ -393,7 +393,7 @@ const Navbar = () => {
       const fetchShop = async () => {
         try {
           const token = localStorage.getItem('market_token');
-          const res = await fetch(`https://yamo-market-server.vercel.app/api/market/myshop`, {
+          const res = await fetch(`http://localhost:5050/api/market/myshop`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -418,7 +418,7 @@ const Navbar = () => {
         <nav className="rounded-2xl backdrop-blur-xl bg-green-900/80 border border-white/10 shadow-xl shadow-black/20 px-3 sm:px-5 md:px-6 flex h-14 items-center justify-between gap-4">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
+          <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
             <div className="w-8 h-8 rounded-xl bg-green-500 flex items-center justify-center shadow-md shadow-green-700/40">
               <ShoppingBag size={15} className="text-white" />
             </div>
@@ -509,7 +509,7 @@ const Navbar = () => {
 
                 {[
                   { icon: <User size={15} />, label: 'Mon profil', to: '/user' },
-                  ...(currentUser?.status ? [{ icon: <Store size={15} />, label: 'Ma boutique', to: `/my-shop/${myshop?.shop_id}` }] : []),
+                  { icon: <Store size={15} />, label: 'Ma boutique', to: `/my-shop/${myshop?.shop_id}` },
                 ].map(item => (
                   <Link key={item.to} to={item.to} onClick={() => setOpen(false)}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/70 hover:text-white hover:bg-white/10 transition-all">
@@ -523,7 +523,7 @@ const Navbar = () => {
                   className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all mt-1"
                 >
                   <LogOut size={15} />
-                  <span className="font-semibold">Se dÃ©connecter</span>
+                  <span className="font-semibold">Se déconnecter</span>
                 </button>
               </div>
             ) : (

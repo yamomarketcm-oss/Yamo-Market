@@ -1,27 +1,24 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   ChevronLeft, ChevronRight, ExternalLink, Zap,
   Tag, MapPin, BadgeCheck, Eye, ArrowRight, X
 } from 'lucide-react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-/* â”€â”€â”€ Mock ad data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Mock ad data ───────────────────────────────── */
 /* Each ad has:
    id, title, subtitle, tag, cta (call-to-action label),
    link, shop, region, m_img (banner image from Cloudinary),
    accent (tailwind bg color for overlays), pill (badge label)
-*/
 
-/* Small ads (sidebar / grid cards) */
-
-/* â”€â”€â”€ Pill badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Pill badge ─────────────────────────────────── */
 const Pill = ({ label, className = '' }) => (
   <span className={`inline-flex items-center text-[11px] font-bold px-2.5 py-0.5 rounded-full ${className}`}>
     {label}
   </span>
 );
 
-/* â”€â”€â”€ Hero Carousel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Hero Carousel ──────────────────────────────── */
 const HeroCarousel = ({ ads }) => {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -164,7 +161,7 @@ const HeroCarousel = ({ ads }) => {
   );
 };
 
-/* â”€â”€â”€ Medium banner (wide rectangular) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Medium banner (wide rectangular) ──────────── */
 const MediumBanner = ({ ad, Click }) => (
   <Link to={`/product/${ad?.product_slug}`}
     onClick={Click}
@@ -188,10 +185,7 @@ const MediumBanner = ({ ad, Click }) => (
   </Link>
 );
 
-/* â”€â”€â”€ Small square card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* Mobile: button moved into its own full-width row at the bottom of the card
-   instead of squeezing inline next to the price (desktop layout untouched
-   via sm: prefix). */
+/* ─── Small square card ──────────────────────────── */
 const SmallCard = ({ ad, Click }) => {
   const pillColors = {
     Nouveau: 'bg-emerald-500 text-white',
@@ -233,7 +227,7 @@ const SmallCard = ({ ad, Click }) => {
   );
 };
 
-/* â”€â”€â”€ Inline strip banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Inline strip banner ────────────────────────── */
 const StripBanner = ({ ad, Click }) => (
   <Link to={`/product/${ad?.product_slug}`}
     onClick={Click}
@@ -262,7 +256,7 @@ const StripBanner = ({ ad, Click }) => (
   </Link>
 );
 
-/* â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Main Page ──────────────────────────────────── */
 const AdsPage = () => {
   const [ads, setAds] = useState([]);
   const [smallAds, setSmallAds] = useState([]);
@@ -274,8 +268,8 @@ const AdsPage = () => {
       try {
         const res = await fetch('https://yamo-market-server.vercel.app/api/market/getallads');
         const result = await res.json();
-        setAds(result.data || ADS);
-        setSmallAds(result.data || SMALL_ADS);
+        setAds(result.data);
+        setSmallAds(result.data);
       } catch { } finally { setLoading(false); }
     };
     fetchAds();
@@ -300,7 +294,7 @@ const AdsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-16">
 
-      {/* â”€â”€ Page header â”€â”€ */}
+      {/* ── Page header ── */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <div className="flex items-center justify-between flex-wrap mt-2 gap-4">
           <div>
@@ -308,8 +302,8 @@ const AdsPage = () => {
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               <span className="text-xs font-semibold text-green-600 uppercase tracking-widest">Annonces YamoMarket</span>
             </div>
-            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">PublicitÃ©s & Promotions</h1>
-            <p className="text-sm text-gray-400 mt-1">DÃ©couvrez les meilleures offres sÃ©lectionnÃ©es par notre Ã©quipe.</p>
+            <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Publicités & Promotions</h1>
+            <p className="text-sm text-gray-400 mt-1">Découvrez les meilleures offres sélectionnées par notre équipe.</p>
           </div>
           <span className="flex items-center gap-1.5 text-xs text-gray-400 bg-white border border-gray-200 px-3 py-1.5 rounded-full">
             <BadgeCheck size={12} className="text-green-600" /> Annonces officielles YamoMarket
@@ -319,34 +313,34 @@ const AdsPage = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
 
-        {/* â”€â”€ Hero carousel â”€â”€ */}
+        {/* ── Hero carousel ── */}
         <section>
           <HeroCarousel ads={ads} />
         </section>
 
-        {/* â”€â”€ 2-column medium banners â”€â”€ */}
+        {/* ── 2-column medium banners ── */}
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Zap size={14} className="text-amber-500" />
             <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">Offres du moment</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {ads.slice(0, 2).map(ad => (
+           {ads.slice(0, 2).map(ad => (
               <MediumBanner key={ad.ads_id} ad={ad} Click={() => handleClick(ad)} />
             ))}
           </div>
         </section>
 
-        {/* â”€â”€ Full-width strip â”€â”€ */}
+        {/* ── Full-width strip ── */}
         <section>
           <StripBanner ad={ads[0]} Click={() => handleClick(ads[0])} />
         </section>
 
-        {/* â”€â”€ 4-column small cards â”€â”€ */}
+        {/* ── 4-column small cards ── */}
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Tag size={14} className="text-green-600" />
-            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">Ã€ ne pas manquer</h2>
+            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">À ne pas manquer</h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {smallAds.map(ad => (
@@ -355,16 +349,16 @@ const AdsPage = () => {
           </div>
         </section>
 
-        {/* â”€â”€ Second strip â”€â”€ */}
+        {/* ── Second strip ── */}
         <section>
           <StripBanner ad={ads[1]} Click={() => handleClick(ads[1])} />
         </section>
 
-        {/* â”€â”€ Bottom 3-column medium banners â”€â”€ */}
+        {/* ── Bottom 3-column medium banners ── */}
         <section>
           <div className="flex items-center gap-2 mb-4">
             <Eye size={14} className="text-blue-500" />
-            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">SÃ©lection de la semaine</h2>
+            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-widest">Sélection de la semaine</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {ads.slice(0, 3).map(ad => (
@@ -373,11 +367,11 @@ const AdsPage = () => {
           </div>
         </section>
 
-        {/* â”€â”€ Sponsor note â”€â”€ */}
+        {/* ── Sponsor note ── */}
         <div className="text-center py-6 border-t border-gray-200">
           <p className="text-xs text-gray-400">
-            Ces annonces sont gÃ©rÃ©es directement par l'Ã©quipe YamoMarket.{' '}
-            <a href="/about#contact" className="text-green-600 hover:underline font-medium">Nous contacter pour faire de la publicitÃ©</a>
+            Ces annonces sont gérées directement par l'équipe YamoMarket.{' '}
+            <a href="/contact" className="text-green-600 hover:underline font-medium">Nous contacter pour faire de la publicité</a>
           </p>
         </div>
       </div>

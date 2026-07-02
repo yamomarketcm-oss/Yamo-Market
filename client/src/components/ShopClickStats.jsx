@@ -19,10 +19,10 @@ const ShopClickStats = ({ shopId }) => {
       setError('');
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/click/shop/${shopId}?months=6`, {
+        const res = await fetch(`http://localhost:5050/api/market/click/shop/${shopId}?months=6`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
-        if (!res.ok) throw new Error('Ã‰chec du chargement des statistiques');
+        if (!res.ok) throw new Error('Échec du chargement des statistiques');
         const result = await res.json();
         setData(result);
       } catch (err) {
@@ -38,7 +38,7 @@ const ShopClickStats = ({ shopId }) => {
     return (
       <div className="bg-white rounded-2xl border border-gray-100 p-8 flex items-center justify-center gap-2 text-gray-400">
         <Loader2 size={18} className="animate-spin" />
-        <span className="text-sm">Chargement des statistiquesâ€¦</span>
+        <span className="text-sm">Chargement des statistiques…</span>
       </div>
     );
   }
@@ -68,7 +68,7 @@ const ShopClickStats = ({ shopId }) => {
               <MousePointerClick size={16} className="text-green-600" />
               Statistiques de clics
             </h3>
-            <p className="text-xs text-gray-400 mt-0.5">Mois en cours â€” {current_month}</p>
+            <p className="text-xs text-gray-400 mt-0.5">Mois en cours — {current_month}</p>
           </div>
           {changePct !== null && changePct !== undefined && (
             <span className={`text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 ${
@@ -146,7 +146,7 @@ const ShopClickStats = ({ shopId }) => {
       <div className="bg-white rounded-2xl border border-gray-100 p-5">
         <h3 className="font-bold text-gray-900 text-sm flex items-center gap-2 mb-3">
           <Megaphone size={16} className="text-amber-600" />
-          Clics par publicitÃ©
+          Clics par publicité
         </h3>
         {ad_clicks.length > 0 ? (
           <div className="space-y-2">
@@ -155,7 +155,7 @@ const ShopClickStats = ({ shopId }) => {
                 <img src={a.m_img || 'https://via.placeholder.com/40'} alt={a.title}
                   className="w-10 h-10 rounded-lg object-cover bg-gray-100 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate">{a.title || `PublicitÃ© #${a.ads_id}`}</p>
+                  <p className="text-sm font-medium text-gray-800 truncate">{a.title || `Publicité #${a.ads_id}`}</p>
                   <p className="text-xs text-gray-400 truncate">{a.slogan || a.product_name}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
@@ -166,7 +166,7 @@ const ShopClickStats = ({ shopId }) => {
             ))}
           </div>
         ) : (
-          <p className="text-xs text-gray-400 text-center py-4">Aucun clic sur vos publicitÃ©s ce mois-ci.</p>
+          <p className="text-xs text-gray-400 text-center py-4">Aucun clic sur vos publicités ce mois-ci.</p>
         )}
       </div>
     </div>

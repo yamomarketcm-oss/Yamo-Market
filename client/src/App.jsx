@@ -13,10 +13,10 @@ import UserProfile from './components/UserProfile';
 import MyShopPage from './components/MyShopPage';
 import AboutPage from './components/AboutPage';
 import UserRoute from './PermissionRoute/UserRoute';
+import AdminRoute from './PermissionRoute/AdminRoute';
 import ProductsPage from './components/ProductsPage';
 import AdsPage from './components/AdsPage';
 import ClientLayout from './components/ClientLayout';
-import AdminRoute from './PermissionRoute/AdminRoute';
 
 function AppRoutes() {
 

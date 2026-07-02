@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   User, Mail, Phone, MapPin, Camera, BadgeCheck,
   Shield, Store, ChevronRight, Bell, Lock,
@@ -14,15 +14,12 @@ import { useAuth } from '../context/AuthContext';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Toast } from './Toastcomponent';
 
-/* â”€â”€â”€ mock user â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-
-
-/* â”€â”€â”€ Backdrop â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Backdrop ────────────────────────────────────── */
 const Backdrop = ({ onClick }) => (
   <div onClick={onClick} className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" />
 );
 
-/* â”€â”€â”€ Verify Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Verify Modal ────────────────────────────────── */
 const VerifyModal = ({ onClose }) => {
   const [step, setStep] = useState(1); // 1=method, 2=upload docs, 3=success
   const [method, setMethod] = useState(null);
@@ -168,13 +165,13 @@ const VerifyModal = ({ onClose }) => {
                 <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-5">
                   <CheckCircle2 size={40} className="text-green-600" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Demande envoyÃ©e avec succÃ¨s</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Demande envoyée avec succès</h3>
                 <p className="text-sm text-gray-400 leading-relaxed max-w-xs mx-auto">
-                  Notre Ã©quipe examinera vos documents sous <strong className="text-gray-600">24 Ã  48 heures</strong>.
+                  Notre équipe examinera vos documents sous <strong className="text-gray-600">24 à 48 heures</strong>.
                   Vous recevrez une notification par email.
                 </p>
                 <div className="mt-6 bg-green-50 border border-green-100 rounded-2xl p-4 text-left space-y-2">
-                  {['Documents reÃ§us et sÃ©curisÃ©s', 'Examen en cours par notre Ã©quipe', 'Notification par email Ã  la fin'].map((t, i) => (
+                  {['Documents reçus et sécurisés', 'Examen en cours par notre équipe', 'Notification par email à la fin'].map((t, i) => (
                     <div key={i} className="flex items-center gap-2.5 text-sm text-green-800">
                       <CheckCircle2 size={14} className="text-green-600 flex-shrink-0" /> {t}
                     </div>
@@ -203,7 +200,7 @@ const VerifyModal = ({ onClose }) => {
                 ))}
               </div>
               <div className="flex justify-between mt-1.5 text-[10px] text-gray-400 font-medium">
-                <span>MÃ©thode</span>
+                <span>Méthode</span>
                 <span>Documents</span>
               </div>
             </div>
@@ -214,12 +211,12 @@ const VerifyModal = ({ onClose }) => {
             <div className="flex items-start justify-between mb-6">
               <div>
                 {step === 1 && <>
-                  <h2 className="text-xl font-extrabold text-gray-900">VÃ©rifier mon compte</h2>
-                  <p className="text-sm text-gray-400 mt-1">Choisissez une mÃ©thode de vÃ©rification</p>
+                  <h2 className="text-xl font-extrabold text-gray-900">Vérifier mon compte</h2>
+                  <p className="text-sm text-gray-400 mt-1">Choisissez une méthode de vérification</p>
                 </>}
                 {step === 2 && <>
                   <h2 className="text-xl font-extrabold text-gray-900">Soumettre les documents</h2>
-                  <p className="text-sm text-gray-400 mt-1">TÃ©lÃ©chargez vos piÃ¨ces justificatives</p>
+                  <p className="text-sm text-gray-400 mt-1">Téléchargez vos pièces justificatives</p>
                 </>}
                 {step === 3 && <h2 className="text-xl font-extrabold text-gray-900">Demande soumise !</h2>}
               </div>
@@ -228,12 +225,12 @@ const VerifyModal = ({ onClose }) => {
               </button>
             </div>
 
-            {/* â”€â”€ Step 1: method â”€â”€ */}
+            {/* ── Step 1: method ── */}
             {step === 1 && (
               <div className="space-y-2">
                 {[
-                  { val: 'cni', icon: <FileText size={20} />, label: "Carte Nationale d'IdentitÃ©", desc: 'CNI camerounaise valide (recto/verso)', time: '24â€“48h', color: 'green' },
-                  { val: 'phone', icon: <Phone size={20} />, label: 'NumÃ©ro de tÃ©lÃ©phone', desc: 'VÃ©rification par SMS (rapide)', time: '< 5 min', color: 'emerald' },
+                  { val: 'cni', icon: <FileText size={20} />, label: "Carte Nationale d'Identité", desc: 'CNI camerounaise valide (recto/verso)', time: '24–48h', color: 'green' },
+                  { val: 'phone', icon: <Phone size={20} />, label: 'Numéro de téléphone', desc: 'Vérification par SMS (rapide)', time: '< 5 min', color: 'emerald' },
                 ].map(m => (
                   <button
                     key={m.val}
@@ -262,13 +259,13 @@ const VerifyModal = ({ onClose }) => {
               </div>
             )}
 
-            {/* â”€â”€ Step 2: documents â”€â”€ */}
+            {/* ── Step 2: documents ── */}
             {step === 2 && (
               <div className="">
                 {/* ID upload */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                    {method === 'phone' ? 'NumÃ©ro de tÃ©lÃ©phone' : "PiÃ¨ce d'identitÃ© (recto/verso)"}
+                    {method === 'phone' ? 'Numéro de téléphone' : "Pièce d'identité (recto/verso)"}
                   </label>
                   {method === 'phone' ? (
                     <div className="relative">
@@ -289,7 +286,7 @@ const VerifyModal = ({ onClose }) => {
                         <>
                           <CheckCircle2 size={28} className="text-green-600" />
                           <p className="text-sm font-semibold text-green-700">{img?.name}</p>
-                          <p className="text-xs text-green-500">Fichier prÃªt Ã  l'envoi</p>
+                          <p className="text-xs text-green-500">Fichier prêt à l'envoi</p>
                         </>
                       ) : (
                         <>
@@ -298,7 +295,7 @@ const VerifyModal = ({ onClose }) => {
                           </div>
                           <div className="text-center">
                             <p className="text-sm font-semibold text-gray-700">Recto ID</p>
-                            <p className="text-xs text-gray-400 mt-0.5">JPG, PNG ou PDF â€” max 5 Mo</p>
+                            <p className="text-xs text-gray-400 mt-0.5">JPG, PNG ou PDF — max 5 Mo</p>
                           </div>
                         </>
                       )}
@@ -310,7 +307,7 @@ const VerifyModal = ({ onClose }) => {
                 {method !== 'phone' && (
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
-                      Selfie avec la piÃ¨ce d'identitÃ©
+                      Selfie avec la pièce d'identité
                     </label>
                     <label className={`flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-2xl p-6 cursor-pointer transition-all ${imgb ? 'border-green-400 bg-green-50' : 'border-gray-200 hover:border-green-300 bg-gray-50'}`}>
                       <input type="file" className="sr-only" accept="image/*"
@@ -319,7 +316,7 @@ const VerifyModal = ({ onClose }) => {
                         <>
                           <CheckCircle2 size={28} className="text-green-600" />
                           <p className="text-sm font-semibold text-green-700">{imgb?.name}</p>
-                          <p className="text-xs text-green-500">Fichier prÃªt Ã  l'envoi</p>
+                          <p className="text-xs text-green-500">Fichier prêt à l'envoi</p>
                         </>
                       ) : (
                         <>
@@ -328,7 +325,7 @@ const VerifyModal = ({ onClose }) => {
                           </div>
                           <div className="text-center">
                             <p className="text-sm font-semibold text-gray-700">Verso ID</p>
-                            <p className="text-xs text-gray-400 mt-0.5">Tenez votre piÃ¨ce d'identitÃ© visible</p>
+                            <p className="text-xs text-gray-400 mt-0.5">Tenez votre pièce d'identité visible</p>
                           </div>
                         </>
                       )}
@@ -340,8 +337,8 @@ const VerifyModal = ({ onClose }) => {
                 <div className="flex items-start gap-3 mt-2 bg-amber-50 border border-amber-100 rounded-2xl p-4">
                   <AlertCircle size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />
                   <p className="text-xs text-amber-700 leading-relaxed">
-                    Vos documents sont traitÃ©s de maniÃ¨re sÃ©curisÃ©e et ne sont jamais partagÃ©s avec des tiers.
-                    La vÃ©rification prend gÃ©nÃ©ralement 24 Ã  48 heures.
+                    Vos documents sont traités de manière sécurisée et ne sont jamais partagés avec des tiers.
+                    La vérification prend généralement 24 à 48 heures.
                   </p>
                 </div>
 
@@ -355,7 +352,7 @@ const VerifyModal = ({ onClose }) => {
                     className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-bold text-sm py-3 rounded-xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2"
                   >
                     {isloading ? (
-                      <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Envoi en coursâ€¦</>
+                      <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Envoi en cours…</>
                     ) : (
                       <><CheckCircle2 size={16} /> Soumettre la demande</>
                     )}
@@ -364,19 +361,19 @@ const VerifyModal = ({ onClose }) => {
               </div>
             )}
 
-            {/* â”€â”€ Step 3: success â”€â”€ */}
+            {/* ── Step 3: success ── */}
             {step === 3 && (
               <div className="text-center py-4">
                 <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-5">
                   <CheckCircle2 size={40} className="text-green-600" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Demande envoyÃ©e avec succÃ¨s</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Demande envoyée avec succès</h3>
                 <p className="text-sm text-gray-400 leading-relaxed max-w-xs mx-auto">
-                  Notre Ã©quipe examinera vos documents sous <strong className="text-gray-600">24 Ã  48 heures</strong>.
+                  Notre équipe examinera vos documents sous <strong className="text-gray-600">24 à 48 heures</strong>.
                   Vous recevrez une notification par email.
                 </p>
                 <div className="mt-6 bg-green-50 border border-green-100 rounded-2xl p-4 text-left space-y-2">
-                  {['Documents reÃ§us et sÃ©curisÃ©s', 'Examen en cours par notre Ã©quipe', 'Notification par email Ã  la fin'].map((t, i) => (
+                  {['Documents reçus et sécurisés', 'Examen en cours par notre équipe', 'Notification par email à la fin'].map((t, i) => (
                     <div key={i} className="flex items-center gap-2.5 text-sm text-green-800">
                       <CheckCircle2 size={14} className="text-green-600 flex-shrink-0" /> {t}
                     </div>
@@ -404,7 +401,7 @@ const VerifyModal = ({ onClose }) => {
   );
 };
 
-/* â”€â”€â”€ Create Shop Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Create Shop Modal ───────────────────────────── */
 const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
   const [form, setForm] = useState({ shop_name: '', bio: '', category: '', profile: '', region: "", town: '', address: "", b_phone: '', b_email: '', license_num: '' });
   const [loading, setLoading] = useState(false);
@@ -413,8 +410,8 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
   const [img, setImg] = useState(null);
   const [done, setDone] = useState(false);
 
-  const categories = ['Ã‰lectronique', 'Mode', 'BeautÃ©', 'Maison', 'Alimentation', 'Services', 'Sport', 'Auto'];
-  const regions = ['Centre', 'Littoral', 'Ouest', 'Nord-Ouest', 'Sud-Ouest', 'Adamaoua', 'Nord', 'ExtrÃªme-Nord', 'Est', 'Sud'];
+  const categories = ['Électronique', 'Mode', 'Beauté', 'Maison', 'Alimentation', 'Services', 'Sport', 'Auto'];
+  const regions = ['Centre', 'Littoral', 'Ouest', 'Nord-Ouest', 'Sud-Ouest', 'Adamaoua', 'Nord', 'Extrême-Nord', 'Est', 'Sud'];
 
   const showToast = (msg, type = 'success') => setToast({ msg, type });
 
@@ -468,7 +465,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
 
       const token = localStorage.getItem('market_token');
       // Replace with your actual API endpoint
-      const response = await fetch('https://yamo-market-server.vercel.app/api/market/registershop', {
+      const response = await fetch('http://localhost:5050/api/market/registershop', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -508,12 +505,12 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
             <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
               <Shield size={28} className="text-amber-500" />
             </div>
-            <h2 className="text-xl font-extrabold text-gray-900 mb-2">Compte non vÃ©rifiÃ©</h2>
+            <h2 className="text-xl font-extrabold text-gray-900 mb-2">Compte non vérifié</h2>
             <p className="text-sm text-gray-400 leading-relaxed">
-              Vous devez vÃ©rifier votre compte avant de crÃ©er une boutique. Cela garantit la confiance entre acheteurs et vendeurs.
+              Vous devez vérifier votre compte avant de créer une boutique. Cela garantit la confiance entre acheteurs et vendeurs.
             </p>
             <div className="mt-5 bg-amber-50 border border-amber-100 rounded-2xl p-4 text-left space-y-2">
-              {['ProtÃ¨ge les acheteurs', 'Augmente votre crÃ©dibilitÃ©', 'AccÃ¨s aux fonctionnalitÃ©s vendeur'].map((t, i) => (
+              {['Protège les acheteurs', 'Augmente votre crédibilité', 'Accès aux fonctionnalités vendeur'].map((t, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm text-amber-800">
                   <CheckCircle2 size={13} className="text-amber-500 flex-shrink-0" /> {t}
                 </div>
@@ -524,7 +521,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                 Annuler
               </button>
               <button onClick={verifyModal} className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold text-sm py-3 rounded-xl transition-all shadow-lg shadow-green-200">
-                VÃ©rifier mon compte
+                Vérifier mon compte
               </button>
             </div>
           </div>
@@ -547,8 +544,8 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                     <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center mb-3">
                       <Store size={22} className="text-green-600" />
                     </div>
-                    <h2 className="text-2xl font-extrabold text-gray-900">CrÃ©er ma boutique</h2>
-                    <p className="text-sm text-gray-400 -mt-1">Commencez Ã  vendre sur YamoMarket</p>
+                    <h2 className="text-2xl font-extrabold text-gray-900">Créer ma boutique</h2>
+                    <p className="text-sm text-gray-400 -mt-1">Commencez à vendre sur YamoMarket</p>
                   </div>
                   <button onClick={onClose} className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
                     <X size={16} className="text-gray-500" />
@@ -607,13 +604,13 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mt-1">CatÃ©gorie</label>
+                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mt-1">Catégorie</label>
                       <select
                         value={form.category}
                         onChange={e => setForm(({ ...form, category: e.target.value }))}
                         className="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 rounded-xl outline-none transition-all appearance-none cursor-pointer"
                       >
-                        <option value="">Choisirâ€¦</option>
+                        <option value="">Choisir…</option>
                         {categories.map(c => <option key={c} value={c}>
                           {c}
                         </option>)}
@@ -626,7 +623,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                         onChange={e => setForm(({ ...form, region: e.target.value }))}
                         className="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 rounded-xl outline-none transition-all appearance-none cursor-pointer"
                       >
-                        <option value="">Choisirâ€¦</option>
+                        <option value="">Choisir…</option>
                         {regions.map(r => <option key={r} value={r}>
                           {r}
                         </option>)}
@@ -645,7 +642,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">TÃ©lÃ©phone *</label>
+                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">Téléphone *</label>
                       <input
                         value={form.b_phone}
                         onChange={e => setForm(({...form, b_phone: e.target.value }))}
@@ -677,7 +674,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                         value={form.address}
                         onChange={e => setForm(({...form, address: e.target.value }))}
                         type="email"
-                        placeholder="123 Rue de la LibertÃ©, Douala"
+                        placeholder="123 Rue de la Liberté, Douala"
                         className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 focus:bg-white rounded-xl outline-none transition-all"
                       />
                     </div>
@@ -689,7 +686,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                       value={form.bio}
                       onChange={e => setForm(({...form, bio: e.target.value }))}
                       rows={3}
-                      placeholder="DÃ©crivez votre boutique, vos produits et servicesâ€¦"
+                      placeholder="Décrivez votre boutique, vos produits et services…"
                       className="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 focus:bg-white rounded-xl outline-none transition-all resize-none"
                     />
                   </div>
@@ -697,7 +694,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                   <div className="flex items-start gap-3 bg-green-50 border border-green-100 rounded-2xl p-4">
                     <Zap size={15} className="text-green-600 flex-shrink-0 mt-0.5" />
                     <p className="text-xs text-green-800 leading-relaxed">
-                      Votre boutique sera visible aprÃ¨s validation par notre Ã©quipe (sous 24h). Vous pourrez ajouter vos produits immÃ©diatement.
+                      Votre boutique sera visible après validation par notre équipe (sous 24h). Vous pourrez ajouter vos produits immédiatement.
                     </p>
                   </div>
 
@@ -711,9 +708,9 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                       className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-bold text-sm py-3 rounded-xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2"
                     >
                       {isloading ? (
-                        <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> CrÃ©ationâ€¦</>
+                        <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Création…</>
                       ) : (
-                        <><Store size={16} /> CrÃ©er ma boutique</>
+                        <><Store size={16} /> Créer ma boutique</>
                       )}
                     </button>
                   </div>
@@ -724,19 +721,19 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
                 <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-5">
                   <Store size={36} className="text-green-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Boutique crÃ©Ã©e ! ðŸŽ‰</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Boutique créée ! 🎉</h3>
                 <p className="text-sm text-gray-400 leading-relaxed max-w-xs mx-auto">
-                  Votre boutique <strong className="text-gray-700">"{form.shop_name}"</strong> a Ã©tÃ© soumise. Elle sera activÃ©e dans les 24h aprÃ¨s validation.
+                  Votre boutique <strong className="text-gray-700">"{form.shop_name}"</strong> a été soumise. Elle sera activée dans les 24h après validation.
                 </p>
                 <div className="mt-5 bg-green-50 border border-green-100 rounded-2xl p-4 text-left space-y-2">
-                  {['Boutique crÃ©Ã©e avec succÃ¨s', 'En attente de validation (24h)', 'Vous pouvez dÃ©jÃ  prÃ©parer vos produits'].map((t, i) => (
+                  {['Boutique créée avec succès', 'En attente de validation (24h)', 'Vous pouvez déjà préparer vos produits'].map((t, i) => (
                     <div key={i} className="flex items-center gap-2.5 text-sm text-green-800">
                       <CheckCircle2 size={13} className="text-green-600 flex-shrink-0" /> {t}
                     </div>
                   ))}
                 </div>
                 <button onClick={onClose} className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold text-sm py-3.5 rounded-xl transition-all shadow-lg shadow-green-200">
-                  GÃ©rer ma boutique
+                  Gérer ma boutique
                 </button>
               </div>
             )}
@@ -748,7 +745,7 @@ const CreateShopModal = ({ onClose, isVerified, verifyModal }) => {
   );
 };
 
-/* â”€â”€â”€ Stat card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Stat card ───────────────────────────────────── */
 const StatCard = ({ icon, value, label, color }) => (
   <div className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col items-center text-center hover:border-green-200 hover:shadow-md transition-all">
     <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center mb-2`}>{icon}</div>
@@ -757,7 +754,7 @@ const StatCard = ({ icon, value, label, color }) => (
   </div>
 );
 
-/* â”€â”€â”€ Main page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Main page ───────────────────────────────────── */
 const UserProfile = () => {
   const [user2, setUser2] = useState({});
   const [shop, setShop] = useState({});
@@ -790,7 +787,7 @@ const UserProfile = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/profile`, {
+        const res = await fetch(`http://localhost:5050/api/market/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -811,7 +808,7 @@ const UserProfile = () => {
     const fetchShop = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/myshop`, {
+        const res = await fetch(`http://localhost:5050/api/market/myshop`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -833,7 +830,7 @@ const UserProfile = () => {
 
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/updateuser/${user2.user_id}`, {
+      const res = await fetch(`http://localhost:5050/api/market/updateuser/${user2.user_id}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify(user2),
@@ -863,7 +860,7 @@ const UserProfile = () => {
     const token = localStorage.getItem('market_token');
 
     const res = await fetch(
-      `https://yamo-market-server.vercel.app/api/market/updatepassword`,
+      `http://localhost:5050/api/market/updatepassword`,
       {
         method: 'PUT',
         headers: {
@@ -898,21 +895,20 @@ const UserProfile = () => {
 
   const TABS = [
     { key: 'profile', label: 'Profil', icon: <User size={15} /> },
-    { key: 'security', label: 'SÃ©curitÃ©', icon: <Lock size={15} /> },
+    { key: 'security', label: 'Sécurité', icon: <Lock size={15} /> },
     { key: 'notifications', label: 'Notifications', icon: <Bell size={15} /> },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* â”€â”€ Profile hero â”€â”€ */}
+      {/* ── Profile hero ── */}
       <section className="bg-gradient-to-br pt-16 from-green-800 via-green-700 to-emerald-600 relative overflow-hidden">
         <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/5 rounded-full pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 w-32 h-32 bg-white/5 rounded-full pointer-events-none" />
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 relative z-10">
-          <div className="flex flex-col sm:flex-row justify-between gap-6">
-           <div className='flex gap-2'>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
             {/* avatar */}
             <div className="relative flex-shrink-0">
               <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-green-400 to-emerald-500 border-4 border-white/20 flex items-center justify-center shadow-2xl">
@@ -928,30 +924,29 @@ const UserProfile = () => {
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-2xl font-extrabold text-white">{user2?.username}</h1>
                 {user2?.status
-                  ? <span className="flex items-center gap-1 bg-green-500/30 border border-green-400/40 text-green-200 text-xs font-semibold px-3 py-1 rounded-full"><BadgeCheck size={12} /> VÃ©rifiÃ©</span>
-                  : <span className="flex items-center gap-1 bg-amber-500/20 border border-amber-400/30 text-amber-200 text-xs font-semibold px-3 py-1 rounded-full"><AlertCircle size={12} /> Non vÃ©rifiÃ©</span>
+                  ? <span className="flex items-center gap-1 bg-green-500/30 border border-green-400/40 text-green-200 text-xs font-semibold px-3 py-1 rounded-full"><BadgeCheck size={12} /> Vérifié</span>
+                  : <span className="flex items-center gap-1 bg-amber-500/20 border border-amber-400/30 text-amber-200 text-xs font-semibold px-3 py-1 rounded-full"><AlertCircle size={12} /> Non vérifié</span>
                 }
               </div>
               <p className="text-green-200 text-sm flex items-center gap-1.5"><Mail size={12} /> {user2?.email}</p>
               <p className="text-green-300 text-sm mt-1 flex items-center gap-1"><PhoneCall size={12} />  {user2?.phone}</p>
             </div>
-           </div>
 
             {/* actions */}
             <div className="flex flex-col gap-2.5 flex-shrink-0">
-              {user2?.review === null || user2?.review === 'rejected' && (
+              {user2?.review === "null" && (
                 <button
                   onClick={() => setModal('verify')}
                   className="flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-amber-900 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all"
                 >
-                  <Shield size={15} /> VÃ©rifier mon compte
+                  <Shield size={15} /> Vérifier mon compte
                 </button>
               )}
               {
                 shop?.shop_id ? (
                   <Link to={`/my-shop/${shop?.shop_id}`}>
                     <button
-                      className="flex items-center justify-center gap-2 sm:w-fit w-full text-center bg-white hover:bg-green-50 text-green-800 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all"
+                      className="flex items-center gap-2 bg-white hover:bg-green-50 text-green-800 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all"
                     >
                       <Store size={15} /> Ma Boutique
                     </button>
@@ -961,7 +956,7 @@ const UserProfile = () => {
                     onClick={() => setModal('shop')}
                     className="flex items-center gap-2 bg-white hover:bg-green-50 text-green-800 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all"
                   >
-                    <Store size={15} /> CrÃ©er une boutique
+                    <Store size={15} /> Créer une boutique
                   </button>
                 )
               }
@@ -970,7 +965,7 @@ const UserProfile = () => {
         </div>
       </section>
 
-      {/* â”€â”€ Stats strip â”€â”€ */}
+      {/* ── Stats strip ── */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
         <div className="grid grid-cols-3 gap-3">
           <StatCard icon={<Package size={18} className="text-green-700" />} label="Produits" color="bg-green-100" />
@@ -979,7 +974,7 @@ const UserProfile = () => {
         </div>
       </div>
 
-      {/* â”€â”€ CTA banners â”€â”€ */}
+      {/* ── CTA banners ── */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Verify banner */}
         {user2?.review !== "approved" && user2?.review !== "review" && (
@@ -992,9 +987,9 @@ const UserProfile = () => {
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="font-bold text-gray-900 text-sm">VÃ©rifiez votre compte</p>
+              <p className="font-bold text-gray-900 text-sm">Vérifiez votre compte</p>
               <p className="text-xs text-gray-500 mt-0.5">
-                Gagnez la confiance des vendeurs et dÃ©bloquez toutes les fonctionnalitÃ©s.
+                Gagnez la confiance des vendeurs et débloquez toutes les fonctionnalités.
               </p>
             </div>
 
@@ -1018,7 +1013,7 @@ const UserProfile = () => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-bold text-gray-900 text-sm">Ouvrir une boutique</p>
-              <p className="text-xs text-gray-500 mt-0.5">Vendez vos produits et services Ã  des milliers d'acheteurs.</p>
+              <p className="text-xs text-gray-500 mt-0.5">Vendez vos produits et services à des milliers d'acheteurs.</p>
             </div>
             <ChevronRight size={18} className="text-green-400 group-hover:text-green-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
           </button>
@@ -1026,7 +1021,7 @@ const UserProfile = () => {
         }
       </div>
 
-      {/* â”€â”€ Tabs + content â”€â”€ */}
+      {/* ── Tabs + content ── */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pb-16">
         <div className="flex gap-0 border-b border-gray-200 mb-8">
           {TABS.map(t => (
@@ -1040,7 +1035,7 @@ const UserProfile = () => {
           ))}
         </div>
 
-        {/* â”€â”€ Profile tab â”€â”€ */}
+        {/* ── Profile tab ── */}
         {activeTab === 'profile' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* form */}
@@ -1083,7 +1078,7 @@ const UserProfile = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">TÃ©lÃ©phone</label>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Téléphone</label>
                     <div className="relative">
                       <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><Phone /></span>
                       <input
@@ -1119,30 +1114,30 @@ const UserProfile = () => {
                     : <AlertCircle size={20} className="text-amber-500" />
                   }
                   <p className="font-bold text-gray-900 text-sm">
-                    {user2?.status ? 'Compte vÃ©rifiÃ© âœ“' : 'Compte non vÃ©rifiÃ©'}
+                    {user2?.status ? 'Compte vérifié ✓' : 'Compte non vérifié'}
                   </p>
                 </div>
                 <p className="text-xs text-gray-500 leading-relaxed">
                   {(!user2?.status && user2?.review === "approved")
-                    ? 'Votre identitÃ© a Ã©tÃ© vÃ©rifiÃ©e. Vous avez accÃ¨s Ã  toutes les fonctionnalitÃ©s.'
-                    : 'VÃ©rifiez votre compte pour accÃ©der Ã  toutes les fonctionnalitÃ©s et inspirer confiance.'
+                    ? 'Votre identité a été vérifiée. Vous avez accès à toutes les fonctionnalités.'
+                    : 'Vérifiez votre compte pour accéder à toutes les fonctionnalités et inspirer confiance.'
                   }
                 </p>
                 {!user2?.status && (
                   <button onClick={() => setModal('verify')} className="w-full mt-4 bg-amber-500 hover:bg-amber-400 text-white font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
-                    <Shield size={13} /> VÃ©rifier maintenant
+                    <Shield size={13} /> Vérifier maintenant
                   </button>
                 )}
               </div>
 
               {/* quick links */}
               <div className="bg-white border border-gray-100 rounded-2xl p-5">
-                <h4 className="font-bold text-gray-900 text-sm mb-3">AccÃ¨s rapide</h4>
+                <h4 className="font-bold text-gray-900 text-sm mb-3">Accès rapide</h4>
                 <div className="space-y-1">
                   {[
-                    { icon: <Store size={15} />, label: shop?.shop_id ? 'GÃ©rer ma boutique' : 'CrÃ©er une boutique', action: shop?.shop_id ? () => navigate(`/my-shop/${shop?.shop_id}`) : () => setModal('shop'), color: 'text-green-600' },
+                    { icon: <Store size={15} />, label: shop?.shop_id ? 'Gérer ma boutique' : 'Créer une boutique', action: shop?.shop_id ? () => navigate(`/my-shop/${shop?.shop_id}`) : () => setModal('shop'), color: 'text-green-600' },
                     { icon: <Package size={15} />, label: 'Mes Produits', action: () => {}, color: 'text-blue-500' },
-                    { icon: <LogOut size={15} />, label: 'Se dÃ©connecter', action: handleLogout, color: 'text-red-500' },
+                    { icon: <LogOut size={15} />, label: 'Se déconnecter', action: handleLogout, color: 'text-red-500' },
                   ].map(item => (
                     <button key={item.label} onClick={item.action} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors text-left group">
                       <span className={item.color}>{item.icon}</span>
@@ -1156,7 +1151,7 @@ const UserProfile = () => {
           </div>
         )}
 
-        {/* â”€â”€ Security tab â”€â”€ */}
+        {/* ── Security tab ── */}
         {activeTab === 'security' && (
           <div className="max-w-xl space-y-5">
             <div className="bg-white border border-gray-100 rounded-2xl p-6">
@@ -1170,7 +1165,7 @@ const UserProfile = () => {
                      type={showCurrent ? "text" : "password"}
                       name="currentpassword"
                       value={currentpassword}
-                      placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                      placeholder="••••••••"
                       onChange={(e) =>setCurrentPassword(e.target.value)}
                       className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 focus:bg-white rounded-xl outline-none transition-all" />
                   <button onClick={() => setShowCurrent(s => !s)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
@@ -1186,7 +1181,7 @@ const UserProfile = () => {
                         type={showNew ? "text" : "password"}
                         name="password"
                         value={password}
-                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                        placeholder="••••••••"
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 focus:bg-white rounded-xl outline-none transition-all" />
                       <button onClick={() => setShowNew(s => !s)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
@@ -1202,7 +1197,7 @@ const UserProfile = () => {
                         type={showConfirm ? "text" : "password"}
                         name="comparepassword"
                         value={comparepassword}
-                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                        placeholder="••••••••"
                         onChange={(e) => setComparePassword(e.target.value)}
                       className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 focus:border-green-500 focus:bg-white rounded-xl outline-none transition-all" />
                       <button onClick={() => setShowConfirm(s => !s)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
@@ -1224,14 +1219,14 @@ const UserProfile = () => {
                       )}
                     </div>
                 <button onClick={handleUpdatePassword} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-sm py-3 rounded-xl transition-all shadow-lg shadow-green-200 mt-2">
-                  Mettre Ã  jour le mot de passe
+                  Mettre à jour le mot de passe
                 </button>
               </div>
             </div>
 
             <div className="bg-white border border-gray-100 rounded-2xl p-6">
-              <h3 className="font-bold text-gray-900 mb-1">Authentification Ã  deux facteurs</h3>
-              <p className="text-sm text-gray-400 mb-4">Ajoutez une couche de sÃ©curitÃ© supplÃ©mentaire.</p>
+              <h3 className="font-bold text-gray-900 mb-1">Authentification à deux facteurs</h3>
+              <p className="text-sm text-gray-400 mb-4">Ajoutez une couche de sécurité supplémentaire.</p>
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                 <div className="flex items-center gap-3">
                   <Phone size={18} className="text-green-600" />
@@ -1248,16 +1243,16 @@ const UserProfile = () => {
           </div>
         )}
 
-        {/* â”€â”€ Notifications tab â”€â”€ */}
+        {/* ── Notifications tab ── */}
         {activeTab === 'notifications' && (
           <div className="max-w-xl space-y-5">
             <div className="bg-white border border-gray-100 rounded-2xl p-6">
-              <h3 className="font-bold text-gray-900 mb-5">PrÃ©fÃ©rences de notifications</h3>
+              <h3 className="font-bold text-gray-900 mb-5">Préférences de notifications</h3>
               <div className="space-y-1">
                 {[
-                  { label: 'Mises Ã  jour de commandes', desc: 'Statut de vos commandes', checked: true },
-                  { label: 'Nouveaux produits', desc: 'Dans vos catÃ©gories favorites', checked: false },
-                  { label: 'Newsletter YamoMarket', desc: 'ActualitÃ©s et tendances', checked: false },
+                  { label: 'Mises à jour de commandes', desc: 'Statut de vos commandes', checked: true },
+                  { label: 'Nouveaux produits', desc: 'Dans vos catégories favorites', checked: false },
+                  { label: 'Newsletter YamoMarket', desc: 'Actualités et tendances', checked: false },
                 ].map(n => (
                   <div key={n.label} className="flex items-center justify-between py-3.5 border-b border-gray-50 last:border-0">
                     <div>
@@ -1279,7 +1274,7 @@ const UserProfile = () => {
             <Toast toast={toast} onClose={() => setToast(false)} />
       </div>
 
-      {/* â”€â”€ Modals â”€â”€ */}
+      {/* ── Modals ── */}
       {modal === 'verify' && <VerifyModal onClose={() => setModal(null)} />}
       {modal === 'shop'   && <CreateShopModal onClose={() => setModal(null)} isVerified={user2.status} verifyModal={() => setModal('verify')} />}
     </div>

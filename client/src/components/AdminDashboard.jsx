@@ -7,26 +7,25 @@ import {
   MoreVertical, RefreshCw, FileText, Megaphone, Menu,
   ArrowUpRight, ArrowDownRight, Activity, Ban, Image as ImageIcon,
   Calendar, Link as LinkIcon, ToggleLeft, ToggleRight, Phone, Mail, MapPin, CreditCard,
-  Fingerprint,
-  MousePointerClick
+  Fingerprint
 } from 'lucide-react';
 
 const ACTIVITY_LOG = [
-  { id: 1, action: 'Utilisateur vÃ©rifiÃ©',    subject: 'Nos Utilisateur',  time: '',  type: 'verify'  },
-  { id: 2, action: 'Boutique approuvÃ©e',      subject: 'Market Place',       time: '', type: 'approve' },
-  { id: 3, action: 'Produit supprimÃ©',        subject: 'Les Produit Expire', time: '',    type: 'delete'  },
+  { id: 1, action: 'Utilisateur vérifié',    subject: 'Nos Utilisateur',  time: '',  type: 'verify'  },
+  { id: 2, action: 'Boutique approuvée',      subject: 'Market Place',       time: '', type: 'approve' },
+  { id: 3, action: 'Produit supprimé',        subject: 'Les Produit Expire', time: '',    type: 'delete'  },
   { id: 4, action: 'Utilisateur suspendu',    subject: 'Utilisateur Banni',   time: '',    type: 'ban'     },
-  { id: 5, action: 'Boutique refusÃ©e',        subject: 'Des Boutique Suspendu',   time: '',    type: 'reject'  },
-  { id: 6, action: 'Annonce publiÃ©e',         subject: 'Nos Publicite',   time: '',    type: 'ad'      },
+  { id: 5, action: 'Boutique refusée',        subject: 'Des Boutique Suspendu',   time: '',    type: 'reject'  },
+  { id: 6, action: 'Annonce publiée',         subject: 'Nos Publicite',   time: '',    type: 'ad'      },
 ];
 
-/* â”€â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── helpers ─────────────────────────────────────── */
 const API = 'https://yamo-market-server.vercel.app/api/market';
 const token = () => localStorage.getItem('market_token');
 const authHeader = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${token()}` });
 
 const statusPill = (active) => active
-  ? <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-green-100 text-green-700"><CheckCircle2 size={9} /> VÃ©rifiÃ©</span>
+  ? <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-green-100 text-green-700"><CheckCircle2 size={9} /> Vérifié</span>
   : <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-full w-24 bg-amber-100 text-amber-600"><Clock size={9} /> En attente</span>;
 
 const activityIcon = (type) => ({
@@ -38,7 +37,7 @@ const activityIcon = (type) => ({
   ad:      <div className="w-7 h-7 rounded-xl bg-violet-100 flex items-center justify-center"><Megaphone size={14} className="text-violet-600" /></div>,
 }[type]);
 
-/* â”€â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Toast ──────────────────────────────────────── */
 const Toast = ({ toast, onClose }) => {
   useEffect(() => {
     if (!toast) return;
@@ -55,7 +54,7 @@ const Toast = ({ toast, onClose }) => {
   );
 };
 
-/* â”€â”€â”€ Confirm Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Confirm Modal ──────────────────────────────── */
 const ConfirmModal = ({ config, onConfirm, onCancel }) => {
   if (!config) return null;
   return (
@@ -82,7 +81,7 @@ const ConfirmModal = ({ config, onConfirm, onCancel }) => {
   );
 };
 
-/* â”€â”€â”€ User Verification Detail Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── User Verification Detail Modal ────────────── */
 const UserDetailModal = ({ user, onClose, onApprove, onReject }) => {
   if (!user) return null;
   return (
@@ -97,7 +96,7 @@ const UserDetailModal = ({ user, onClose, onApprove, onReject }) => {
               </div>
               <div>
                 <h3 className="font-bold text-gray-900 leading-tight">{user.username}</h3>
-                <p className="text-xs text-gray-400 mt-0.5">Dossier de vÃ©rification</p>
+                <p className="text-xs text-gray-400 mt-0.5">Dossier de vérification</p>
               </div>
             </div>
             <button onClick={onClose} className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
@@ -125,7 +124,7 @@ const UserDetailModal = ({ user, onClose, onApprove, onReject }) => {
             {/* document info */}
             <div>
               <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2.5 flex items-center gap-1.5">
-                <CreditCard size={13} /> Document d'identitÃ©
+                <CreditCard size={13} /> Document d'identité
               </h4>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {user.id_front && (
@@ -142,7 +141,7 @@ const UserDetailModal = ({ user, onClose, onApprove, onReject }) => {
                 )}
                 {user.photo && (
                   <div>
-                    <img src={user.photo} alt="Selfie de vÃ©rification" className="w-full h-28 object-cover rounded-xl border border-gray-100" />
+                    <img src={user.photo} alt="Selfie de vérification" className="w-full h-28 object-cover rounded-xl border border-gray-100" />
                     <p className="text-[10px] text-gray-400 mt-1 text-center">Selfie</p>
                   </div>
                 )}
@@ -165,7 +164,7 @@ const UserDetailModal = ({ user, onClose, onApprove, onReject }) => {
   );
 };
 
-/* â”€â”€â”€ Ad Form Modal (create / edit) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Ad Form Modal (create / edit) ──────────────── */
 const AdFormModal = ({ ad, onSuccess, onClose }) => {
   const [form, setForm] = useState(ad || {
     title: '', product: '', slogan: '', chancing: '',
@@ -182,7 +181,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('market_token');
-        const res = await fetch(`https://yamo-market-server.vercel.app/api/market/getallproducts`, {
+        const res = await fetch(`http://localhost:5050/api/market/getallproducts`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -209,7 +208,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
     (p.shop_name || p.shop || '').toLowerCase().includes(productSearch.toLowerCase())
   );
  
-  /* selecting a product only links it â€” title and slogan stay manual */
+  /* selecting a product only links it — title and slogan stay manual */
   const selectProduct = (p) => {
     setForm(f => ({
       ...f,
@@ -231,7 +230,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('market_token');
-      const response = await fetch('https://yamo-market-server.vercel.app/api/market/createads', {
+      const response = await fetch('http://localhost:5050/api/market/createads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -241,15 +240,15 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
       });
  
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Ã‰chec de la crÃ©ation');
+      if (!response.ok) throw new Error(data.message || 'Échec de la création');
  
       onSuccess(
-        { type: 'success', msg: ad ? 'Annonce mise Ã  jour âœ“' : 'Annonce crÃ©Ã©e avec succÃ¨s âœ“' },
+        { type: 'success', msg: ad ? 'Annonce mise à jour ✓' : 'Annonce créée avec succès ✓' },
         data
       );
       onClose();
     } catch (err) {
-      setError(err.message || 'Une erreur est survenue, veuillez rÃ©essayer.');
+      setError(err.message || 'Une erreur est survenue, veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }
@@ -291,7 +290,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
                     <p className="text-sm font-semibold text-gray-800 truncate">{form.productSnapshot.product_name}</p>
                     <p className="text-[11px] text-gray-400 truncate">
                       {form.productSnapshot.shop_name}
-                      {form.productSnapshot.price ? ` â€¢ ${Number(form.productSnapshot.price).toLocaleString('fr-FR')} FCFA` : ''}
+                      {form.productSnapshot.price ? ` • ${Number(form.productSnapshot.price).toLocaleString('fr-FR')} FCFA` : ''}
                     </p>
                   </div>
                   <button onClick={() => setShowPicker(s => !s)} className="text-xs font-semibold text-green-700 hover:underline flex-shrink-0">
@@ -301,7 +300,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
               ) : (
                 <button onClick={() => setShowPicker(s => !s)}
                   className="w-full flex items-center justify-center gap-2 border border-dashed border-gray-300 hover:border-green-400 text-gray-500 hover:text-green-700 text-sm font-semibold py-2.5 rounded-xl transition-all">
-                  <Search size={14} /> SÃ©lectionner un produit
+                  <Search size={14} /> Sélectionner un produit
                 </button>
               )}
  
@@ -310,7 +309,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
                   <div className="flex items-center gap-2 px-3 py-2 border-b border-gray-100 bg-gray-50">
                     <Search size={13} className="text-gray-400 flex-shrink-0" />
                     <input autoFocus value={productSearch} onChange={e => setProductSearch(e.target.value)}
-                      placeholder="Rechercher un produit ou une boutiqueâ€¦"
+                      placeholder="Rechercher un produit ou une boutique…"
                       className="w-full text-sm outline-none bg-transparent" />
                     <button onClick={() => setShowPicker(false)} className="flex-shrink-0">
                       <X size={13} className="text-gray-400" />
@@ -318,9 +317,9 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
                   </div>
                   <div className="max-h-48 overflow-y-auto divide-y divide-gray-50">
                     {productsLoading ? (
-                      <p className="text-xs text-gray-400 text-center py-4">Chargement des produitsâ€¦</p>
+                      <p className="text-xs text-gray-400 text-center py-4">Chargement des produits…</p>
                     ) : filteredProducts.length === 0 ? (
-                      <p className="text-xs text-gray-400 text-center py-4">Aucun produit trouvÃ©.</p>
+                      <p className="text-xs text-gray-400 text-center py-4">Aucun produit trouvé.</p>
                     ) : filteredProducts.map(p => (
                       <button key={p.id ?? p._id} onClick={() => selectProduct(p)}
                         className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 text-left transition-colors">
@@ -334,7 +333,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-gray-800 truncate">{p.product_name}</p>
                           <p className="text-[10px] text-gray-400 truncate">
-                            {p.shop_name || p.shop}{p.price ? ` â€¢ ${Number(p.price).toLocaleString('fr-FR')} FCFA` : ''}
+                            {p.shop_name || p.shop}{p.price ? ` • ${Number(p.price).toLocaleString('fr-FR')} FCFA` : ''}
                           </p>
                         </div>
                       </button>
@@ -352,7 +351,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
  
             <div>
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Slogan</label>
-              <input value={form.slogan} onChange={e => set('slogan', e.target.value)} placeholder="Ex: Offre limitÃ©e, ne manquez pas Ã§a !"
+              <input value={form.slogan} onChange={e => set('slogan', e.target.value)} placeholder="Ex: Offre limitée, ne manquez pas ça !"
                 className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-green-400 transition-all" />
             </div>
  
@@ -360,7 +359,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Chance d'affichage (%)</label>
               <input type="number" min="1" max="100" value={form.chancing} onChange={e => set('chancing', e.target.value)} placeholder="Ex: 50"
                 className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-green-400 transition-all" />
-              <p className="text-[11px] text-gray-400 mt-1">Plus la valeur est Ã©levÃ©e, plus l'annonce apparaÃ®t souvent.</p>
+              <p className="text-[11px] text-gray-400 mt-1">Plus la valeur est élevée, plus l'annonce apparaît souvent.</p>
             </div>
           </div>
  
@@ -372,10 +371,10 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
               className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-bold transition-all shadow-md shadow-green-200">
               {isLoading ? (
                 <>
-                  <RefreshCw size={14} className="animate-spin" /> {ad ? 'Enregistrementâ€¦' : 'CrÃ©ationâ€¦'}
+                  <RefreshCw size={14} className="animate-spin" /> {ad ? 'Enregistrement…' : 'Création…'}
                 </>
               ) : (
-                ad ? 'Enregistrer' : 'CrÃ©er l\'annonce'
+                ad ? 'Enregistrer' : 'Créer l\'annonce'
               )}
             </button>
           </div>
@@ -385,7 +384,7 @@ const AdFormModal = ({ ad, onSuccess, onClose }) => {
   );
 };
 
-/* â”€â”€â”€ Edit Ad Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Edit Ad Modal ──────────────────────────────── */
 const EditAdModal = ({ ad, onSuccess, onClose }) => {
   const [form, setForm] = useState({
     title:    ad?.title    ?? '',
@@ -395,7 +394,7 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error,     setError]     = useState('');
  
-  /* product details come from the joined ads query â€” read directly from ad prop */
+  /* product details come from the joined ads query — read directly from ad prop */
   const product = ad?.product_name ? {
     product_name: ad.product_name,
     image:        ad.m_img ?? ad.image,
@@ -414,7 +413,7 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('market_token');
-      const response = await fetch(`https://yamo-market-server.vercel.app/api/market/updatead/${ad.ads_id}`, {
+      const response = await fetch(`http://localhost:5050/api/market/updatead/${ad.ads_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -424,15 +423,15 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
       });
  
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Ã‰chec de la mise Ã  jour');
+      if (!response.ok) throw new Error(data.message || 'Échec de la mise à jour');
  
       onSuccess(
-        { type: 'success', msg: 'Annonce mise Ã  jour âœ“' },
+        { type: 'success', msg: 'Annonce mise à jour ✓' },
         { ...ad, ...form }
       );
       onClose();
     } catch (err) {
-      setError(err.message || 'Une erreur est survenue, veuillez rÃ©essayer.');
+      setError(err.message || 'Une erreur est survenue, veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }
@@ -457,9 +456,9 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
  
           <div className="px-6 py-5 space-y-4">
  
-            {/* â”€â”€ Product detail card (read-only, from joined query) â”€â”€ */}
+            {/* ── Product detail card (read-only, from joined query) ── */}
             <div>
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Produit liÃ©</p>
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Produit lié</p>
               {product ? (
                 <div className="bg-gray-50 border border-gray-100 rounded-2xl overflow-hidden">
                   <div className="flex gap-4 p-4">
@@ -506,12 +505,12 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
                   </div>
                   <div className="bg-amber-50 border-t border-amber-100 px-4 py-2 flex items-center gap-1.5">
                     <AlertCircle size={11} className="text-amber-500 flex-shrink-0" />
-                    <span className="text-[11px] text-amber-600 font-medium">Le produit liÃ© ne peut pas Ãªtre changÃ©.</span>
+                    <span className="text-[11px] text-amber-600 font-medium">Le produit lié ne peut pas être changé.</span>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 text-sm text-gray-400 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3">
-                  <Package size={14} /> Aucun dÃ©tail produit disponible.
+                  <Package size={14} /> Aucun détail produit disponible.
                 </div>
               )}
             </div>
@@ -523,7 +522,7 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
               </div>
             )}
  
-            {/* â”€â”€ Editable fields â”€â”€ */}
+            {/* ── Editable fields ── */}
             <div>
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Titre</label>
               <input value={form.title} onChange={e => set('title', e.target.value)}
@@ -534,7 +533,7 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
             <div>
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">Slogan</label>
               <input value={form.slogan} onChange={e => set('slogan', e.target.value)}
-                placeholder="Ex: Offre limitÃ©e, ne manquez pas Ã§a !"
+                placeholder="Ex: Offre limitée, ne manquez pas ça !"
                 className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-green-400 transition-all" />
             </div>
  
@@ -543,7 +542,7 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
               <input type="number" min="1" max="100" value={form.chancing} onChange={e => set('chancing', e.target.value)}
                 placeholder="Ex: 50"
                 className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-green-400 transition-all" />
-              <p className="text-[11px] text-gray-400 mt-1">Plus la valeur est Ã©levÃ©e, plus l'annonce apparaÃ®t souvent.</p>
+              <p className="text-[11px] text-gray-400 mt-1">Plus la valeur est élevée, plus l'annonce apparaît souvent.</p>
             </div>
           </div>
  
@@ -556,7 +555,7 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
             <button onClick={handleSubmit} disabled={!form.title.trim() || isLoading}
               className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-bold transition-all shadow-md shadow-green-200">
               {isLoading
-                ? <><RefreshCw size={14} className="animate-spin" /> Enregistrementâ€¦</>
+                ? <><RefreshCw size={14} className="animate-spin" /> Enregistrement…</>
                 : 'Enregistrer'
               }
             </button>
@@ -570,17 +569,17 @@ const EditAdModal = ({ ad, onSuccess, onClose }) => {
 
 const NAV = [
   { key: 'overview',      label: 'Vue d\'ensemble', icon: <LayoutDashboard size={16} /> },
-  { key: 'verify-users',  label: 'VÃ©rif. utilisateurs', icon: <ShieldCheck size={16} /> },
+  { key: 'verify-users',  label: 'Vérif. utilisateurs', icon: <ShieldCheck size={16} /> },
   { key: 'users',         label: 'Utilisateurs',        icon: <Users size={16} />          },
   { key: 'shops',         label: 'Boutiques',            icon: <Store size={16} />          },
   { key: 'products',      label: 'Produits',             icon: <Package size={16} />        },
-  { key: 'ads',           label: 'Annonces',             icon: <Megaphone size={16} />      },
+  { key: 'ads',           label: 'Annonces',             icon: <Fingerprint size={16} />     },
+  { key: 'activity',      label: 'Activité',             icon: <Activity size={16} />       },
+  { key: 'settings',      label: 'Paramètres',           icon: <Settings size={16} />       },
   { key: 'clicklogs',      label: 'Click',                icon: <Fingerprint size={16} />       },
-  { key: 'activity',      label: 'ActivitÃ©',             icon: <Activity size={16} />       },
-  { key: 'settings',      label: 'ParamÃ¨tres',           icon: <Settings size={16} />       },
 ];
 
-/* â”€â”€â”€ Main Admin component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Main Admin component ───────────────────────── */
 const AdminDashboard = () => {
   const [activeTab,  setActiveTab]  = useState('overview');
   const [sidebarOpen,setSidebarOpen]= useState(false);
@@ -821,7 +820,7 @@ const AdminDashboard = () => {
     }
   };
 
-  /* â”€â”€ Sidebar â”€â”€ */
+  /* ── Sidebar ── */
   const Sidebar = ({ mobile = false }) => (
     <div className={`${mobile ? 'flex' : 'hidden lg:flex'} flex-col h-full bg-gray-900`}>
       {/* logo */}
@@ -860,13 +859,13 @@ const AdminDashboard = () => {
       {/* logout */}
       <div className="px-3 py-4 border-t border-gray-800">
         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-gray-800 transition-all">
-          <LogOut size={16} /> Se dÃ©connecter
+          <LogOut size={16} /> Se déconnecter
         </button>
       </div>
     </div>
   );
 
-  /* â”€â”€ Top bar â”€â”€ */
+  /* ── Top bar ── */
   const TopBar = ({ title, sub }) => (
     <div className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between gap-4 sticky top-0 z-10">
       <div className="flex items-center gap-3">
@@ -881,7 +880,7 @@ const AdminDashboard = () => {
       <div className="flex items-center gap-3">
         <div className="hidden sm:flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">
           <Search size={13} className="text-gray-400" />
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercherâ€¦"
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Rechercher…"
             className="text-sm outline-none bg-transparent text-gray-700 placeholder-gray-400 w-40" />
         </div>
         <button className="relative w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center">
@@ -893,7 +892,7 @@ const AdminDashboard = () => {
     </div>
   );
 
-  /* â”€â”€ OVERVIEW â”€â”€ */
+  /* ── OVERVIEW ── */
   const OverviewTab = () => (
     <div className="p-6 space-y-6">
       {/* stat cards */}
@@ -934,12 +933,12 @@ const AdminDashboard = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-800 truncate">{u?.username}</p>
-                  <p className="text-xs text-gray-400">VÃ©rification utilisateur â€¢ {u?.doc}</p>
+                  <p className="text-xs text-gray-400">Vérification utilisateur • {u?.doc}</p>
                 </div>
                 <div className="flex gap-1.5 flex-shrink-0">
                   <button onClick={() => askConfirm({
                     title: 'Approuver cet utilisateur ?',
-                    desc: `Valider l'identitÃ© de "${u?.username}" sur YamoMarket.`,
+                    desc: `Valider l'identité de "${u?.username}" sur YamoMarket.`,
                     icon: <BadgeCheck size={24} className="text-green-600" />,
                     iconBg: 'bg-green-100', btnClass: 'bg-green-600 hover:bg-green-700', btnLabel: 'Approuver'
                   }, () => { verifyUser(u, true, 'approved'); closeConfirm(); })}
@@ -962,7 +961,7 @@ const AdminDashboard = () => {
               <p className="text-sm text-gray-400 text-center py-6">Aucune action en attente.</p>
             )}
             <button onClick={() => setActiveTab('verify-users')} className="w-full text-xs text-green-700 font-semibold py-2 hover:underline">
-              Voir toutes les demandes â†’
+              Voir toutes les demandes →
             </button>
           </div>
         </div>
@@ -970,7 +969,7 @@ const AdminDashboard = () => {
         {/* activity log */}
         <div className="bg-white border border-gray-100 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-gray-900 text-sm">ActivitÃ© rÃ©cente</h2>
+            <h2 className="font-bold text-gray-900 text-sm">Activité récente</h2>
             <button onClick={() => setActiveTab('activity')} className="text-xs text-green-700 font-semibold hover:underline">Tout voir</button>
           </div>
           <div className="space-y-3">
@@ -990,14 +989,14 @@ const AdminDashboard = () => {
     </div>
   );
 
-  /* â”€â”€ VERIFY USERS â”€â”€ */
+  /* ── VERIFY USERS ── */
   const VerifyUsersTab = () => (
     <div className="p-6 space-y-4">
       {pendingUsers.length === 0 ? (
         <div className="text-center py-20">
           <CheckCircle2 size={40} className="text-green-400 mx-auto mb-3" />
           <p className="font-bold text-gray-700">Aucune demande en attente</p>
-          <p className="text-sm text-gray-400 mt-1">Toutes les vÃ©rifications ont Ã©tÃ© traitÃ©es.</p>
+          <p className="text-sm text-gray-400 mt-1">Toutes les vérifications ont été traitées.</p>
         </div>
       ) : pendingUsers.map(u => (
         <div key={u.user_id} className="bg-white border border-gray-100 rounded-2xl p-5 hover:border-green-200 transition-all">
@@ -1024,7 +1023,7 @@ const AdminDashboard = () => {
               <button
                 onClick={() => askConfirm({
                   title: 'Approuver cet utilisateur ?',
-                  desc: `Valider l'identitÃ© de "${u.username}" sur YamoMarket.`,
+                  desc: `Valider l'identité de "${u.username}" sur YamoMarket.`,
                   icon: <BadgeCheck size={24} className="text-green-600" />,
                   iconBg: 'bg-green-100', btnClass: 'bg-green-600 hover:bg-green-700', btnLabel: 'Approuver'
                 }, () => { verifyUser(u, true, 'approved'); closeConfirm(); })}
@@ -1034,7 +1033,7 @@ const AdminDashboard = () => {
               <button
                 onClick={() => askConfirm({
                   title: 'Refuser cette demande ?',
-                  desc: `Rejeter la demande de vÃ©rification de "${u.username}".`,
+                  desc: `Rejeter la demande de vérification de "${u.username}".`,
                   icon: <XCircle size={24} className="text-red-500" />,
                   iconBg: 'bg-red-100', btnClass: 'bg-red-500 hover:bg-red-600', btnLabel: 'Refuser'
                 }, () => { verifyUser(u, true, 'approuve'); closeConfirm(); })}
@@ -1048,7 +1047,7 @@ const AdminDashboard = () => {
     </div>
   );
 
-  /* â”€â”€ ALL USERS â”€â”€ */
+  /* ── ALL USERS ── */
   const UsersTab = () => {
     const filtered = allUsers.filter(u =>
       u.username.toLowerCase().includes(search.toLowerCase()) ||
@@ -1082,12 +1081,7 @@ const AdminDashboard = () => {
                   <td className="px-4 py-3 text-xs text-gray-500">{u.email}</td>
                   <td className="px-4 py-3 text-xs text-gray-500">{u.phone}</td>
                   <td className="">
-                    <span className={`text-[10px] font-bold px-4 flex justify-center items-center w-fit rounded-full ${  u.review === 'rejected'
-                      ? 'bg-red-200 text-red-700'
-                      : u.review === 'approved'
-                      ? 'bg-green-200 text-green-700'
-                      : 'bg-gray-200 text-gray-600'}`
-                    }>
+                    <span className={`text-[10px] font-bold px-4 flex justify-center items-center w-fit rounded-full ${u.review === 'rejected' ? 'bg-red-200 text-red-700' : 'bg-gray-200 text-gray-600'}`}>
                       {u.review}
                     </span>
                   </td>
@@ -1110,10 +1104,10 @@ const AdminDashboard = () => {
                       <button
                         onClick={() => askConfirm({
                           title: 'Supprimer cet utilisateur ?',
-                          desc: `Cette action est irrÃ©versible pour "${u.username}".`,
+                          desc: `Cette action est irréversible pour "${u.username}".`,
                           icon: <Trash2 size={24} className="text-red-500" />,
                           iconBg: 'bg-red-100', btnClass: 'bg-red-500 hover:bg-red-600', btnLabel: 'Supprimer'
-                        }, () => { deleteUser(u.user_id); closeConfirm(); showToast('Utilisateur supprimÃ©'); })}
+                        }, () => { deleteUser(u.user_id); closeConfirm(); showToast('Utilisateur supprimé'); })}
                         className="w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center transition-colors" title="Supprimer">
                         <Trash2 size={12} className="text-red-500" />
                       </button>
@@ -1128,7 +1122,7 @@ const AdminDashboard = () => {
     );
   };
 
-  /* â”€â”€ ALL SHOPS â”€â”€ */
+  /* ── ALL SHOPS ── */
   const ShopsTab = () => {
     const filtered = allShops.filter(s =>
       s.shop_name.toLowerCase().includes(search.toLowerCase()) ||
@@ -1140,7 +1134,7 @@ const AdminDashboard = () => {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                {['Boutique','PropriÃ©taire','RÃ©gion','Town','Address','CatÃ©gorie','Statut','Actions'].map(h => (
+                {['Boutique','Propriétaire','Région','Town','Address','Catégorie','Statut','Actions'].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
                 ))}
               </tr>
@@ -1175,7 +1169,7 @@ const AdminDashboard = () => {
                       <button
                         onClick={() => askConfirm({
                           title: 'Supprimer cette boutique ?',
-                          desc: `"${s.shop_name}" et tous ses produits seront supprimÃ©s.`,
+                          desc: `"${s.shop_name}" et tous ses produits seront supprimés.`,
                           icon: <Trash2 size={24} className="text-red-500" />,
                           iconBg: 'bg-red-100', btnClass: 'bg-red-500 hover:bg-red-600', btnLabel: 'Supprimer'
                         }, () => { deleteShop(s.shop_id); closeConfirm(); })}
@@ -1193,7 +1187,7 @@ const AdminDashboard = () => {
     );
   };
 
-  /* â”€â”€ ACTIVITY â”€â”€ */
+  /* ── ACTIVITY ── */
   const ActivityTab = () => (
     <div className="p-6">
       <div className="bg-white border border-gray-100 rounded-2xl divide-y divide-gray-50">
@@ -1211,13 +1205,13 @@ const AdminDashboard = () => {
     </div>
   );
 
-  /* â”€â”€ SETTINGS â”€â”€ */
+  /* ── SETTINGS ── */
   const SettingsTab = () => (
     <div className="p-6 max-w-xl space-y-5">
       <div className="bg-white border border-gray-100 rounded-2xl p-5">
-        <h3 className="font-bold text-gray-900 text-sm mb-4">ParamÃ¨tres gÃ©nÃ©raux</h3>
+        <h3 className="font-bold text-gray-900 text-sm mb-4">Paramètres généraux</h3>
         <div className="space-y-4">
-          {['Nom de la plateforme', 'Email de contact', 'TÃ©lÃ©phone support'].map(l => (
+          {['Nom de la plateforme', 'Email de contact', 'Téléphone support'].map(l => (
             <div key={l}>
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5 block">{l}</label>
               <input placeholder={l} className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-green-400 transition-all" />
@@ -1231,13 +1225,13 @@ const AdminDashboard = () => {
       <div className="bg-white border border-gray-100 rounded-2xl p-5">
         <h3 className="font-bold text-gray-900 text-sm mb-4">Zone de danger</h3>
         <button className="flex items-center gap-2 border border-red-200 hover:bg-red-50 text-red-500 text-sm font-semibold px-4 py-2.5 rounded-xl transition-all">
-          <Trash2 size={14} /> RÃ©initialiser les donnÃ©es de test
+          <Trash2 size={14} /> Réinitialiser les données de test
         </button>
       </div>
     </div>
   );
 
-  /* â”€â”€ PRODUCTS â”€â”€ */
+  /* ── PRODUCTS ── */
   const ProductsTab = () => {
     const filtered = products.filter(p =>
       (p.product_name || '').toLowerCase().includes(search.toLowerCase()) ||
@@ -1247,14 +1241,14 @@ const AdminDashboard = () => {
       <div className="p-6">
         {productsLoading && (
           <div className="flex items-center gap-2 text-xs text-gray-400 mb-3">
-            <RefreshCw size={12} className="animate-spin" /> Chargement des produitsâ€¦
+            <RefreshCw size={12} className="animate-spin" /> Chargement des produits…
           </div>
         )}
         <div className="bg-white border border-gray-100 rounded-2xl overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                {['Produit','Boutique','CatÃ©gorie','Prix','Desc','Statut','Actions'].map(h => (
+                {['Produit','Boutique','Catégorie','Prix','Desc','Statut','Actions'].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">{h}</th>
                 ))}
               </tr>
@@ -1273,7 +1267,7 @@ const AdminDashboard = () => {
                       )}
                       <div>
                         <p className="font-semibold text-gray-800 text-sm">{p.product_name}</p>
-                        <p className="text-[10px] text-gray-400">AjoutÃ© le {p.created_at || 'â€”'}</p>
+                        <p className="text-[10px] text-gray-400">Ajouté le {p.created_at || '—'}</p>
                       </div>
                     </div>
                   </td>
@@ -1282,13 +1276,13 @@ const AdminDashboard = () => {
                       <Store size={11} /> {p.shop_name}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-gray-500 font-semibold">{p.tag || 'â€”'}</td>
+                  <td className="px-4 py-3 text-xs text-gray-500 font-semibold">{p.tag || '—'}</td>
                   <td className="px-4 py-3 text-xs font-semibold text-gray-700">
-                    {p.price ? `${Number(p.price).toLocaleString('fr-FR')} FCFA` : 'â€”'}
+                    {p.price ? `${Number(p.price).toLocaleString('fr-FR')} FCFA` : '—'}
                   </td>
                   <td className="px-4 py-3">
                     <span className={`text-xs font-semibold line-clamp-1`}>
-                      {p.desc || 'â€”'}
+                      {p.desc || '—'}
                     </span>
                   </td>
                   <td className="px-4 py-3">{statusPill(!!p.status)}</td>
@@ -1300,10 +1294,10 @@ const AdminDashboard = () => {
                       <button
                         onClick={() => askConfirm({
                           title: 'Supprimer ce produit ?',
-                          desc: `"${p.name}" sera retirÃ© de la boutique "${p.shop_name || p.shop}".`,
+                          desc: `"${p.name}" sera retiré de la boutique "${p.shop_name || p.shop}".`,
                           icon: <Trash2 size={24} className="text-red-500" />,
                           iconBg: 'bg-red-100', btnClass: 'bg-red-500 hover:bg-red-600', btnLabel: 'Supprimer'
-                        }, () => { deleteProduct(p.product_id); closeConfirm(); showToast('Produit supprimÃ©'); })}
+                        }, () => { deleteProduct(p.product_id); closeConfirm(); showToast('Produit supprimé'); })}
                         className="w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 flex items-center justify-center transition-colors" title="Supprimer">
                         <Trash2 size={12} className="text-red-500" />
                       </button>
@@ -1312,7 +1306,7 @@ const AdminDashboard = () => {
                 </tr>
               ))}
               {filtered.length === 0 && !productsLoading && (
-                <tr><td colSpan={7} className="px-4 py-10 text-center text-sm text-gray-400">Aucun produit trouvÃ©.</td></tr>
+                <tr><td colSpan={7} className="px-4 py-10 text-center text-sm text-gray-400">Aucun produit trouvé.</td></tr>
               )}
             </tbody>
           </table>
@@ -1321,11 +1315,11 @@ const AdminDashboard = () => {
     );
   };
 
-  /* â”€â”€ ADS â”€â”€ */
+  /* ── ADS ── */
   const AdsTab = () => (
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-xs text-gray-400">{adstotal} annonce(s) configurÃ©e(s)</p>
+        <p className="text-xs text-gray-400">{adstotal} annonce(s) configurée(s)</p>
         <button onClick={() => { setEditingAd(null); setShowAdForm(true); }}
           className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-green-200">
           <Megaphone size={13} /> Nouvelle annonce
@@ -1336,7 +1330,7 @@ const AdminDashboard = () => {
         <div className="text-center py-20">
           <Megaphone size={40} className="text-gray-300 mx-auto mb-3" />
           <p className="font-bold text-gray-700">Aucune annonce</p>
-          <p className="text-sm text-gray-400 mt-1">CrÃ©ez votre premiÃ¨re publicitÃ© pour le site.</p>
+          <p className="text-sm text-gray-400 mt-1">Créez votre première publicité pour le site.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1353,7 +1347,7 @@ const AdminDashboard = () => {
                  <span className="inline-block text-[11px] font-bold px-3 rounded-full ml-1 bg-violet-100 text-violet-700 w-fit h-fit">{a?.product_category}</span>
                 <div className="flex items-start justify-between gap-2">
                   <p className="font-bold text-gray-900 text-sm leading-tight">{a?.title}</p>
-                  <button onClick={() => toggleAdStatus(a.id)} className="flex-shrink-0" title="Activer / dÃ©sactiver">
+                  <button onClick={() => toggleAdStatus(a.id)} className="flex-shrink-0" title="Activer / désactiver">
                     {a?.status === "active" ? <ToggleRight size={22} className="text-green-600" /> : <ToggleLeft size={22} className="text-gray-300" />}
                   </button>
                 </div>
@@ -1371,7 +1365,7 @@ const AdminDashboard = () => {
                   <button
                     onClick={() => askConfirm({
                       title: 'Supprimer cette annonce ?',
-                      desc: `"${a?.title}" sera retirÃ©e du site.`,
+                      desc: `"${a?.title}" sera retirée du site.`,
                       icon: <Trash2 size={24} className="text-red-500" />,
                       iconBg: 'bg-red-100', btnClass: 'bg-red-500 hover:bg-red-600', btnLabel: 'Supprimer'
                     }, () => { deleteAd(a?.ads_id); closeConfirm(); })}
@@ -1482,8 +1476,8 @@ const AdminDashboard = () => {
         <div className="bg-white border border-gray-100 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
             <div>
-              <h2 className="font-bold text-gray-900 text-sm">DÃ©tail par cible</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Mois en cours â€” clics uniques par IP</p>
+              <h2 className="font-bold text-gray-900 text-sm">Detail par cible</h2>
+              <p className="text-xs text-gray-400 mt-0.5">Mois en cours du clics uniques par IP</p>
             </div>
             <div className="flex items-center gap-2">
               {TYPE_TABS.map(t => (
@@ -1529,7 +1523,7 @@ const AdminDashboard = () => {
           ) : activeData.length === 0 ? (
             <div className="text-center py-12">
               <MousePointerClick size={36} className="text-gray-200 mx-auto mb-3" />
-              <p className="text-gray-500 font-semibold text-sm">Aucun clic enregistrÃ© ce mois-ci</p>
+              <p className="text-gray-500 font-semibold text-sm">Aucun clic enregistré ce mois-ci</p>
             </div>
           ) : (
             <div className="space-y-2.5">
@@ -1609,7 +1603,7 @@ const AdminDashboard = () => {
                       <div className="mt-1 mx-1 bg-white border border-green-100 rounded-xl p-4">
                         {detailLoading ? (
                           <div className="flex items-center gap-2 text-xs text-gray-400 py-2">
-                            <RefreshCw size={12} className="animate-spin" /> Chargement du dÃ©tailâ€¦
+                            <RefreshCw size={12} className="animate-spin" /> Chargement du detail…
                           </div>
                         ) : detailTarget?.data ? (
                           <>
@@ -1711,7 +1705,7 @@ const AdminDashboard = () => {
                             )}
                           </>
                         ) : (
-                          <p className="text-xs text-gray-400 py-2">Aucune donnÃ©e disponible.</p>
+                          <p className="text-xs text-gray-400 py-2">Aucune donne disponible.</p>
                         )}
                       </div>
                     )}
@@ -1727,15 +1721,15 @@ const AdminDashboard = () => {
 
 
   const TAB_META = {
-    overview:      { title: 'Vue d\'ensemble',       sub: 'ActivitÃ© globale de YamoMarket' },
-    'verify-users':{ title: 'VÃ©rifications utilisateurs', sub: `${pendingUsers.length} demande(s) en attente` },
-    users:         { title: 'Utilisateurs',              sub: `${allUsers.length} comptes enregistrÃ©s` },
+    overview:      { title: 'Vue d\'ensemble',       sub: 'Activité globale de YamoMarket' },
+    'verify-users':{ title: 'Vérifications utilisateurs', sub: `${pendingUsers.length} demande(s) en attente` },
+    users:         { title: 'Utilisateurs',              sub: `${allUsers.length} comptes enregistrés` },
     shops:         { title: 'Boutiques',                  sub: `${allShops.length} boutiques sur la plateforme` },
-    products:      { title: 'Produits',                   sub: 'Tous les produits publiÃ©s' },
-    ads:           { title: 'Annonces publicitaires',     sub: 'GÃ©rer les banners et promotions' },
-    activity:      { title: 'Journal d\'activitÃ©',        sub: 'Toutes les actions administratives' },
-    settings:      { title: 'ParamÃ¨tres',                 sub: 'Configuration de la plateforme' },
-    clicklogs:        { title: 'Statistiques Clics',         sub: 'Clics par boutique, produit et annonce â€” mois en cours' },
+    products:      { title: 'Produits',                   sub: 'Tous les produits publiés' },
+    ads:           { title: 'Annonces publicitaires',     sub: 'Gérer les banners et promotions' },
+    activity:      { title: 'Journal d\'activité',        sub: 'Toutes les actions administratives' },
+    settings:      { title: 'Paramètres',                 sub: 'Configuration de la plateforme' },
+    clicklogs:     { title: 'Statistiques Clics',         sub: 'Clics par boutique, produit et annonces du mois en cours' },
   };
 
   const renderTab = () => {
@@ -1761,12 +1755,12 @@ const AdminDashboard = () => {
   return (
     <div className="h-screen flex overflow-hidden bg-gray-50">
 
-      {/* â”€â”€ Desktop sidebar â”€â”€ */}
+      {/* ── Desktop sidebar ── */}
       <div className="w-56 flex-shrink-0 hidden lg:block">
         <Sidebar />
       </div>
 
-      {/* â”€â”€ Mobile sidebar overlay â”€â”€ */}
+      {/* ── Mobile sidebar overlay ── */}
       {sidebarOpen && (
         <>
           <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-30 bg-black/50 lg:hidden" />
@@ -1776,7 +1770,7 @@ const AdminDashboard = () => {
         </>
       )}
 
-      {/* â”€â”€ Main content â”€â”€ */}
+      {/* ── Main content ── */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopBar title={meta.title} sub={meta.sub} />
         <main className="flex-1 overflow-y-auto">
@@ -1784,7 +1778,7 @@ const AdminDashboard = () => {
         </main>
       </div>
 
-      {/* â”€â”€ Confirm modal â”€â”€ */}
+      {/* ── Confirm modal ── */}
       {confirm && (
         <ConfirmModal
           config={confirm.config}
@@ -1799,13 +1793,13 @@ const AdminDashboard = () => {
           onClose={() => setUserDetail(null)}
           onApprove={(u) => askConfirm({
             title: 'Approuver cet utilisateur ?',
-            desc: `Valider l'identitÃ© de "${u.username}" sur YamoMarket.`,
+            desc: `Valider l'identité de "${u.username}" sur YamoMarket.`,
             icon: <BadgeCheck size={24} className="text-green-600" />,
             iconBg: 'bg-green-100', btnClass: 'bg-green-600 hover:bg-green-700', btnLabel: 'Approuver'
           }, () => { verifyUser(u, true, 'approved'); closeConfirm(); })}
           onReject={(u) => askConfirm({
             title: 'Refuser cette demande ?',
-            desc: `Rejeter la demande de vÃ©rification de "${u.username}".`,
+            desc: `Rejeter la demande de vérification de "${u.username}".`,
             icon: <XCircle size={24} className="text-red-500" />,
             iconBg: 'bg-red-100', btnClass: 'bg-red-500 hover:bg-red-600', btnLabel: 'Refuser'
           }, () => { verifyUser(u, true, 'rejected'); closeConfirm(); })}

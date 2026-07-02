@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft, Star, Heart, Share2, Shield, Zap,
   MapPin, ChevronRight, CheckCircle2, Package,
@@ -12,12 +12,12 @@ import {
 import { useParams, Link } from 'react-router-dom';
 
 const REVIEWS_DATA = [
-  { name: 'Jean-Paul M.', rating: 5, date: 'il y a 3 jours', text: 'Excellent produit, livraison rapide depuis Douala. TrÃ¨s satisfait !' },
-  { name: 'AmÃ©lie T.',    rating: 4, date: 'il y a 1 semaine', text: "Bon rapport qualitÃ©-prix. L'Ã©cran est vraiment superbe." },
-  { name: 'Rodrigue K.', rating: 5, date: 'il y a 2 semaines', text: 'Le meilleur smartphone que j\'ai eu. La camÃ©ra est incroyable.' },
+  { name: 'Jean-Paul M.', rating: 5, date: 'il y a 3 jours', text: 'Excellent produit, livraison rapide depuis Douala. Très satisfait !' },
+  { name: 'Amélie T.',    rating: 4, date: 'il y a 1 semaine', text: "Bon rapport qualité-prix. L'écran est vraiment superbe." },
+  { name: 'Rodrigue K.', rating: 5, date: 'il y a 2 semaines', text: 'Le meilleur smartphone que j\'ai eu. La caméra est incroyable.' },
 ];
 
-/* â”€â”€â”€ StarRow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── StarRow ─────────────────────────────────────── */
 const StarRow = ({ rating, size = 14, showNum = false }) => (
   <div className="flex items-center gap-0.5">
     {[1,2,3,4,5].map(i => (
@@ -84,19 +84,19 @@ const ContactModal = ({ product, onClose }) => {
             {/* header */}
             <div className="flex items-start justify-between mb-5">
               <div className="flex-1 min-w-0 pr-3">
-                <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center text-2xl mb-3">ðŸª</div>
+                <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center text-2xl mb-3">🏪</div>
                 <h2 className="text-lg font-extrabold text-gray-900">Contacter le vendeur</h2>
  
                 {/* shop name + location pill */}
                 <div className="mt-2.5 w-80 inline-flex items-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl px-3.5 py-2.5 shadow-md shadow-green-200/60 max-w-full">
                   <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">
-                    ðŸª
+                    🏪
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-bold text-white leading-tight truncate">{shopName}</p>
                     <p className="text-[10px] text-green-200 flex items-center gap-0.5 mt-0.5">
                       <MapPin size={9} className="flex-shrink-0" />
-                      {product?.region} â€¢ {product?.town}
+                      {product?.region} • {product?.town}
                     </p>
                   </div>
                 </div>
@@ -119,7 +119,7 @@ const ContactModal = ({ product, onClose }) => {
                   <Phone size={14} className="text-green-700" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">TÃ©lÃ©phone</p>
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Téléphone</p>
                   <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">
                     {phone || <span className="text-gray-400 font-normal italic">Non disponible</span>}
                   </p>
@@ -128,7 +128,7 @@ const ContactModal = ({ product, onClose }) => {
                   <button
                     onClick={() => copyToClipboard(phone, 'phone')}
                     className="w-8 h-8 rounded-lg bg-white border border-gray-200 hover:border-green-400 flex items-center justify-center transition-all flex-shrink-0"
-                    aria-label="Copier le numÃ©ro"
+                    aria-label="Copier le numéro"
                   >
                     {copied === 'phone'
                       ? <CheckCircle2 size={13} className="text-green-600" />
@@ -143,7 +143,7 @@ const ContactModal = ({ product, onClose }) => {
                   <MapPin size={14} className="text-emerald-700" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">RÃ©gion</p>
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Région</p>
                   <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">
                     {region || <span className="text-gray-400 font-normal italic">Non disponible</span>}
                   </p>
@@ -180,7 +180,7 @@ const ContactModal = ({ product, onClose }) => {
  
             {/* footer note */}
             <p className="text-center text-[10px] text-gray-400 mt-5 leading-relaxed">
-              YamoMarket ne garantit pas les Ã©changes hors plateforme. Restez vigilant.
+              YamoMarket ne garantit pas les échanges hors plateforme. Restez vigilant.
             </p>
           </div>
         </div>
@@ -189,13 +189,13 @@ const ContactModal = ({ product, onClose }) => {
   );
 };
 
-/* â”€â”€â”€ Share Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Share Modal ─────────────────────────────────── */
 const ShareModal = ({ product, onClose }) => {
   const [copied, setCopied] = useState(false);
  
   const url   = window.location.href;
   const title = product?.product_name || 'Produit sur YamoMarket';
-  const text  = `DÃ©couvrez "${title}" sur YamoMarket â€” ${url}`;
+  const text  = `Découvrez "${title}" sur YamoMarket — ${url}`;
  
   const copyLink = async () => {
     try {
@@ -316,7 +316,7 @@ const ShareModal = ({ product, onClose }) => {
                 }`}
                 aria-label="Copier le lien"
               >
-                {copied ? <><CheckCircle2 size={13} /> CopiÃ© !</> : <><Copy size={13} /> Copier</>}
+                {copied ? <><CheckCircle2 size={13} /> Copié !</> : <><Copy size={13} /> Copier</>}
               </button>
             </div>
  
@@ -342,11 +342,11 @@ const badgeColor = (b) => ({
   Local:'bg-green-700', Promo:'bg-violet-500',
 }[b] || 'bg-gray-400');
 
-/* â”€â”€â”€ Image panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Image panel ─────────────────────────────────── */
 /*
  * productdetail has two separate image fields:
- *   m_img  â€” main / primary image URL
- *   img    â€” secondary image URL
+ *   m_img  — main / primary image URL
+ *   img    — secondary image URL
  *
  * We build a small images array [m_img, img] (filtering nulls)
  * and let the user switch between them with arrows + thumbnails.
@@ -376,15 +376,15 @@ const ImagePanel = ({ product }) => {
             className="w-full h-full object-cover transition-opacity duration-300"
           />
         ) : (
-          <span className="text-[100px] select-none group-hover:scale-110 transition-transform duration-500">ðŸ›ï¸</span>
+          <span className="text-[100px] select-none group-hover:scale-110 transition-transform duration-500">🛍️</span>
         )}
 
-        {/* arrows â€” only show if 2 images */}
+        {/* arrows — only show if 2 images */}
         {images.length > 1 && (
           <>
             <button onClick={prev}
               className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-md hover:bg-white transition-all"
-              aria-label="Image prÃ©cÃ©dente">
+              aria-label="Image précédente">
               <ChevronLeft size={18} className="text-gray-600" />
             </button>
             <button onClick={next}
@@ -405,7 +405,7 @@ const ImagePanel = ({ product }) => {
         {/* verified pill */}
         {product.status && (
           <span className="absolute top-3 right-3 bg-black/20 border border-white/30 text-white text-[10px] font-medium px-2 py-0.5 rounded-full backdrop-blur-sm flex items-center gap-1">
-            <BadgeCheck size={10} className="text-emerald-300" /> VÃ©rifiÃ©
+            <BadgeCheck size={10} className="text-emerald-300" /> Vérifié
           </span>
         )}
 
@@ -422,7 +422,7 @@ const ImagePanel = ({ product }) => {
         )}
       </div>
 
-      {/* Thumbnails â€” one per real image */}
+      {/* Thumbnails — one per real image */}
       {images.length > 1 && (
         <div className="flex w-48 h-24 mx-auto gap-3">
           {images.map((src, i) => (
@@ -434,7 +434,7 @@ const ImagePanel = ({ product }) => {
               }`}
               aria-label={i === 0 ? 'Image principale' : 'Image secondaire'}
             >
-              <img src={src} alt={`AperÃ§u ${i + 1}`} className="w-full h-full object-cover" />
+              <img src={src} alt={`Aperçu ${i + 1}`} className="w-full h-full object-cover" />
             </button>
           ))}
           {/* filler slots so thumbnails don't stretch weirdly when only 2 */}
@@ -447,8 +447,8 @@ const ImagePanel = ({ product }) => {
       {/* Trust badges */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { icon: <Shield size={15} className="text-green-600" />,  label: 'Vendeur vÃ©rifiÃ©'    },
-          { icon: <Zap    size={15} className="text-amber-500" />,  label: 'En ActivitÃ©'         },
+          { icon: <Shield size={15} className="text-green-600" />,  label: 'Vendeur vérifié'    },
+          { icon: <Zap    size={15} className="text-amber-500" />,  label: 'En Activité'         },
           { icon: <Package size={15} className="text-blue-500" />,  label: 'Consommation Valide' },
         ].map(b => (
           <div key={b.label} className="bg-white border border-gray-100 rounded-2xl p-3 flex flex-col items-center gap-1.5 text-center">
@@ -461,10 +461,10 @@ const ImagePanel = ({ product }) => {
   );
 };
 
-/* â”€â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Main component ──────────────────────────────── */
 const ProductDetail = () => {
-  
-  const { slug } = useParams();
+
+   const { slug } = useParams();
 
   const [product, setProduct] = useState(null);
   const [shop, setShop]       = useState(null);
@@ -526,7 +526,7 @@ const ProductDetail = () => {
   }
 };
 
-  /* â”€â”€ loading skeleton â”€â”€ */
+  /* ── loading skeleton ── */
   if (loading) return (
     <div className="min-h-screen pt-16 bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -543,10 +543,10 @@ const ProductDetail = () => {
     </div>
   );
 
-  /* â”€â”€ not found â”€â”€ */
+  /* ── not found ── */
   if (!product) return (
     <div className="min-h-screen pt-16 bg-gray-50 flex flex-col items-center justify-center gap-4">
-      <p className="text-5xl">ðŸ˜•</p>
+      <p className="text-5xl">😕</p>
       <p className="text-lg font-bold text-gray-700">Produit introuvable</p>
       <Link to="/products" className="text-green-600 hover:underline text-sm font-medium flex items-center gap-1">
         <ArrowLeft size={14} /> Retour aux produits
@@ -567,13 +567,13 @@ const ProductDetail = () => {
           <span className="text-gray-600 font-medium truncate max-w-[180px]">{product.product_name}</span>
         </div>
 
-        {/* â”€â”€ Main grid â”€â”€ */}
+        {/* ── Main grid ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
-          {/* LEFT â€” dynamic images from m_img + img */}
+          {/* LEFT — dynamic images from m_img + img */}
           <ImagePanel product={product} />
 
-          {/* RIGHT â€” info */}
+          {/* RIGHT — info */}
           <div className="space-y-4">
 
             {/* title */}
@@ -583,7 +583,7 @@ const ProductDetail = () => {
               </h1>
               <div className="flex flex-wrap items-center gap-2 mt-3">
                 <span className="flex items-center gap-1 bg-orange-400 text-white text-xs font-semibold px-3 py-0.5 rounded-full">
-                  <BadgeCheck size={11} className="text-yellow-200" /> CrÃ©dible
+                  <BadgeCheck size={11} className="text-yellow-200" /> TrustWorthy
                 </span>
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-orange-600">
                   Valide
@@ -605,7 +605,7 @@ const ProductDetail = () => {
                 <span className="text-lg text-gray-400 font-medium mb-0.5">XAF</span>
               </div>
               <p className="text-sm text-green-700 font-medium mt-1">
-                Vous Ã©conomisez votre temps avec YamoMarket
+                Vous économisez votre temps avec YamoMarket
               </p>
             </div>
 
@@ -642,7 +642,7 @@ const ProductDetail = () => {
             {/* Shop card */}
             <Link to={`/boutique/${shop?.shop_slug}`} onClick={() => handleClick(product)} >
             <div className="bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-green-200 transition-colors cursor-pointer group">
-              <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-2xl flex-shrink-0">ðŸª</div>
+              <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-2xl flex-shrink-0">🏪</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
                   <p className="font-bold text-gray-800 text-sm truncate">{product.shop_name}</p>
@@ -660,7 +660,7 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* â”€â”€ Tabs â”€â”€ */}
+        {/* ── Tabs ── */}
         <div className="mt-10">
           <div className="flex gap-0 border-b border-gray-200 mb-8">
             {[
@@ -690,7 +690,7 @@ const ProductDetail = () => {
               <div className="bg-white border border-gray-100 rounded-2xl p-6 flex flex-col items-center text-center lg:sticky lg:top-20 self-start">
                 <p className="text-6xl font-black text-gray-900">4.7</p>
                 <StarRow rating={4.7} size={20} />
-                <p className="text-sm text-gray-400 mt-2">{REVIEWS_DATA.length} avis vÃ©rifiÃ©s</p>
+                <p className="text-sm text-gray-400 mt-2">{REVIEWS_DATA.length} avis vérifiés</p>
                 <div className="w-full mt-5 space-y-2">
                   {[[5,72],[4,19],[3,6],[2,2],[1,1]].map(([s,p]) => (
                     <RatingBar key={s} label={s} pct={p} />
@@ -721,7 +721,7 @@ const ProductDetail = () => {
         </div>
         
       </div>
-      {/* â”€â”€ Contact Modal â”€â”€ */}
+      {/* ── Contact Modal ── */}
       {showContact && (
         <ContactModal product={product} onClose={() => setShowContact(false)} />
       )}

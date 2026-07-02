@@ -9,7 +9,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Toast } from './Toastcomponent';
 import ShopClickStats from './ShopClickStats';
 
-/* â”€â”€â”€ Cloudinary config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Cloudinary config ──────────────────────────── */
   const CLOUD_NAME = 'dsdrkaask';
   const UPLOAD_PRESET = 'Upload_Market';
 
@@ -26,8 +26,8 @@ const uploadToCloudinary = async (file) => {
   return data.secure_url;
 };
 
-/* â”€â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-const CATEGORIES = ['Ã‰lectronique', 'Mode', 'BeautÃ©', 'Maison', 'Alimentation', 'Services', 'Autre'];
+/* ─── Constants ──────────────────────────────────── */
+const CATEGORIES = ['Électronique', 'Mode', 'Beauté', 'Maison', 'Alimentation', 'Services', 'Autre'];
 
 const BADGES     = ['New', 'Sale', 'Hot', 'Local', 'Promo'];
 
@@ -36,14 +36,14 @@ const badgeColor = (b) => ({
   Local:'bg-green-700', Promo:'bg-violet-500',
 }[b] || 'bg-gray-400');
 
-/* â”€â”€â”€ Image Upload Field â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Image Upload Field ─────────────────────────── */
 /*
  * Handles Cloudinary upload internally.
  * Props:
- *   label       â€“ field label string
- *   value       â€“ current cloudinary URL (or null)
- *   onChange    â€“ (url: string) => void   called after successful upload
- *   onError     â€“ (msg: string) => void   called on upload failure
+ *   label       – field label string
+ *   value       – current cloudinary URL (or null)
+ *   onChange    – (url: string) => void   called after successful upload
+ *   onError     – (msg: string) => void   called on upload failure
  */
 const CloudinaryImageField = ({ label, value, onChange, onError }) => {
   const [uploading, setUploading] = useState(false);
@@ -51,7 +51,7 @@ const CloudinaryImageField = ({ label, value, onChange, onError }) => {
 
   const handleFile = async (file) => {
     if (!file || !file.type.startsWith('image/')) {
-      onError?.('Veuillez sÃ©lectionner un fichier image valide.');
+      onError?.('Veuillez sélectionner un fichier image valide.');
       return;
     }
     setUploading(true);
@@ -59,7 +59,7 @@ const CloudinaryImageField = ({ label, value, onChange, onError }) => {
       const url = await uploadToCloudinary(file);
       onChange(url);
     } catch (err) {
-      onError?.(err.message || 'Ã‰chec du tÃ©lÃ©chargement de l\'image');
+      onError?.(err.message || 'Échec du téléchargement de l\'image');
     } finally {
       setUploading(false);
     }
@@ -92,7 +92,7 @@ const CloudinaryImageField = ({ label, value, onChange, onError }) => {
         {uploading && (
           <div className="absolute inset-0 bg-white/80 flex flex-col items-center justify-center gap-2 z-10 rounded-2xl">
             <Loader2 size={24} className="text-green-600 animate-spin" />
-            <p className="text-xs text-green-700 font-semibold">Upload en coursâ€¦</p>
+            <p className="text-xs text-green-700 font-semibold">Upload en cours…</p>
           </div>
         )}
 
@@ -114,7 +114,7 @@ const CloudinaryImageField = ({ label, value, onChange, onError }) => {
             <p className="text-xs text-gray-400">
               Glissez ou <span className="text-green-600 font-medium">parcourez</span>
             </p>
-            <p className="text-[10px] text-gray-300 mt-0.5">JPG, PNG, WEBP â€” max 10 Mo</p>
+            <p className="text-[10px] text-gray-300 mt-0.5">JPG, PNG, WEBP — max 10 Mo</p>
           </>
         ) : null}
       </label>
@@ -129,7 +129,7 @@ const CloudinaryImageField = ({ label, value, onChange, onError }) => {
   );
 };
 
-/* â”€â”€â”€ Shared Form Fields â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Shared Form Fields ─────────────────────────── */
 const FormFields = ({ form, setForm, onImageError }) => {
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -165,10 +165,10 @@ const FormFields = ({ form, setForm, onImageError }) => {
       {/* Category + Badge */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">CatÃ©gorie *</label>
+          <label className="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Catégorie *</label>
           <select value={form.category} onChange={e => set('category', e.target.value)}
             className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 transition-all bg-white appearance-none cursor-pointer">
-            <option value="">Choisirâ€¦</option>
+            <option value="">Choisir…</option>
             {CATEGORIES.map(c => <option key={c}>{c}</option>)}
           </select>
         </div>
@@ -196,15 +196,15 @@ const FormFields = ({ form, setForm, onImageError }) => {
       <div>
         <label className="text-xs font-semibold text-gray-600 mb-1.5 block uppercase tracking-wide">Description</label>
         <textarea value={form.desc} onChange={e => set('desc', e.target.value)}
-          placeholder="DÃ©crivez votre produitâ€¦" rows={3}
+          placeholder="Décrivez votre produit…" rows={3}
           className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 outline-none focus:border-green-400 focus:ring-2 focus:ring-green-100 transition-all resize-none" />
       </div>
 
       {/* Publish toggle */}
       <div className="flex items-center justify-between bg-gray-50 border border-gray-100 rounded-xl px-4 py-3">
         <div>
-          <p className="text-sm font-semibold text-gray-700">Publier immÃ©diatement</p>
-          <p className="text-xs text-gray-400">Visible sur le marketplace dÃ¨s la crÃ©ation</p>
+          <p className="text-sm font-semibold text-gray-700">Publier immédiatement</p>
+          <p className="text-xs text-gray-400">Visible sur le marketplace dès la création</p>
         </div>
         <button type="button"
           onClick={() => set('status', form.status === 'active' ? 'inactive' : 'active')}
@@ -216,7 +216,7 @@ const FormFields = ({ form, setForm, onImageError }) => {
   );
 };
 
-/* â”€â”€â”€ Add Product Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Add Product Modal ──────────────────────────── */
 const AddProductModal = ({ shopId, onClose, onSuccess }) => {
   const [form, setForm] = useState({
     product_name: '', desc: '', price: '', stock: '',
@@ -237,8 +237,8 @@ const AddProductModal = ({ shopId, onClose, onSuccess }) => {
 
       const token = localStorage.getItem('market_token');
 
-      // imageUrl already uploaded to Cloudinary â€” send as plain JSON
-      const res = await fetch('https://yamo-market-server.vercel.app/api/market/createproduct', {
+      // imageUrl already uploaded to Cloudinary — send as plain JSON
+      const res = await fetch('http://localhost:5050/api/market/createproduct', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -258,9 +258,9 @@ const AddProductModal = ({ shopId, onClose, onSuccess }) => {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Ã‰chec de la crÃ©ation');
+      if (!res.ok) throw new Error(data.message || 'Échec de la création');
       onSuccess(
-        { type: 'success', msg: 'Produit crÃ©Ã© avec succÃ¨s !' },
+        { type: 'success', msg: 'Produit créé avec succès !' },
         data.product || { id: Date.now(), product_name: form.product_name, ...form, image: form.m_img || form.img, views: 0, sales: 0 }
       );
       onClose();
@@ -277,7 +277,7 @@ const AddProductModal = ({ shopId, onClose, onSuccess }) => {
         <div className="bg-gradient-to-r from-green-700 to-emerald-600 px-6 py-5 flex items-center justify-between">
           <div>
             <h2 className="text-white font-bold text-lg">Nouveau produit</h2>
-            <p className="text-green-200 text-xs mt-0.5">L'image est hÃ©bergÃ©e sur Cloudinary</p>
+            <p className="text-green-200 text-xs mt-0.5">L'image est hébergée sur Cloudinary</p>
           </div>
           <button onClick={onClose} className="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-lg flex items-center justify-center text-white transition-colors">
             <X size={16} />
@@ -300,8 +300,8 @@ const AddProductModal = ({ shopId, onClose, onSuccess }) => {
           <button onClick={handleSubmit} disabled={!isValid || loading}
             className="flex-1 py-2.5 rounded-xl bg-green-600 text-white text-sm font-bold hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2">
             {loading
-              ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> CrÃ©ationâ€¦</>
-              : <><Check size={15} /> CrÃ©er le produit</>}
+              ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Création…</>
+              : <><Check size={15} /> Créer le produit</>}
           </button>
         </div>
       </div>
@@ -309,7 +309,7 @@ const AddProductModal = ({ shopId, onClose, onSuccess }) => {
   );
 };
 
-/* â”€â”€â”€ Edit Product Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Edit Product Modal ─────────────────────────── */
 const EditProductModal = ({ product, shopId, onClose, onSuccess }) => {
   const [form, setForm] = useState({
     product_name: product.product_name        || '',
@@ -333,7 +333,7 @@ const EditProductModal = ({ product, shopId, onClose, onSuccess }) => {
     try {
       const token = localStorage.getItem('market_token');
 
-      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/updateproduct/${product.product_id}`, {
+      const res = await fetch(`http://localhost:5050/api/market/updateproduct/${product.product_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -353,9 +353,9 @@ const EditProductModal = ({ product, shopId, onClose, onSuccess }) => {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Ã‰chec de la mise Ã  jour');
+      if (!res.ok) throw new Error(data.message || 'Échec de la mise à jour');
        onSuccess(
-        { type: 'success', msg: 'Produit mis Ã  jour avec succÃ¨s !' },
+        { type: 'success', msg: 'Produit mis à jour avec succès !' },
         { ...product, product_name: form.product_name, desc: form.desc, price: form.price, tag: form.tag, category: form.category, status: form.status, m_img: form.m_img, img: form.img}
       );
       onClose();
@@ -395,7 +395,7 @@ const EditProductModal = ({ product, shopId, onClose, onSuccess }) => {
           <button onClick={handleUpdate} disabled={!isValid || loading}
             className="flex-1 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2">
             {loading
-              ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Mise Ã  jourâ€¦</>
+              ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Mise à jour…</>
               : <> Enregistrer les modifications</>}
           </button>
         </div>
@@ -404,7 +404,7 @@ const EditProductModal = ({ product, shopId, onClose, onSuccess }) => {
   );
 };
 
-/* â”€â”€â”€ Delete Confirm Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Delete Confirm Modal ───────────────────────── */
 const DeleteModal = ({ product, onConfirm, onCancel, loading }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
     <div className="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 text-center">
@@ -413,7 +413,7 @@ const DeleteModal = ({ product, onConfirm, onCancel, loading }) => (
       </div>
       <h3 className="text-lg font-bold text-gray-900">Supprimer ce produit ?</h3>
       <p className="text-sm text-gray-400 mt-2 leading-relaxed">
-        Vous Ãªtes sur le point de supprimer <strong className="text-gray-700">"{product?.product_name}"</strong>. Cette action est irrÃ©versible.
+        Vous êtes sur le point de supprimer <strong className="text-gray-700">"{product?.product_name}"</strong>. Cette action est irréversible.
       </p>
       <div className="flex gap-3 mt-6">
         <button onClick={onCancel} className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
@@ -422,7 +422,7 @@ const DeleteModal = ({ product, onConfirm, onCancel, loading }) => (
         <button onClick={onConfirm} disabled={loading}
           className="flex-1 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-60">
           {loading
-            ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Suppressionâ€¦</>
+            ? <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Suppression…</>
             : <><Trash2 size={14} /> Supprimer</>}
         </button>
       </div>
@@ -430,7 +430,7 @@ const DeleteModal = ({ product, onConfirm, onCancel, loading }) => (
   </div>
 );
 
-/* â”€â”€â”€ Stat Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Stat Card ──────────────────────────────────── */
 const StatCard = ({ icon, label, value, sub, color }) => (
   <div className="bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4 hover:shadow-md hover:shadow-green-100/50 transition-all">
     <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>{icon}</div>
@@ -442,7 +442,7 @@ const StatCard = ({ icon, label, value, sub, color }) => (
   </div>
 );
 
-/* â”€â”€â”€ Product Row â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Product Row ─────────────────────────────────── */
 const ProductRow = ({ p, onEdit, onDelete, onToggle }) => (
   <div className="flex items-center gap-4 bg-white rounded-2xl border border-gray-100 p-3 hover:border-green-200 hover:shadow-md hover:shadow-green-100/40 transition-all">
     <img src={p.m_img || 'https://via.placeholder.com/56'} alt={p.product_name}
@@ -466,7 +466,7 @@ const ProductRow = ({ p, onEdit, onDelete, onToggle }) => (
         </div>
     </div>
     <div className="flex items-center gap-1 flex-shrink-0">
-      <button onClick={() => onToggle(p.product_id)} title={p.status === 'active' ? 'DÃ©sactiver' : 'Activer'}
+      <button onClick={() => onToggle(p.product_id)} title={p.status === 'active' ? 'Désactiver' : 'Activer'}
         className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${p.status === 'active' ? 'text-green-600 hover:bg-green-50' : 'text-gray-400 hover:bg-gray-50'}`}>
         {p.status === 'active' ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
       </button>
@@ -482,7 +482,7 @@ const ProductRow = ({ p, onEdit, onDelete, onToggle }) => (
   </div>
 );
 
-/* â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Main Page ──────────────────────────────────── */
 const MyShopPage = () => {
   const { shop_id } = useParams();
 
@@ -582,11 +582,11 @@ const MyShopPage = () => {
         </div>
 
         <h1 className="text-2xl font-extrabold text-gray-900 mb-2">
-          AccÃ¨s RefusÃ©
+          Accès Refusé
         </h1>
 
         <p className="text-gray-500 text-sm leading-relaxed mb-6">
-          Vous n'avez pas l'autorisation nÃ©cessaire pour accÃ©der Ã  cette
+          Vous n'avez pas l'autorisation nécessaire pour accéder à cette
           boutique ou effectuer cette action.
         </p>
 
@@ -598,7 +598,7 @@ const MyShopPage = () => {
           onClick={() => navigate('/')}
           className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-green-200"
         >
-          Retour Ã  l'accueil
+          Retour à l'accueil
         </button>
       </div>
     </div>
@@ -621,14 +621,14 @@ const MyShopPage = () => {
     setProducts(ps => ps.map(p => p.product_id === product_id ? { ...p, status: newStatus } : p));
     try {
       const token = localStorage.getItem('market_token');
-      await fetch(`https://yamo-market-server.vercel.app/api/market/updateproduct/${product_id}`, {
+      await fetch(`http://localhost:5050/api/market/updateproduct/${product_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ ...product, status: newStatus }),
       });
     } catch {
       setProducts(ps => ps.map(p => p.product_id === product_id ? { ...p, status: product.status } : p));
-      setToast({ type: 'error', msg: 'Ã‰chec de la mise Ã  jour du statut' });
+      setToast({ type: 'error', msg: 'Échec de la mise à jour du statut' });
     }
   };
 
@@ -637,13 +637,13 @@ const MyShopPage = () => {
     setDeleteLoading(true);
     try {
       const token = localStorage.getItem('market_token');
-      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/deleteproduct/${deleteTarget.shop}/${deleteTarget.product_id}`, {
+      const res = await fetch(`http://localhost:5050/api/market/deleteproduct/${deleteTarget.shop}/${deleteTarget.product_id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.message); }
       setProducts(ps => ps.filter(p => p.product_id !== deleteTarget.product_id));
-      setToast({ type: 'success', msg: 'Produit supprimÃ© avec succÃ¨s' });
+      setToast({ type: 'success', msg: 'Produit supprimé avec succès' });
       setDeleteTarget(null);
     } catch (err) {
       setToast({ type: 'error', msg: err.message || 'Erreur lors de la suppression' });
@@ -664,15 +664,15 @@ const MyShopPage = () => {
             <h1 className="text-white font-extrabold text-xl">{shopDetail?.shop_name || 'Ma boutique'}</h1>
             <p className="text-green-200 text-xs">{shopDetail?.b_email}</p>
             <p className="text-green-200 text-sm mt-0.5 flex items-center gap-1">
-              <MapPin size={11} />{shopDetail?.region} â€¢ {shopDetail?.town} â€¢ {shopDetail?.address}
+              <MapPin size={11} />{shopDetail?.region} • {shopDetail?.town} • {shopDetail?.address}
             </p>
-            <span className="text-xs bg-white/20 text-white px-2.5 py-0.5 rounded-full font-medium mt-1 inline-block">â˜… Boutique vÃ©rifiÃ©e</span>
+            <span className="text-xs bg-white/20 text-white px-2.5 py-0.5 rounded-full font-medium mt-1 inline-block">★ Boutique vérifiée</span>
           </div>
         </div>
         <div className="flex items-center gap-2 relative z-10 flex-shrink-0">
           <Link to={`/boutique/${shopDetail?.shop_slug}`} target="_blank" rel="noopener noreferrer">
             <button className="bg-white/20 hover:bg-white/30 border border-white/30 text-white text-xs font-medium px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5">
-              <Eye size={13} /> AperÃ§u public
+              <Eye size={13} /> Aperçu public
             </button>
           </Link>
           <button onClick={() => setShowAdd(true)}
@@ -705,7 +705,7 @@ const MyShopPage = () => {
               <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 py-2">
                 <Search size={13} className="text-gray-400" />
                 <input value={search} onChange={e => setSearch(e.target.value)}
-                  placeholder="Rechercherâ€¦"
+                  placeholder="Rechercher…"
                   className="text-sm outline-none w-36 text-gray-700 placeholder-gray-400" />
               </div>
               <button onClick={() => setShowAdd(true)}
@@ -729,11 +729,11 @@ const MyShopPage = () => {
               <div className="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center">
                 <Package size={24} className="text-green-500" />
               </div>
-              <p className="font-semibold text-gray-700">Aucun produit trouvÃ©</p>
-              <p className="text-sm text-gray-400 max-w-xs">Ajoutez votre premier produit pour commencer Ã  vendre.</p>
+              <p className="font-semibold text-gray-700">Aucun produit trouvé</p>
+              <p className="text-sm text-gray-400 max-w-xs">Ajoutez votre premier produit pour commencer à vendre.</p>
               <button onClick={() => setShowAdd(true)}
                 className="mt-2 bg-green-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2">
-                <Plus size={14} /> CrÃ©er un produit
+                <Plus size={14} /> Créer un produit
               </button>
             </div>
           )}
@@ -742,14 +742,14 @@ const MyShopPage = () => {
         {/* Tips */}
         <div className="bg-white rounded-2xl border border-gray-100 p-5">
           <h3 className="font-bold text-gray-900 text-sm mb-3 flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-amber-100 flex items-center justify-center text-xs">ðŸ’¡</span>
+            <span className="w-5 h-5 rounded-full bg-amber-100 flex items-center justify-center text-xs">💡</span>
             Conseils pour booster vos ventes
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
-              { tip: "Ajoutez des photos de qualitÃ© pour attirer plus d'acheteurs.", action: 'Modifier les images' },
-              { tip: 'ComplÃ©tez la description de chaque produit pour le rÃ©fÃ©rencement.', action: 'Voir mes produits' },
-              { tip: 'Activez le badge "Promo" pour mettre en avant vos rÃ©ductions.', action: 'Ajouter un badge' },
+              { tip: "Ajoutez des photos de qualité pour attirer plus d'acheteurs.", action: 'Modifier les images' },
+              { tip: 'Complétez la description de chaque produit pour le référencement.', action: 'Voir mes produits' },
+              { tip: 'Activez le badge "Promo" pour mettre en avant vos réductions.', action: 'Ajouter un badge' },
             ].map((t, i) => (
               <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
                 <p className="text-xs text-gray-500 leading-relaxed">{t.tip}</p>

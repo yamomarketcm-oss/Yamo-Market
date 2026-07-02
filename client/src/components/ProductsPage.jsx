@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Search, SlidersHorizontal, X, ChevronDown, Star,
   Heart, Eye, MapPin, ArrowLeft, ShoppingBag,
@@ -8,35 +8,51 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-/* â”€â”€â”€ constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-const CATEGORIES = ['Toutes', 'Ã‰lectronique', 'Mode', 'BeautÃ©', 'Maison', 'Alimentation', 'Services', 'Autre'];
+/* ─── constants ───────────────────────────────────── */
+const CATEGORIES = ['Toutes', 'Électronique', 'Mode', 'Beauté', 'Maison', 'Alimentation', 'Services', 'Autre'];
 
 const PRICE_RANGES = [
   { label: 'Tous les prix', min: 0,      max: Infinity },
   { label: 'Moins de 5 000',  min: 0,    max: 5000     },
-  { label: '5 000 â€“ 20 000',  min: 5000, max: 20000    },
-  { label: '20 000 â€“ 50 000', min: 20000,max: 50000    },
-  { label: '50 000 â€“ 100 000',min: 50000,max: 100000   },
+  { label: '5 000 – 20 000',  min: 5000, max: 20000    },
+  { label: '20 000 – 50 000', min: 20000,max: 50000    },
+  { label: '50 000 – 100 000',min: 50000,max: 100000   },
   { label: 'Plus de 100 000', min: 100000,max: Infinity},
 ];
 
 const SORT_OPTIONS = [
-  { value: 'newest',   label: 'Plus rÃ©cents'    },
+  { value: 'newest',   label: 'Plus récents'    },
   { value: 'popular',  label: 'Plus populaires' },
   { value: 'price_asc',label: 'Prix croissant'  },
-  { value: 'price_desc',label:'Prix dÃ©croissant' },
-  { value: 'rating',   label: 'Mieux notÃ©s'     },
+  { value: 'price_desc',label:'Prix décroissant' },
+  { value: 'rating',   label: 'Mieux notés'     },
 ];
 
 const BADGES = ['Tous', 'New', 'Sale', 'Hot', 'Local', 'Promo'];
 
 const REGIONS = [
-  'Toutes les rÃ©gions',
+  'Toutes les régions',
   'Centre', 'Littoral', 'Ouest', 'Nord-Ouest',
-  'Sud-Ouest', 'Adamaoua', 'Nord', 'ExtrÃªme-Nord', 'Est', 'Sud',
+  'Sud-Ouest', 'Adamaoua', 'Nord', 'Extrême-Nord', 'Est', 'Sud',
 ];
 
-/* â”€â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── mock products ───────────────────────────────── */
+const PRODUCTS = [
+  { id:1,  name:'Smartphone Pro Max X12', price:85000,  category:'Électronique', badge:'New',   region:'Littoral', town:'Douala',    shop:'TechShop Douala',   rating:4.7, reviews:32, views:318, stock:7,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'📱' },
+  { id:2,  name:'Robe élégante coton',    price:12500,  category:'Mode',         badge:'Sale',  region:'Centre',   town:'Yaoundé',   shop:'Mode Afrique',      rating:4.5, reviews:18, views:145, stock:20, verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'👗' },
+  { id:3,  name:'Casque audio sans-fil',  price:22000,  category:'Électronique', badge:null,    region:'Littoral', town:'Douala',    shop:'SoundHub',          rating:4.9, reviews:54, views:201, stock:12, verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🎧' },
+  { id:4,  name:'Fauteuil design bois',   price:45000,  category:'Maison',       badge:'Local', region:'Centre',   town:'Yaoundé',   shop:'Déco Yaoundé',      rating:4.6, reviews:11, views:89,  stock:4,  verified:false, m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🪑' },
+  { id:5,  name:'Parfum Oud Intense',     price:18000,  category:'Beauté',       badge:'Hot',   region:'Ouest',    town:'Bafoussam', shop:'Beauté Prestige',   rating:4.8, reviews:27, views:233, stock:9,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🌹' },
+  { id:6,  name:'Sneakers Urban Run',     price:35000,  category:'Sport',        badge:null,    region:'Littoral', town:'Douala',    shop:'SportZone CM',      rating:4.4, reviews:43, views:176, stock:15, verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'👟' },
+  { id:7,  name:'Montre connectée GT5',   price:55000,  category:'Électronique', badge:'Sale',  region:'Littoral', town:'Douala',    shop:'TechShop Douala',   rating:4.7, reviews:19, views:145, stock:3,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'⌚' },
+  { id:8,  name:'Sac à main cuir',        price:28000,  category:'Mode',         badge:null,    region:'Centre',   town:'Yaoundé',   shop:'Mode Afrique',      rating:4.3, reviews:9,  views:67,  stock:8,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'👜' },
+  { id:9,  name:'Laptop UltraSlim 14"',   price:320000, category:'Électronique', badge:'New',   region:'Littoral', town:'Douala',    shop:'TechShop Douala',   rating:4.8, reviews:22, views:267, stock:3,  verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'💻' },
+  { id:10, name:'Épices locales assortis', price:4500,  category:'Alimentation', badge:'Local', region:'Centre',   town:'Yaoundé',   shop:'Cuisine & Saveurs', rating:4.7, reviews:38, views:112, stock:50, verified:true,  m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🌶️' },
+  { id:11, name:'Chaussures derby cuir',  price:42000,  category:'Mode',         badge:null,    region:'Sud-Ouest',town:'Buea',      shop:'FashionHub Buea',   rating:4.4, reviews:14, views:88,  stock:6,  verified:false, m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'👞' },
+  { id:12, name:'Tabouret pliant bois',   price:8500,   category:'Maison',       badge:'Promo', region:'Centre',   town:'Mbalmayo', shop:'Déco Yaoundé',      rating:4.2, reviews:7,  views:44,  stock:22, verified:false, m_img:'https://i.pinimg.com/736x/35/bb/85/35bb853bc438f8f020ffb9887be6ddb2.jpg', icon:'🪑' },
+];
+
+/* ─── helpers ─────────────────────────────────────── */
 const fmtPrice = (n) => n.toLocaleString('fr-CM');
 
 const badgeColor = (b) => ({
@@ -44,7 +60,7 @@ const badgeColor = (b) => ({
   Local:'bg-green-700', Promo:'bg-violet-500',
 }[b] || 'bg-gray-400');
 
-/* â”€â”€â”€ StarRow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── StarRow ─────────────────────────────────────── */
 const StarRow = ({ rating, size = 12 }) => (
   <div className="flex items-center gap-0.5">
     {[1,2,3,4,5].map(i => (
@@ -54,7 +70,7 @@ const StarRow = ({ rating, size = 12 }) => (
   </div>
 );
 
-/* â”€â”€â”€ ProductCard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── ProductCard ─────────────────────────────────── */
 const ProductCard = ({ p, viewMode }) => {
 
   const handleClick = async () => {
@@ -77,7 +93,7 @@ const ProductCard = ({ p, viewMode }) => {
       <Link to={`/product/${p.product_slug}`}>
       <div className={`relative bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center flex-shrink-0 ${isList ? 'w-24 h-24 rounded-xl' : 'h-44'}`}>
         {p.m_img
-          ? <img src={p.m_img} onClick={handleClick} alt={p.product_name} className={`${isList && 'rounded-xl'} w-full h-full object-cover`} />
+          ? <img src={p.m_img} onClick={handleClick} className={`${isList && 'rounded-xl'} w-full h-full object-cover`} />
           : <span className={`select-none group-hover:scale-110 transition-transform duration-300 ${isList ? 'text-4xl' : 'text-6xl'}`}>{p.icon}</span>
         }
         {p.tag && !isList && (
@@ -88,7 +104,7 @@ const ProductCard = ({ p, viewMode }) => {
             className="absolute top-3 right-3 flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-white/15 backdrop-blur-md border border-white/20 shadow-lg shadow-black/10 text-white text-[11px] font-semibold tracking-wide"
           >
             <BadgeCheck size={13} className="text-emerald-400" />
-            VÃ©rifiÃ©
+            Verified
           </span>
         )}
       </div>
@@ -126,10 +142,10 @@ const ProductCard = ({ p, viewMode }) => {
         <div className={`flex items-center justify-between ${isList ? 'mt-2' : 'mt-3'}`}>
           <div className='ml-1'>
             <span className="text-green-700 font-bold text-sm">{fmtPrice(p.price)}</span>
-            <span className="text-xs font-semibold text-gray-400 ml-0.5">XAF</span>
+            <span className="text-xs text-gray-400 ml-1">XAF</span>
           </div>
           <div className="flex items-center">
-            <Link to={`/product/${p.product_slug}`} onClick={handleClick}>
+            <Link to={`/product/${p.product_slug}`}>
             <button className="text-xs font-medium text-green-700 border border-green-200 hover:bg-green-600 hover:text-white hover:border-green-600 px-3 py-1.5 rounded-lg transition-all">
               Voir
             </button>
@@ -141,7 +157,7 @@ const ProductCard = ({ p, viewMode }) => {
   );
 };
 
-/* â”€â”€â”€ Dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Dropdown ────────────────────────────────────── */
 const Dropdown = ({ label, value, options, onChange }) => {
   const [open, setOpen] = useState(false);
   return (
@@ -176,9 +192,9 @@ const Dropdown = ({ label, value, options, onChange }) => {
   );
 };
 
-/* â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Main Page ───────────────────────────────────── */
 const ProductsPage = () => {
-  const [products, setProducts]   = useState([]);
+   const [products, setProducts]   = useState([]);
   const [loading, setLoading]     = useState(true);
   const [query, setQuery]         = useState('');
   const [category, setCategory]   = useState('Toutes');
@@ -190,7 +206,7 @@ const ProductsPage = () => {
   const [viewMode, setViewMode]   = useState('grid');
   const [showFilters, setShowFilters]   = useState(false);
 
-  /* â”€â”€ fetch products from API (falls back to mock) â”€â”€ */
+  /* fetch products from API (falls back to mock) */
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -212,32 +228,32 @@ const ProductsPage = () => {
     fetchProducts();
   }, []);
 
-  /* â”€â”€ resolve selected price range object â”€â”€ */
+  /* ── resolve selected price range object ── */
   const priceObj = PRICE_RANGES.find(r => r.label === priceRange);
 
-  /* â”€â”€ active filter count â”€â”€ */
+  /* ── active filter count ── */
   const activeCount = [
     category     !== 'Toutes',
-    region       !== 'Toutes les rÃ©gions',
+    region       !== 'Toutes les régions',
     priceRange   !== 'Tous les prix',
     badge        !== 'Tous',
     verifiedOnly,
   ].filter(Boolean).length;
 
   const clearFilters = () => {
-    setCategory('Toutes'); setRegion('Toutes les rÃ©gions');
+    setCategory('Toutes'); setRegion('Toutes les régions');
     setPriceRange('Tous les prix'); setBadge('Tous');
     setVerifiedOnly(false); setInStockOnly(false); setQuery('');
   };
 
-  /* â”€â”€ filter â”€â”€ */
+  /* ── filter ── */
   const filtered = useMemo(() => {
     let list = products.filter(p => {
       const q = query.toLowerCase();
       return (
         (!q || p.product_name?.toLowerCase().includes(q) || p.shop_name?.toLowerCase().includes(q) || p.town?.toLowerCase().includes(q)) &&
         (category  === 'Toutes'             || p.product_category === category) &&
-        (region    === 'Toutes les rÃ©gions' || p.region   === region) &&
+        (region    === 'Toutes les régions' || p.region   === region) &&
         (p.price   >= priceObj.min && p.price <= priceObj.max) &&
         (badge     === 'Tous'               || p.tag    === badge) &&
         (verifiedOnly === !p.status || p.status)
@@ -250,7 +266,7 @@ const ProductsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* â”€â”€ Hero â”€â”€ */}
+      {/* ── Hero ── */}
       <section className="bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 relative overflow-hidden">
         <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/5 rounded-full pointer-events-none" />
         <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/5 rounded-full pointer-events-none" />
@@ -264,11 +280,11 @@ const ProductsPage = () => {
               </span>
               <h1 className="text-4xl font-extrabold text-white tracking-tight">Nos Produits</h1>
               <p className="text-green-200 mt-2 text-sm max-w-md">
-                DÃ©couvrez des centaines de produits locaux â€” authentiques, vÃ©rifiÃ©s, livrÃ©s partout.
+                Découvrez des centaines de produits locaux — authentiques, vérifiés, livrés partout.
               </p>
             </div>
             <div className="flex gap-6 text-center">
-              {[['340+','Produits'],['80+','Boutiques'],['4.7â˜…','Note moy.']].map(([v,l]) => (
+              {[['340+','Produits'],['80+','Boutiques'],['4.7★','Note moy.']].map(([v,l]) => (
                 <div key={l}>
                   <p className="text-2xl font-bold text-white">{v}</p>
                   <p className="text-green-300 text-xs mt-0.5">{l}</p>
@@ -277,14 +293,14 @@ const ProductsPage = () => {
             </div>
           </div>
 
-          {/* â”€â”€ Main search bar â”€â”€ */}
+          {/* ── Main search bar ── */}
           <div className="mt-8 bg-white rounded-2xl shadow-xl shadow-green-900/20 p-2 flex items-center gap-2">
             <div className="flex-1 flex items-center gap-2 px-3">
               <Search size={18} className="text-gray-400 flex-shrink-0" />
               <input
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Rechercher un produit, boutique, villeâ€¦"
+                placeholder="Rechercher un produit, boutique, ville…"
                 className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none py-2 bg-transparent"
               />
               {query && (
@@ -306,7 +322,7 @@ const ProductsPage = () => {
         </div>
       </section>
 
-      {/* â”€â”€ Filter panel â”€â”€ */}
+      {/* ── Filter panel ── */}
       {showFilters && (
         <div className="bg-white border-b border-gray-200 shadow-sm">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -314,7 +330,7 @@ const ProductsPage = () => {
 
               {/* Region */}
               <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">RÃ©gion</label>
+                <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">Région</label>
                 <Dropdown
                   value={region}
                   options={REGIONS}
@@ -350,7 +366,7 @@ const ProductsPage = () => {
                     onClick={() => setVerifiedOnly(v => !v)}
                     className={`flex items-center justify-between px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${verifiedOnly ? 'bg-green-600 text-white border-green-600' : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-green-400'}`}
                   >
-                    <span className="flex items-center gap-2"><BadgeCheck size={14} /> VÃ©rifiÃ©s</span>
+                    <span className="flex items-center gap-2"><BadgeCheck size={14} /> Vérifiés</span>
                     <div className={`w-8 h-4 rounded-full relative transition-all ${verifiedOnly ? 'bg-white/30' : 'bg-gray-300'}`}>
                       <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-all ${verifiedOnly ? 'left-4' : 'left-0.5'}`} />
                     </div>
@@ -364,10 +380,10 @@ const ProductsPage = () => {
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <span className="text-xs text-gray-400">Filtres actifs :</span>
                 {category   !== 'Toutes'             && <Chip label={category}   onRemove={() => setCategory('Toutes')} />}
-                {region     !== 'Toutes les rÃ©gions' && <Chip label={region}     onRemove={() => setRegion('Toutes les rÃ©gions')} icon={<MapPin size={9} />} />}
+                {region     !== 'Toutes les régions' && <Chip label={region}     onRemove={() => setRegion('Toutes les régions')} icon={<MapPin size={9} />} />}
                 {priceRange !== 'Tous les prix'      && <Chip label={priceRange} onRemove={() => setPriceRange('Tous les prix')} />}
                 {badge      !== 'Tous'               && <Chip label={badge}      onRemove={() => setBadge('Tous')} />}
-                {verifiedOnly && <Chip label="VÃ©rifiÃ©s"  onRemove={() => setVerifiedOnly(false)} />}
+                {verifiedOnly && <Chip label="Vérifiés"  onRemove={() => setVerifiedOnly(false)} />}
                 <button onClick={clearFilters} className="text-xs text-rose-500 hover:text-rose-700 font-medium ml-1 hover:underline">
                   Tout effacer
                 </button>
@@ -377,7 +393,7 @@ const ProductsPage = () => {
         </div>
       )}
 
-      {/* â”€â”€ Category quick chips â”€â”€ */}
+      {/* ── Category quick chips ── */}
       <div className="bg-white border-b border-gray-100 max-w-6xl mx-auto sticky top-[72px] z-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex gap-2 overflow-x-auto">
           {CATEGORIES.map(c => (
@@ -393,7 +409,7 @@ const ProductsPage = () => {
         </div>
       </div>
 
-      {/* â”€â”€ Results â”€â”€ */}
+      {/* ── Results ── */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -402,7 +418,7 @@ const ProductsPage = () => {
               Nos Produit
             </p>
             {query && (
-              <p className="text-xs text-gray-400 mt-0.5">RÃ©sultats pour "<span className="text-gray-600 font-medium">{query}</span>"</p>
+              <p className="text-xs text-gray-400 mt-0.5">Résultats pour "<span className="text-gray-600 font-medium">{query}</span>"</p>
             )}
           </div>
 
@@ -436,14 +452,14 @@ const ProductsPage = () => {
         ) : filtered.length === 0 ? (
           /* empty state */
           <div className="text-center py-24">
-            <p className="text-6xl mb-4">ðŸ”</p>
-            <p className="text-gray-700 font-bold text-lg">Aucun produit trouvÃ©</p>
+            <p className="text-6xl mb-4">🔍</p>
+            <p className="text-gray-700 font-bold text-lg">Aucun produit trouvé</p>
             <p className="text-gray-400 text-sm mt-2 max-w-sm mx-auto">
-              Essayez de modifier vos filtres ou d'Ã©largir votre recherche.
+              Essayez de modifier vos filtres ou d'élargir votre recherche.
             </p>
             <button onClick={clearFilters}
               className="mt-6 bg-green-600 text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-green-700 transition-colors">
-              RÃ©initialiser les filtres
+              Réinitialiser les filtres
             </button>
           </div>
         ) : (
@@ -461,7 +477,7 @@ const ProductsPage = () => {
   );
 };
 
-/* â”€â”€â”€ small helper chip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── small helper chip ───────────────────────────── */
 const Chip = ({ label, onRemove, icon }) => (
   <span className="flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
     {icon}{label}
@@ -470,4 +486,3 @@ const Chip = ({ label, onRemove, icon }) => (
 );
 
 export default ProductsPage;
-

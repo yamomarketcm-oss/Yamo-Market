@@ -6,17 +6,17 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-/* â”€â”€â”€ static data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-const CATEGORIES = ['All', 'Ã‰lectronique', 'Mode', 'BeautÃ©', 'Maison', 'Alimentation', 'Services', 'Autre'];
+/* ─── static data ─────────────────────────────────── */
+const CATEGORIES = ['All', 'Électronique', 'Mode', 'Beauté', 'Maison', 'Alimentation', 'Services', 'Autre'];
 
 const FEATURES = [
-  { icon: <Shield size={22} />, title: 'Vendeurs vÃ©rifiÃ©s', desc: 'Toutes les boutiques sont approuvÃ©es et vÃ©rifiÃ©es par notre Ã©quipe.' },
-  { icon: <Zap size={22} />, title: 'Livraison rapide', desc: 'Recevez vos commandes en 24â€“48 h dans les grandes villes.' },
-  { icon: <Package size={22} />, title: 'Large choix', desc: 'Plus de 340 produits dans 7 catÃ©gories diffÃ©rentes.' },
+  { icon: <Shield size={22} />, title: 'Vendeurs vérifiés', desc: 'Toutes les boutiques sont approuvées et vérifiées par notre équipe.' },
+  { icon: <Zap size={22} />, title: 'Livraison rapide', desc: 'Recevez vos commandes en 24–48 h dans les grandes villes.' },
+  { icon: <Package size={22} />, title: 'Large choix', desc: 'Plus de 340 produits dans 7 catégories différentes.' },
   { icon: <TrendingUp size={22} />, title: 'Meilleures offres', desc: 'Des promos exclusives chaque semaine sur Yamo Market.' },
 ];
 
-/* â”€â”€â”€ sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── sub-components ──────────────────────────────── */
 const StarRow = ({ rating, reviews }) => (
   <div className="flex items-center gap-1">
     {[1,2,3,4,5].map(i => (
@@ -32,12 +32,11 @@ const badgeColor = (b) => ({
   Local:'bg-green-700', Promo:'bg-violet-500',
 }[b] || 'bg-gray-400');
 
-const ProductCard = ({ p, onFav, favs, Click }) => (
-
+const ProductCard = ({ p, onFav, favs }) => (
   <div className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-green-200 hover:shadow-xl hover:shadow-green-100/60 transition-all duration-300 flex flex-col">
    <Link to={`/product/${p.product_slug}`}>
     <div className={`relative sm:h-48 h-40 bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center`}>
-        <img src={p.m_img} onClick={Click} alt={p.name} className="w-full h-full object-cover" />
+        <img src={p.m_img} alt={p.name} className="w-full h-full object-cover" />
         {p.tag && (
           <span className={`absolute top-3 left-3 ${badgeColor(p.tag)} text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full tracking-wide`}>
             {p.tag}
@@ -56,10 +55,10 @@ const ProductCard = ({ p, onFav, favs, Click }) => (
         <ShoppingBag size={10} /> {p.shop_name}
       </p>
       <h3 className="font-semibold text-gray-800 text-sm leading-snug truncate">{p.product_name}</h3>
-      <p className="text-xs text-gray-500 line-clamp-1">{p.desc}</p>
+      <p className="text-xs text-gray-500 line-clamp-2">{p.desc}</p>
       <div className="pt-3 flex items-center justify-between">
         <span className="text-green-700 font-bold text-base">{p.price} <span className="text-xs font-normal text-gray-400">XAF</span></span>
-        <Link to={`/product/${p.product_slug}`} onClick={Click}>
+        <Link to={`/product/${p.product_slug}`}>
           <button className="text-xs font-medium text-green-700 border border-green-200 hover:bg-green-600 hover:text-white hover:border-green-600 px-3 py-1.5 rounded-lg transition-all duration-200">
             Voir
           </button>
@@ -69,8 +68,8 @@ const ProductCard = ({ p, onFav, favs, Click }) => (
   </div>
 );
 
-const BoutiqueCard = ({ b, Click }) => (
-  <Link to={`/boutique/${b.shop_slug}`} onClick={Click}>
+const BoutiqueCard = ({ b }) => (
+  <Link to={`/boutique/${b.shop_slug}`}>
   <div className="group bg-white rounded-2xl border border-gray-100 hover:border-green-200 hover:shadow-lg hover:shadow-green-100/50 transition-all duration-300 p-4 flex items-center gap-3 cursor-pointer">
     <div className={`w-16 h-16 rounded-xl ${b.color} flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-105 transition-transform`}>
       <img src={b.profile} className='w-16 h-16 rounded-xl' />
@@ -92,7 +91,7 @@ const BoutiqueCard = ({ b, Click }) => (
   </Link>
 );
 
-/* â”€â”€â”€ main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── main component ──────────────────────────────── */
 const LandingPage = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
@@ -195,11 +194,10 @@ for (let i = randomProducts.length - 1; i > 0; i--) {
 }
 
 const HomeProducts = randomProducts.slice(0, 4);
-
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* â”€â”€ Hero â”€â”€ */}
+      {/* ── Hero ── */}
       <section className="relative bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 overflow-hidden">
         {/* decorative circles */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/5 rounded-full" />
@@ -211,15 +209,15 @@ const HomeProducts = randomProducts.slice(0, 4);
           <div>
             <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white text-xs font-medium px-4 py-1.5 rounded-full mb-6">
               <span className="w-1.5 h-1.5 bg-green-300 rounded-full animate-pulse"></span>
-              Marketplace officiel â€” Cameroun
+              Marketplace officiel — Cameroun
             </span>
             <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
-              Le marchÃ©<br />
+              Le marché<br />
               <span className="text-green-300">digital</span> du<br />
               Cameroun
             </h1>
             <p className="mt-5 text-green-100 text-lg leading-relaxed max-w-md">
-              DÃ©couvrez des milliers de produits auprÃ¨s de boutiques locales vÃ©rifiÃ©es â€” rapide, fiable, proche de chez vous.
+              Découvrez des milliers de produits auprès de boutiques locales vérifiées — rapide, fiable, proche de chez vous.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -237,7 +235,7 @@ const HomeProducts = randomProducts.slice(0, 4);
 
             {/* mini stats */}
             <div className="mt-10 flex flex-wrap gap-8">
-              {[['340+', 'Produits'], ['80+', 'Boutiques'], ['4.8â˜…', 'Note moyenne']].map(([n, l]) => (
+              {[['340+', 'Produits'], ['80+', 'Boutiques'], ['4.8★', 'Note moyenne']].map(([n, l]) => (
                 <div key={l}>
                   <p className="text-2xl font-bold text-white">{n}</p>
                   <p className="text-green-200 text-xs mt-0.5">{l}</p>
@@ -246,18 +244,18 @@ const HomeProducts = randomProducts.slice(0, 4);
             </div>
           </div>
 
-          {/* Right â€” floating product cards */}
+          {/* Right — floating product cards */}
           <div className="hidden lg:flex items-center justify-center relative h-80">
             {/* card 1 */}
             <div className="absolute cursor-pointer -top-4 left-0 bg-white rounded-2xl shadow-2xl p-4 w-52 rotate-[-6deg] hover:rotate-0 transition-transform duration-500">
-              <div className="h-24 bg-gradient-to-br from-emerald-50 to-green-100 rounded-xl flex items-center justify-center text-4xl mb-3">ðŸ“±</div>
+              <div className="h-24 bg-gradient-to-br from-emerald-50 to-green-100 rounded-xl flex items-center justify-center text-4xl mb-3">📱</div>
               <p className="text-xs text-gray-500 truncate">TechShop Douala</p>
               <p className="font-bold text-gray-800 text-sm">Smartphone Pro Max</p>
               <p className="text-green-700 font-bold text-sm mt-1">85 000 XAF</p>
             </div>
             {/* card 2 */}
             <div className="absolute cursor-pointer top-8 right-0 bg-white rounded-2xl shadow-2xl p-4 w-48 rotate-[5deg] hover:rotate-0 transition-transform duration-500">
-              <div className="h-20 bg-gradient-to-br from-lime-50 to-emerald-100 rounded-xl flex items-center justify-center text-3xl mb-3">ðŸŽ§</div>
+              <div className="h-20 bg-gradient-to-br from-lime-50 to-emerald-100 rounded-xl flex items-center justify-center text-3xl mb-3">🎧</div>
               <p className="text-xs text-gray-500 truncate">SoundHub</p>
               <p className="font-bold text-gray-800 text-sm">Casque sans-fil</p>
               <p className="text-green-700 font-bold text-sm mt-1">22 000 XAF</p>
@@ -265,7 +263,7 @@ const HomeProducts = randomProducts.slice(0, 4);
             {/* card 3 */}
             <div className="absolute cursor-pointer -bottom-4 left-12 bg-white rounded-2xl shadow-xl p-3 w-40">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">âŒš</div>
+                <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">⌚</div>
                 <div>
                   <p className="text-xs font-semibold text-gray-700">Montre smart</p>
                   <p className="text-green-700 text-xs font-bold">55 000 XAF</p>
@@ -276,20 +274,20 @@ const HomeProducts = randomProducts.slice(0, 4);
         </div>
       </section>
 
-      {/* â”€â”€ Search (mobile) â”€â”€ */}
+      {/* ── Search (mobile) ── */}
       <div className="sm:hidden px-4 -mt-5 relative z-10">
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center px-4 py-3 gap-3">
           <Search size={16} className="text-gray-400" />
           <input
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Rechercherâ€¦"
+            placeholder="Rechercher…"
             className="flex-1 text-sm outline-none text-gray-700 placeholder-gray-400"
           />
         </div>
       </div>
 
-      {/* â”€â”€ Features bar â”€â”€ */}
+      {/* ── Features bar ── */}
       <section id="features" className="bg-white border-b border-gray-100 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-2 lg:grid-cols-4 gap-6">
           {FEATURES.map(f => (
@@ -306,7 +304,7 @@ const HomeProducts = randomProducts.slice(0, 4);
         </div>
       </section>
 
-      {/* â”€â”€ Products â”€â”€ */}
+      {/* ── Products ── */}
       <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         {/* Header */}
         <div className="flex sm:items-center justify-between gap-4 mb-2">
@@ -348,46 +346,46 @@ const HomeProducts = randomProducts.slice(0, 4);
             </div>
           ) : (
             <div className="text-center py-24">
-              <p className="text-6xl mb-4">ðŸ”</p>
-              <p className="text-gray-700 font-bold text-lg">Aucun produit trouvÃ©</p>
+              <p className="text-6xl mb-4">🔍</p>
+              <p className="text-gray-700 font-bold text-lg">Aucun produit trouvé</p>
               <p className="text-gray-400 text-sm mt-2 max-w-sm mx-auto">
-                Essayez de modifier vos filtres ou d'Ã©largir votre recherche.
+                Essayez de modifier vos filtres ou d'élargir votre recherche.
               </p>
               <button onClick={() => setActiveCategory('All')}
                 className="mt-6 bg-green-600 text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-green-700 transition-colors">
-                RÃ©initialiser les filtres
+                Réinitialiser les filtres
               </button>
           </div>
           )
         }
       </section>
 
-      {/* â”€â”€ Promo banner â”€â”€ */}
+      {/* ── Promo banner ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
         <div className="relative bg-gradient-to-r from-green-700 to-emerald-600 rounded-3xl overflow-hidden px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="absolute right-0 top-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
           <div className="relative z-10">
             <p className="text-green-200 text-sm font-medium mb-1">Cette semaine seulement</p>
             <h2 className="text-white text-3xl font-extrabold leading-tight">Semaine des<br />bonnes affaires</h2>
-            <p className="text-green-100 text-sm mt-2 max-w-xs">Des rÃ©ductions exclusives sur des centaines de produits dans toutes les catÃ©gories.</p>
+            <p className="text-green-100 text-sm mt-2 max-w-xs">Des réductions exclusives sur des centaines de produits dans toutes les catégories.</p>
             <button className="mt-5 bg-white text-green-800 font-semibold text-sm px-6 py-2.5 rounded-xl hover:bg-green-50 transition-colors shadow-lg">
               Explorer les offres
             </button>
           </div>
           <div className="relative z-10 text-center sm:w-fit w-full bg-white/10 border border-white/20 rounded-2xl px-10 py-6 flex-shrink-0">
             <p className="text-6xl font-black text-green-200 leading-none">90%</p>
-            <p className="text-white/80 text-sm mt-1">rÃ©duction max</p>
+            <p className="text-white/80 text-sm mt-1">réduction max</p>
           </div>
         </div>
       </section>
 
-      {/* â”€â”€ Boutiques â”€â”€ */}
+      {/* ── Boutiques ── */}
       <section id="boutiques" className="bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Boutiques de confiance</h2>
-              <p className="text-sm font-medium text-gray-400 -mt-1">Toutes vÃ©rifiÃ©es par l'Ã©quipe Yamo Market</p>
+              <p className="text-sm font-medium text-gray-400 -mt-1">Toutes vérifiées par l'équipe Yamo Market</p>
             </div>
             <Link to='/boutiques'>
               <button className="flex items-center gap-1 text-sm mt-2 text-green-700 font-medium hover:text-green-500">
