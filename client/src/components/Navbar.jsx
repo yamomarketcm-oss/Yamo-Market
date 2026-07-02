@@ -30,7 +30,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5050/api/market/login', {
+      const response = await fetch('https://yamo-market-server.vercel.app/api/market/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -147,7 +147,7 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5050/api/market/register', {
+      const response = await fetch('https://yamo-market-server.vercel.app/api/market/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -277,7 +277,7 @@ const ProfileDropdown = ({ user, onClose }) => {
       const fetchShop = async () => {
         try {
           const token = localStorage.getItem('market_token');
-          const res = await fetch(`http://localhost:5050/api/market/myshop`, {
+          const res = await fetch(`https://yamo-market-server.vercel.app/api/market/myshop`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -393,7 +393,7 @@ const Navbar = () => {
       const fetchShop = async () => {
         try {
           const token = localStorage.getItem('market_token');
-          const res = await fetch(`http://localhost:5050/api/market/myshop`, {
+          const res = await fetch(`https://yamo-market-server.vercel.app/api/market/myshop`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
