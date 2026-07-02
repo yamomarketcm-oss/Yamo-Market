@@ -238,7 +238,7 @@ const AddProductModal = ({ shopId, onClose, onSuccess }) => {
       const token = localStorage.getItem('market_token');
 
       // imageUrl already uploaded to Cloudinary — send as plain JSON
-      const res = await fetch('http://localhost:5050/api/market/createproduct', {
+      const res = await fetch('https://yamo-market-server.vercel.app/api/market/createproduct', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -333,7 +333,7 @@ const EditProductModal = ({ product, shopId, onClose, onSuccess }) => {
     try {
       const token = localStorage.getItem('market_token');
 
-      const res = await fetch(`http://localhost:5050/api/market/updateproduct/${product.product_id}`, {
+      const res = await fetch(`https://yamo-market-server.vercel.app/api/market/updateproduct/${product.product_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
