@@ -946,7 +946,7 @@ const UserProfile = () => {
                 shop?.shop_id ? (
                   <Link to={`/my-shop/${shop?.shop_id}`}>
                     <button
-                      className="flex items-center gap-2 bg-white hover:bg-green-50 text-green-800 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all"
+                      className="flex items-center sm:w-fit w-full gap-2 bg-white hover:bg-green-50 text-green-800 font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition-all"
                     >
                       <Store size={15} /> Ma Boutique
                     </button>
