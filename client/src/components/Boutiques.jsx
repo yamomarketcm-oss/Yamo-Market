@@ -150,7 +150,7 @@ const BoutiqueCard = ({ b, viewMode }) => {
 /* ─── main component ──────────────────────────────── */
 const Boutiques = () => {
    const [query, setQuery]               = useState('');
-  const [selectedRegion, setRegion]     = useState('Toutes les rÃ©gions');
+  const [selectedRegion, setRegion]     = useState('Toutes les régions');
   const [selectedTown, setTown]         = useState('Toutes les villes');
   const [selectedCategory, setCategory] = useState('Toutes');
   const [verifiedOnly, setVerifiedOnly] = useState(false);
@@ -189,14 +189,14 @@ const Boutiques = () => {
   };
 
   const activeFilterCount = [
-    selectedRegion !== 'Toutes les rÃ©gions',
+    selectedRegion !== 'Toutes les régions',
     selectedTown !== 'Toutes les villes',
     selectedCategory !== 'Toutes',
     verifiedOnly,
   ].filter(Boolean).length;
 
   const clearFilters = () => {
-    setRegion('Toutes les rÃ©gions');
+    setRegion('Toutes les régions');
     setTown('Toutes les villes');
     setCategory('Toutes');
     setVerifiedOnly(false);
@@ -207,7 +207,7 @@ const Boutiques = () => {
     let list = boutique.filter(b => {
       const q = query.toLowerCase();
       const matchQuery = !q || b.shop_name.toLowerCase().includes(q) || b.town.toLowerCase().includes(q) || b.region.toLowerCase().includes(q)
-      const matchRegion = selectedRegion === 'Toutes les rÃ©gions' || b.region === selectedRegion;
+      const matchRegion = selectedRegion === 'Toutes les régions' || b.region === selectedRegion;
       const matchTown = selectedTown === 'Toutes les villes' || b.town === selectedTown;
       const matchCat = selectedCategory === 'Toutes' || b.category === selectedCategory;
       const matchVerified = !verifiedOnly || b.status;
