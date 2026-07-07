@@ -3,12 +3,14 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Toast } from "./Toastcomponent";
+import logo from '../img/logo_yamo_market_circle.png';
 
 const links = [
   { label: "Boutiques", link: "/boutiques" },
   { label: "Produits", link: "/products" },
   { label: "Trend", link: "/banner" },
   { label: "About", link: "/about" },
+  { label: "Terms", link: "/terms" },
 ];
 
 /* ─── Backdrop ───────────────────────────────────── */
@@ -59,7 +61,7 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-8 h-8 rounded-xl bg-green-600 flex items-center justify-center">
-                    <ShoppingBag size={15} className="text-white" />
+                    <img src={logo} className="w-6 h-6" alt="YamoMarket Logo" />
                   </div>
                   <span className="font-bold text-gray-900">Yamo<span className="text-green-600">Market</span></span>
                 </div>
@@ -174,7 +176,7 @@ const RegisterModal = ({ onClose, onSwitchToLogin }) => {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-8 h-8 rounded-xl bg-green-600 flex items-center justify-center">
-                    <ShoppingBag size={15} className="text-white" />
+                    <img src={logo} className="w-6 h-6" alt="YamoMarket Logo" />
                   </div>
                   <span className="font-bold text-gray-900">Yamo<span className="text-green-600">Market</span></span>
                 </div>
@@ -419,8 +421,8 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
-            <div className="w-8 h-8 rounded-xl bg-green-500 flex items-center justify-center shadow-md shadow-green-700/40">
-              <ShoppingBag size={15} className="text-white" />
+            <div className="w-8 h-8 rounded-xl bg-green-600 flex items-center justify-center shadow-md shadow-green-700/40">
+              <img src={logo} className="w-6 h-6" alt="YamoMarket Logo" />
             </div>
             <span className="font-extrabold text-base tracking-tight flex">
               <span className="text-green-400">Yamo</span>

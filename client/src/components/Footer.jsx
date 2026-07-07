@@ -1,5 +1,7 @@
 import { ShoppingBag } from 'lucide-react'
 import React from 'react'
+import { Link } from 'react-router-dom'
+import logo from '../img/logo_yamo_market_circle.png';
 
 const Footer = () => {
   return (
@@ -10,7 +12,7 @@ const Footer = () => {
           <div className='mx-auto'>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 rounded-xl bg-green-500 flex items-center justify-center">
-                <ShoppingBag size={16} className="text-white" />
+                <img src={logo} className="w-6 h-6" alt="YamoMarket Logo" />
               </div>
               <span className="text-white font-bold text-lg">YamoMarket</span>
             </div>
@@ -34,7 +36,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-green-800 py-4 text-center text-xs font-medium text-green-500">
-          © {new Date().getFullYear()} YamoMarket. Tous droits réservés.
+          © {new Date().getFullYear()} YamoMarket. <Link to="/terms" className="hover:underline">Tous droits réservés.</Link>
         </div>
       </footer>
     </div>
