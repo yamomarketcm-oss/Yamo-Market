@@ -4,7 +4,7 @@ import { Shield, ChevronRight, Mail, ArrowUp, CheckCircle, Scale, Users, CreditC
 const SECTIONS = [
   {
     id: "acceptance",
-    label: "Acceptance of Terms",
+    label: "Acceptation des conditions",
     num: "01",
     icon: <CheckCircle size={18} />,
     color: "from-emerald-500 to-green-600",
@@ -12,13 +12,13 @@ const SECTIONS = [
     textColor: "text-emerald-700",
     borderColor: "border-emerald-200",
     body: [
-      "By creating an account, listing a business, or browsing Yamo Market, you agree to be bound by these Terms & Conditions. If you do not agree, please do not use the platform.",
-      "Yamo Market is a digital marketplace connecting verified Cameroonian businesses with consumers. These Terms apply to all visitors, registered merchants, and shoppers, collectively referred to as \"users.\""
+      "En créant un compte, en référençant une activité ou en naviguant sur Yamo Market, vous acceptez d'être lié par les présentes Conditions Générales d'Utilisation (« CGU »). Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser la plateforme.",
+      "Yamo Market est une marketplace digitale qui met en relation des entreprises camerounaises vérifiées et des consommateurs. Ces CGU s'appliquent à tous les visiteurs, marchands inscrits et acheteurs, collectivement désignés par le terme « utilisateurs »."
     ],
   },
   {
     id: "definitions",
-    label: "Definitions",
+    label: "Définitions",
     num: "02",
     icon: <BookOpen size={18} />,
     color: "from-green-500 to-teal-600",
@@ -26,15 +26,15 @@ const SECTIONS = [
     textColor: "text-green-700",
     borderColor: "border-green-200",
     definitions: [
-      ["Merchant", "A business or individual registered to sell products or services on Yamo Market."],
-      ["Consumer", "A user who browses, compares, or contacts merchants through the platform."],
-      ["Listing", "Any product, service, or business profile published by a merchant."],
-      ["Verification", "The identity and business-legitimacy check performed before a merchant is marked \"Verified.\""],
+      ["Marchand", "Une entreprise ou un particulier inscrit pour vendre des produits ou services sur Yamo Market."],
+      ["Consommateur", "Un utilisateur qui parcourt, compare ou contacte des marchands via la plateforme."],
+      ["Annonce", "Tout produit, service ou profil d'entreprise publié par un marchand."],
+      ["Vérification", "Le contrôle d'identité et de légitimité commerciale effectué avant qu'un marchand soit marqué « Vérifié »."],
     ],
   },
   {
     id: "eligibility",
-    label: "Eligibility",
+    label: "Conditions d'éligibilité",
     num: "03",
     icon: <Users size={18} />,
     color: "from-teal-500 to-emerald-600",
@@ -42,13 +42,13 @@ const SECTIONS = [
     textColor: "text-teal-700",
     borderColor: "border-teal-200",
     body: [
-      "You must be at least 18 years old, or the age of majority in your jurisdiction, to register an account. Businesses must be legally established and operating within Cameroon to register as a merchant.",
-      "Yamo Market reserves the right to refuse registration or suspend accounts that fail to meet these requirements or provide false information."
+      "Vous devez avoir au moins 18 ans, ou l'âge de la majorité dans votre juridiction, pour créer un compte. Les entreprises doivent être légalement constituées et opérer au Cameroun pour s'inscrire en tant que marchand.",
+      "Yamo Market se réserve le droit de refuser l'inscription ou de suspendre les comptes ne répondant pas à ces exigences ou ayant fourni de fausses informations."
     ],
   },
   {
     id: "accounts",
-    label: "Account Registration",
+    label: "Création de compte",
     num: "04",
     icon: <Fingerprint size={18} />,
     color: "from-emerald-600 to-green-700",
@@ -56,13 +56,13 @@ const SECTIONS = [
     textColor: "text-emerald-700",
     borderColor: "border-emerald-200",
     body: [
-      "You are responsible for maintaining the confidentiality of your account credentials and for all activity that occurs under your account. Notify us immediately of any unauthorized use.",
-      "Information provided during registration must be accurate and kept up to date. Impersonating another business or individual is strictly prohibited."
+      "Vous êtes responsable de la confidentialité de vos identifiants de connexion et de toutes les activités effectuées depuis votre compte. Signalez-nous immédiatement toute utilisation non autorisée.",
+      "Les informations fournies lors de l'inscription doivent être exactes et tenues à jour. L'usurpation d'identité d'une autre entreprise ou d'un autre particulier est strictement interdite."
     ],
   },
   {
     id: "verification",
-    label: "Business Verification",
+    label: "Vérification des entreprises",
     num: "05",
     icon: <Shield size={18} />,
     color: "from-green-600 to-emerald-700",
@@ -70,32 +70,32 @@ const SECTIONS = [
     textColor: "text-green-700",
     borderColor: "border-green-200",
     body: [
-      "Merchants may apply for verification by submitting proof of business registration, identity documents, and a physical operating address within Cameroon. Verification is not a guarantee of quality and does not constitute an endorsement by Yamo Market.",
-      "We may revoke a merchant's verified status at any time if submitted information is found to be false, expired, or if the merchant violates these Terms."
+      "Les marchands peuvent demander une vérification en soumettant une preuve d'immatriculation, des pièces d'identité et une adresse physique d'exploitation au Cameroun. La vérification ne constitue pas une garantie de qualité ni un cautionnement de la part de Yamo Market.",
+      "Nous pouvons révoquer le statut vérifié d'un marchand à tout moment si les informations soumises s'avèrent fausses, expirées ou si le marchand enfreint les présentes CGU."
     ],
   },
   {
     id: "conduct",
-    label: "User Conduct",
+    label: "Comportement des utilisateurs",
     num: "06",
     icon: <AlertTriangle size={18} />,
     color: "from-amber-500 to-orange-600",
     lightColor: "bg-amber-50",
     textColor: "text-amber-700",
     borderColor: "border-amber-200",
-    intro: "Users agree not to:",
+    intro: "Les utilisateurs s'engagent à ne pas :",
     bullets: [
-      "List counterfeit, illegal, or misrepresented products or services",
-      "Post false reviews or manipulate ratings",
-      "Harass, defraud, or mislead other users",
-      "Use the platform to collect user data for unrelated purposes",
-      "Circumvent the verification or moderation process",
+      "Publier des produits ou services contrefaits, illégaux ou faussement présentés",
+      "Poster de faux avis ou manipuler les notes",
+      "Harceler, escroquer ou induire en erreur d'autres utilisateurs",
+      "Utiliser la plateforme pour collecter des données personnelles à des fins non liées",
+      "Contourner le processus de vérification ou de modération",
     ],
-    outro: "Violations may result in listing removal, account suspension, or permanent ban."
+    outro: "Tout manquement peut entraîner la suppression d'annonces, la suspension du compte ou un bannissement définitif."
   },
   {
     id: "listings",
-    label: "Products & Listings",
+    label: "Produits & annonces",
     num: "07",
     icon: <FileText size={18} />,
     color: "from-emerald-500 to-green-600",
@@ -103,13 +103,13 @@ const SECTIONS = [
     textColor: "text-emerald-700",
     borderColor: "border-emerald-200",
     body: [
-      "Merchants are solely responsible for the accuracy of their listings, including pricing, availability, and product descriptions. Yamo Market does not manufacture, hold, or ship inventory on behalf of merchants.",
-      "Transactions, delivery arrangements, and after-sales support occur directly between merchant and consumer unless otherwise stated on the platform."
+      "Les marchands sont seuls responsables de l'exactitude de leurs annonces, notamment les prix, la disponibilité et les descriptions de produits. Yamo Market ne fabrique, ne stocke ni n'expédie aucun article pour le compte des marchands.",
+      "Les transactions, modalités de livraison et le service après-vente s'effectuent directement entre le marchand et le consommateur, sauf mention contraire sur la plateforme."
     ],
   },
   {
     id: "payments",
-    label: "Payments & Fees",
+    label: "Paiements & frais",
     num: "08",
     icon: <CreditCard size={18} />,
     color: "from-green-500 to-emerald-600",
@@ -117,13 +117,13 @@ const SECTIONS = [
     textColor: "text-green-700",
     borderColor: "border-green-200",
     body: [
-      "Basic merchant accounts are free. Premium subscriptions, featured listings, and verification services are billed according to the pricing published on the platform at the time of purchase.",
-      "Fees are non-refundable except where required by law or expressly stated in a specific offer. Yamo Market may change pricing with prior notice to affected merchants."
+      "Les comptes marchands de base sont gratuits. Les abonnements premium, les annonces mises en avant et les services de vérification sont facturés selon les tarifs publiés sur la plateforme au moment de l'achat.",
+      "Les frais ne sont pas remboursables, sauf obligation légale ou mention expresse dans une offre spécifique. Yamo Market peut modifier ses tarifs avec un préavis adressé aux marchands concernés."
     ],
   },
   {
     id: "ip",
-    label: "Intellectual Property",
+    label: "Propriété intellectuelle",
     num: "09",
     icon: <Star size={18} />,
     color: "from-teal-500 to-green-600",
@@ -131,12 +131,12 @@ const SECTIONS = [
     textColor: "text-teal-700",
     borderColor: "border-teal-200",
     body: [
-      "The Yamo Market name, logo, and platform design are the property of Yamo Market. Merchants retain ownership of the content they upload but grant Yamo Market a non-exclusive license to display it on the platform and in related promotional materials."
+      "Le nom, le logo et la conception visuelle de Yamo Market sont la propriété exclusive de Yamo Market. Les marchands conservent la propriété du contenu qu'ils publient, mais accordent à Yamo Market une licence non exclusive pour l'afficher sur la plateforme et dans les supports promotionnels associés."
     ],
   },
   {
     id: "liability",
-    label: "Limitation of Liability",
+    label: "Limitation de responsabilité",
     num: "10",
     icon: <Scale size={18} />,
     color: "from-emerald-600 to-teal-700",
@@ -144,12 +144,12 @@ const SECTIONS = [
     textColor: "text-emerald-700",
     borderColor: "border-emerald-200",
     body: [
-      "Yamo Market provides the platform \"as is\" and is not liable for disputes, damages, or losses arising from transactions between merchants and consumers. Our role is limited to facilitating discovery and connection between verified businesses and shoppers."
+      "Yamo Market met la plateforme à disposition « en l'état » et décline toute responsabilité pour les litiges, dommages ou pertes résultant de transactions entre marchands et consommateurs. Notre rôle se limite à faciliter la mise en relation entre entreprises vérifiées et acheteurs."
     ],
   },
   {
     id: "termination",
-    label: "Termination",
+    label: "Résiliation",
     num: "11",
     icon: <AlertTriangle size={18} />,
     color: "from-red-500 to-rose-600",
@@ -157,12 +157,12 @@ const SECTIONS = [
     textColor: "text-red-700",
     borderColor: "border-red-200",
     body: [
-      "We may suspend or terminate any account that violates these Terms, engages in fraudulent activity, or poses a risk to other users. Users may close their account at any time by contacting support."
+      "Nous pouvons suspendre ou résilier tout compte enfreignant les présentes CGU, se livrant à des activités frauduleuses ou représentant un risque pour les autres utilisateurs. Les utilisateurs peuvent clôturer leur compte à tout moment en contactant notre support."
     ],
   },
   {
     id: "law",
-    label: "Governing Law",
+    label: "Droit applicable",
     num: "12",
     icon: <Globe size={18} />,
     color: "from-green-600 to-emerald-700",
@@ -170,12 +170,12 @@ const SECTIONS = [
     textColor: "text-green-700",
     borderColor: "border-green-200",
     body: [
-      "These Terms are governed by the laws of the Republic of Cameroon. Any disputes arising from use of the platform will be subject to the exclusive jurisdiction of Cameroonian courts."
+      "Les présentes CGU sont régies par les lois de la République du Cameroun. Tout litige découlant de l'utilisation de la plateforme relèvera de la compétence exclusive des juridictions camerounaises."
     ],
   },
   {
     id: "changes",
-    label: "Changes to Terms",
+    label: "Modifications des CGU",
     num: "13",
     icon: <RefreshCw size={18} />,
     color: "from-emerald-500 to-green-600",
@@ -183,12 +183,12 @@ const SECTIONS = [
     textColor: "text-emerald-700",
     borderColor: "border-emerald-200",
     body: [
-      "We may update these Terms from time to time. Material changes will be communicated to registered users by email or in-app notice at least 14 days before taking effect. Continued use of the platform after changes take effect constitutes acceptance."
+      "Nous pouvons mettre à jour les présentes CGU à tout moment. Les modifications importantes seront communiquées aux utilisateurs inscrits par e-mail ou notification in-app au moins 14 jours avant leur entrée en vigueur. La poursuite de l'utilisation de la plateforme après cette date vaut acceptation des nouvelles conditions."
     ],
   },
   {
     id: "contact",
-    label: "Contact Us",
+    label: "Nous contacter",
     num: "14",
     icon: <Mail size={18} />,
     color: "from-green-700 to-emerald-800",
@@ -266,8 +266,8 @@ const SectionCard = ({ s, sectionRef }) => (
                 <Mail size={15} />
               </div>
               <div>
-                <p className="text-xs text-green-200">Email légal</p>
-                <p className="font-semibold text-sm">yamomarketcm@gmail.com</p>
+                <p className="text-xs text-green-200">Courriel juridique</p>
+                <p className="font-semibold text-sm">legal@yamomarket.cm</p>
               </div>
             </a>
             <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-2xl px-5 py-3.5">
@@ -275,7 +275,7 @@ const SectionCard = ({ s, sectionRef }) => (
                 <Globe size={15} className="text-green-600" />
               </div>
               <div>
-                <p className="text-xs text-gray-400">Adresse</p>
+                <p className="text-xs text-gray-400">Siège social</p>
                 <p className="font-semibold text-sm text-gray-800">Yamo Market S.A., Douala</p>
               </div>
             </div>
@@ -316,8 +316,36 @@ export default function TermsAndConditions() {
   return (
     <div className="min-h-screen bg-gray-50">
 
+      {/* ── Sticky Header ── */}
+      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-green-600 to-emerald-700 flex items-center justify-center">
+              <Zap size={15} className="text-white" />
+            </div>
+            <span className="font-black text-gray-900 text-lg tracking-tight">Yamo</span>
+            <span className="text-xs font-bold text-green-600 tracking-widest uppercase">Market</span>
+          </div>
+
+          {/* Pill badge */}
+          <div className="hidden sm:flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-1.5">
+            <Scale size={12} className="text-green-600" />
+            <span className="text-xs font-semibold text-green-700">Conditions d'utilisation</span>
+          </div>
+
+          {/* Mobile menu toggle */}
+          <button
+            onClick={() => setMenuOpen(v => !v)}
+            className="md:hidden flex items-center gap-1.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-xl transition-colors"
+          >
+            {menuOpen ? "Fermer" : "Sections"}
+          </button>
+        </div>
+      </header>
+
       {/* ── Hero ── */}
-      <div className="relative bg-gradient-to-br pt-8 from-green-800 via-green-700 to-emerald-600 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 overflow-hidden">
         <div className="absolute -top-32 -right-32 w-96 h-96 bg-white/5 rounded-full" />
         <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-white/5 rounded-full" />
         {/* Grid pattern overlay */}
