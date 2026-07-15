@@ -17,32 +17,20 @@ const REVIEWS = [
   { name: 'Rodrigue K.', rating: 5, date: 'il y a 3 semaines', text: 'TechShop est ma boutique préférée sur Yamo. Toujours satisfait de mes achats !' },
 ];
 
-/* Static trust stats shown on every shop — not shop-specific numbers */
 const TRUST_STATS = [
-  { icon: <Shield size={15} className="text-green-600" />,   title: 'Vendeur vérifié',    desc: 'Identité et documents vérifiés par notre équipe.' },
-  { icon: <Zap    size={15} className="text-amber-500" />,   title: 'Livraison rapide',   desc: 'Expédition sous 24–48h dans les grandes villes.' },
-  { icon: <BadgeCheck size={15} className="text-blue-500" />,title: 'Produits authentiques', desc: 'Tous les produits sont contrôlés avant mise en ligne.' },
-  { icon: <Users  size={15} className="text-violet-500" />,  title: 'Communauté active',  desc: 'Des milliers d\'acheteurs satisfaits sur YamoMarket.' },
+  { icon: <Shield size={15} className="text-green-600" />,    title: 'Vendeur vérifié',      desc: 'Identité et documents vérifiés par notre équipe.' },
+  { icon: <Zap    size={15} className="text-amber-500" />,    title: 'Livraison rapide',     desc: 'Expédition sous 24–48h dans les grandes villes.' },
+  { icon: <BadgeCheck size={15} className="text-blue-500" />, title: 'Produits authentiques', desc: 'Tous les produits sont contrôlés avant mise en ligne.' },
+  { icon: <Users  size={15} className="text-violet-500" />,   title: 'Communauté active',    desc: 'Des milliers d\'acheteurs satisfaits sur YamoMarket.' },
 ];
 
 /* ─── helpers ─────────────────────────────────────── */
-const StarRow = ({ rating, size = 13, showNum = false }) => (
+const StarRow = ({ rating, size = 13 }) => (
   <div className="flex items-center gap-0.5">
     {[1,2,3,4,5].map(i => (
       <Star key={i} size={size}
         className={i <= Math.round(rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'} />
     ))}
-    {showNum && <span className="text-xs text-gray-500 ml-1">{rating}</span>}
-  </div>
-);
-
-const RatingBar = ({ label, pct }) => (
-  <div className="flex items-center gap-3 text-xs text-gray-500">
-    <span className="w-3">{label}★</span>
-    <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-      <div className="h-full bg-green-500 rounded-full transition-all duration-700" style={{ width: `${pct}%` }} />
-    </div>
-    <span className="w-6 text-right">{pct}%</span>
   </div>
 );
 
@@ -51,19 +39,41 @@ const badgeColor = (b) => ({
   Local:'bg-green-700', Promo:'bg-violet-500',
 }[b] || 'bg-gray-400');
 
+/* ─── WhatsApp helpers ───────────────────────────── */
+/**
+ * Builds a wa.me deep-link with a pre-filled message.
+ * Handles numbers with or without the 237 Cameroon prefix.
+ */
+const buildWhatsAppURL = (rawPhone, shopName, productName = null) => {
+  const clean = (rawPhone || '').replace(/[\s\-().+]/g, '');
+  const e164  = clean.startsWith('237') ? clean : `237${clean}`;
+
+  const greeting = productName
+    ? `Bonjour ${shopName || 'la boutique'} ! 👋\nJe vous contacte depuis *Yamo Market*.\nJe suis intéressé(e) par votre produit : *${productName}*.`
+    : `Bonjour ${shopName || 'la boutique'} ! 👋\nJe vous contacte depuis *Yamo Market*.\nJe suis intéressé(e) par vos produits.`;
+
+  return `https://wa.me/${e164}?text=${encodeURIComponent(greeting)}`;
+};
+
+const copyToClipboard = async (text) => {
+  try { await navigator.clipboard.writeText(text); }
+  catch {
+    const el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+  }
+};
+
 /* ─── Product Card ───────────────────────────────── */
 const ProductCard = ({ p, viewMode, onFav, favs }) => {
-
   const handleClick = async () => {
     try {
-      const res = await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
+      await fetch('https://yamo-market-server.vercel.app/api/market/click-log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clict_type: 'product', shoplead_ip: p.product_id, vendor:p.product_id, shop: p.shop }),
+        body: JSON.stringify({ clict_type: 'product', shoplead_ip: p.product_id, vendor: p.product_id, shop: p.shop }),
       });
-    } catch (err) {
-      console.log('Could not submit update.', 'error');
-    }
+    } catch { /* silent */ }
   };
 
   const isList = viewMode === 'list';
@@ -81,7 +91,6 @@ const ProductCard = ({ p, viewMode, onFav, favs }) => {
           <button
             onClick={e => { e.preventDefault(); onFav(p.product_id); }}
             className={`absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-white transition-colors shadow-sm ${isList ? 'hidden' : ''}`}
-            aria-label="Favori"
           >
             <Heart size={12} className={favs.includes(p.product_id) ? 'fill-rose-500 text-rose-500' : 'text-gray-400'} />
           </button>
@@ -106,239 +115,259 @@ const ProductCard = ({ p, viewMode, onFav, favs }) => {
   );
 };
 
-/* ─── Message Modal ──────────────────────────────── */
+/* ─── Shared modal shell ─────────────────────────── */
+const ModalShell = ({ onClose, topBarClass, children }) => (
+  <>
+    <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" />
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 pointer-events-none">
+      <div className="pointer-events-auto w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <div className={`h-1.5 w-full ${topBarClass}`} />
+        <div className="p-6">{children}</div>
+      </div>
+    </div>
+  </>
+);
+
+/* ─── Shared shop pill ───────────────────────────── */
+const ShopPill = ({ shop }) => (
+  <div className="mt-2.5 inline-flex items-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl px-3.5 py-2.5 shadow-md shadow-green-200/60 max-w-full">
+    <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">🏪</div>
+    <div className="min-w-0">
+      <p className="text-sm font-bold text-white leading-tight truncate">{shop?.shop_name || 'Boutique'}</p>
+      <p className="text-[10px] text-green-200 flex items-center gap-0.5 mt-0.5">
+        <MapPin size={9} className="flex-shrink-0" /> {shop?.region} • {shop?.town}
+      </p>
+    </div>
+  </div>
+);
+
+/* ─── WhatsApp button ────────────────────────────── */
+const WhatsAppButton = ({ onClick, subtext }) => (
+  <button
+    onClick={onClick}
+    className="w-full flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] active:scale-[0.98] text-white font-bold text-sm px-5 py-4 rounded-2xl transition-all shadow-lg shadow-green-300/40 group"
+  >
+    <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <div className="flex-1 text-left">
+      <p className="font-extrabold text-base leading-none">Ouvrir WhatsApp</p>
+      <p className="text-[11px] text-white/80 mt-0.5 font-normal">{subtext || 'Message pré-rempli · réponse rapide'}</p>
+    </div>
+    <ChevronRight size={16} className="flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
+  </button>
+);
+
+/* ─── No-WhatsApp fallback banner ────────────────── */
+const NoWhatsAppBanner = () => (
+  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4 flex items-start gap-3">
+    <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+      <Phone size={14} className="text-amber-600" />
+    </div>
+    <div>
+      <p className="text-sm font-bold text-amber-800">WhatsApp non renseigné</p>
+      <p className="text-xs text-amber-600 mt-0.5">Utilisez les coordonnées ci-dessous pour contacter cette boutique.</p>
+    </div>
+  </div>
+);
+
+/* ─── Copy row ───────────────────────────────────── */
+const CopyRow = ({ icon, value, label, copiedKey, activeCopied, onCopy, accentClass }) => (
+  <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-xl px-3.5 py-2.5">
+    <div className="flex-shrink-0 text-gray-400">{icon}</div>
+    <div className="flex-1 min-w-0">
+      {label && <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{label}</p>}
+      <p className="text-sm font-bold text-gray-700 truncate">{value}</p>
+    </div>
+    <button
+      onClick={() => onCopy(value, copiedKey)}
+      className={`flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg flex-shrink-0 transition-all
+        ${activeCopied === copiedKey ? `${accentClass || 'bg-green-600'} text-white` : 'bg-white border border-gray-200 hover:border-green-300 text-gray-500'}`}
+    >
+      {activeCopied === copiedKey
+        ? <><CheckCircle2 size={11} /> Copié</>
+        : <><Copy size={11} /> Copier</>}
+    </button>
+  </div>
+);
+
+/* ─── Disclaimer ─────────────────────────────────── */
+const Disclaimer = () => (
+  <p className="text-center text-[10px] text-gray-400 mt-4 leading-relaxed">
+    YamoMarket ne garantit pas les échanges hors plateforme. Restez vigilant.
+  </p>
+);
+
+/* ═══════════════════════════════════════════════════
+   MESSAGE MODAL  — WhatsApp primary, copy fallback
+═══════════════════════════════════════════════════ */
 const MessageModal = ({ shop, onClose }) => {
   const [copied, setCopied] = useState(null);
 
-  const email = shop?.b_email || shop?.email || null;
   const phone = shop?.phone   || shop?.b_phone || null;
+  const email = shop?.b_email || shop?.email   || null;
+  const hasWA = !!phone;
 
-  const copy = async (text, type) => {
-    try { await navigator.clipboard.writeText(text); }
-    catch {
-      const el = document.createElement('textarea');
-      el.value = text; document.body.appendChild(el); el.select();
-      document.execCommand('copy'); document.body.removeChild(el);
-    }
-    setCopied(type);
+  const handleCopy = async (text, key) => {
+    await copyToClipboard(text);
+    setCopied(key);
     setTimeout(() => setCopied(null), 2000);
   };
 
   return (
-    <>
-      <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" />
-      <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 pointer-events-none">
-        <div className="pointer-events-auto w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden">
-          <div className="h-1.5 w-full bg-gradient-to-r from-green-500 via-emerald-400 to-green-600" />
-          <div className="p-6">
-            {/* header */}
-            <div className="flex items-start justify-between mb-5">
-              <div className="flex-1 min-w-0 pr-3">
-                <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center mb-3">
-                  <MessageCircle size={20} className="text-green-700" />
-                </div>
-                <h2 className="text-lg font-extrabold text-gray-900">Envoyer un message</h2>
-
-                {/* shop pill */}
-                <div className="mt-2.5 inline-flex items-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl px-3.5 py-2.5 shadow-md shadow-green-200/60 max-w-full">
-                  <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">🏪</div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-white leading-tight truncate">{shop?.shop_name || 'Boutique'}</p>
-                    <p className="text-[10px] text-green-200 flex items-center gap-0.5 mt-0.5">
-                      <MapPin size={9} className="flex-shrink-0" /> {shop?.region} • {shop?.town}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <button onClick={onClose} className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors flex-shrink-0">
-                <X size={16} className="text-gray-500" />
-              </button>
-            </div>
-
-            {/* info rows */}
-            <div className="bg-gray-50 border border-gray-100 rounded-2xl overflow-hidden divide-y divide-gray-100">
-
-              {/* Email */}
-              <div className="flex items-center gap-3 px-4 py-3.5">
-                <div className="w-8 h-8 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <Mail size={14} className="text-blue-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Email</p>
-                  <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">
-                    {email || <span className="text-gray-400 font-normal italic">Non disponible</span>}
-                  </p>
-                </div>
-                {email && (
-                  <button onClick={() => copy(email, 'email')}
-                    className="w-8 h-8 rounded-lg bg-white border border-gray-200 hover:border-blue-400 flex items-center justify-center transition-all flex-shrink-0">
-                    {copied === 'email' ? <CheckCircle2 size={13} className="text-blue-600" /> : <Copy size={12} className="text-gray-400" />}
-                  </button>
-                )}
-              </div>
-
-              {/* Phone */}
-              <div className="flex items-center gap-3 px-4 py-3.5">
-                <div className="w-8 h-8 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <Phone size={14} className="text-green-700" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Téléphone</p>
-                  <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">
-                    {phone || <span className="text-gray-400 font-normal italic">Non disponible</span>}
-                  </p>
-                </div>
-                {phone && (
-                  <button onClick={() => copy(phone, 'phone')}
-                    className="w-8 h-8 rounded-lg bg-white border border-gray-200 hover:border-green-400 flex items-center justify-center transition-all flex-shrink-0">
-                    {copied === 'phone' ? <CheckCircle2 size={13} className="text-green-600" /> : <Copy size={12} className="text-gray-400" />}
-                  </button>
-                )}
-              </div>
-
-              {/* Address */}
-              <div className="flex items-start gap-3 px-4 py-3.5">
-                <div className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <MapPin size={14} className="text-orange-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Adresse</p>
-                  <p className="text-sm font-bold text-gray-900 mt-0.5 leading-snug">
-                    {shop?.address || <span className="text-gray-400 font-normal italic">Non disponible</span>}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-center text-[10px] text-gray-400 mt-4 leading-relaxed">
-              YamoMarket ne garantit pas les échanges hors plateforme. Restez vigilant.
-            </p>
+    <ModalShell onClose={onClose} topBarClass="bg-gradient-to-r from-green-500 via-emerald-400 to-green-600">
+      {/* header */}
+      <div className="flex items-start justify-between mb-5">
+        <div className="flex-1 min-w-0 pr-3">
+          <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center mb-3">
+            <MessageCircle size={20} className="text-green-700" />
           </div>
+          <h2 className="text-lg font-extrabold text-gray-900">Contacter la boutique</h2>
+          <ShopPill shop={shop} />
         </div>
+        <button onClick={onClose} className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors flex-shrink-0">
+          <X size={16} className="text-gray-500" />
+        </button>
       </div>
-    </>
+
+      <div className="space-y-3">
+        {hasWA ? (
+          <>
+            {/* PRIMARY CTA */}
+            <WhatsAppButton onClick={() => window.open(buildWhatsAppURL(phone, shop?.shop_name), '_blank')} />
+
+            {/* number copy — secondary */}
+            <CopyRow
+              icon={<Phone size={13} />}
+              value={phone}
+              copiedKey="phone"
+              activeCopied={copied}
+              onCopy={handleCopy}
+            />
+          </>
+        ) : (
+          <NoWhatsAppBanner />
+        )}
+
+        {/* email copy — always shown if available */}
+        {email && (
+          <CopyRow
+            icon={<Mail size={13} className="text-blue-400" />}
+            value={email}
+            label="Email"
+            copiedKey="email"
+            activeCopied={copied}
+            onCopy={handleCopy}
+            accentClass="bg-blue-600"
+          />
+        )}
+
+        {/* address — read-only */}
+        {shop?.address && (
+          <div className="flex items-start gap-3 bg-gray-50 border border-gray-100 rounded-xl px-3.5 py-2.5">
+            <MapPin size={13} className="text-orange-400 flex-shrink-0 mt-0.5" />
+            <p className="text-sm font-bold text-gray-700 leading-snug">{shop.address}</p>
+          </div>
+        )}
+      </div>
+
+      <Disclaimer />
+    </ModalShell>
   );
 };
 
-/* ─── Call Modal ─────────────────────────────────── */
+/* ═══════════════════════════════════════════════════
+   CALL MODAL  — WhatsApp primary, tel: + copy fallback
+═══════════════════════════════════════════════════ */
 const CallModal = ({ shop, onClose }) => {
   const [copied, setCopied] = useState(false);
   const phone = shop?.phone || shop?.b_phone || null;
 
-  const copy = async () => {
-    if (!phone) return;
-    try { await navigator.clipboard.writeText(phone); }
-    catch {
-      const el = document.createElement('textarea');
-      el.value = phone; document.body.appendChild(el); el.select();
-      document.execCommand('copy'); document.body.removeChild(el);
-    }
+  const handleCopy = async () => {
+    await copyToClipboard(phone);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <>
-      <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" />
-      <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 pointer-events-none">
-        <div className="pointer-events-auto w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden">
-          <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-green-400 to-teal-500" />
-          <div className="p-6">
-            {/* header */}
-            <div className="flex items-start justify-between mb-5">
-              <div className="flex-1 min-w-0 pr-3">
-                <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center mb-3">
-                  <Phone size={20} className="text-green-700" />
-                </div>
-                <h2 className="text-lg font-extrabold text-gray-900">Appeler la boutique</h2>
+    <ModalShell onClose={onClose} topBarClass="bg-gradient-to-r from-emerald-500 via-green-400 to-teal-500">
+      {/* header */}
+      <div className="flex items-start justify-between mb-5">
+        <div className="flex-1 min-w-0 pr-3">
+          <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center mb-3">
+            <Phone size={20} className="text-green-700" />
+          </div>
+          <h2 className="text-lg font-extrabold text-gray-900">Appeler la boutique</h2>
+          <ShopPill shop={shop} />
+        </div>
+        <button onClick={onClose} className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors flex-shrink-0">
+          <X size={16} className="text-gray-500" />
+        </button>
+      </div>
 
-                {/* shop pill */}
-                <div className="mt-2.5 inline-flex items-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl px-3.5 py-2.5 shadow-md shadow-green-200/60 max-w-full">
-                  <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">🏪</div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-white leading-tight truncate">{shop?.shop_name || 'Boutique'}</p>
-                    <p className="text-[10px] text-green-200 flex items-center gap-0.5 mt-0.5">
-                      <MapPin size={9} className="flex-shrink-0" /> {shop?.region} • {shop?.town}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <button onClick={onClose} className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors flex-shrink-0">
-                <X size={16} className="text-gray-500" />
-              </button>
+      {phone ? (
+        <div className="space-y-3">
+          {/* ── big phone display ── */}
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 rounded-2xl p-5 text-center">
+            <div className="w-14 h-14 rounded-full bg-green-600 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-green-300/50">
+              <Phone size={24} className="text-white" />
             </div>
+            <p className="text-2xl font-black text-gray-900 tracking-wide">{phone}</p>
+            <p className="text-xs text-gray-400 mt-1">{shop?.shop_name}</p>
+          </div>
 
-            {phone ? (
-              <>
-                {/* big phone display */}
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 rounded-2xl p-5 text-center mb-4">
-                  <div className="w-14 h-14 rounded-full bg-green-600 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-green-300/50">
-                    <Phone size={24} className="text-white" />
-                  </div>
-                  <p className="text-2xl font-black text-gray-900 tracking-wide">{phone}</p>
-                  <p className="text-xs text-gray-400 mt-1">{shop?.shop_name}</p>
-                </div>
+          {/* ── PRIMARY: WhatsApp call / chat ── */}
+          <WhatsAppButton
+            onClick={() => window.open(buildWhatsAppURL(phone, shop?.shop_name), '_blank')}
+            subtext="Discutez ou appelez via WhatsApp"
+          />
 
-                {/* copy row */}
-                <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 mb-3">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Numéro</p>
-                    <p className="text-sm font-bold text-gray-800 truncate">{phone}</p>
-                  </div>
-                  <button onClick={copy}
-                    className={`flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl flex-shrink-0 transition-all ${copied ? 'bg-green-600 text-white' : 'bg-white border border-gray-200 hover:border-green-400 text-gray-600'}`}>
-                    {copied ? <><CheckCircle2 size={13} /> Copié</> : <><Copy size={13} /> Copier</>}
-                  </button>
-                </div>
+          {/* ── SECONDARY: native tel dial ── */}
+          <a
+            href={`tel:+237${(phone).replace(/[\s\-().+]/g, '').replace(/^237/, '')}`}
+            className="w-full flex items-center justify-center gap-2 border-2 border-green-200 hover:border-green-400 text-green-700 font-semibold text-sm py-3.5 rounded-2xl transition-all"
+          >
+            <Phone size={15} /> Appel téléphonique direct
+          </a>
 
-                {/* info rows */}
-                <div className="bg-gray-50 border border-gray-100 rounded-2xl overflow-hidden divide-y divide-gray-100">
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <div className="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                      <MapPin size={13} className="text-emerald-700" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Région</p>
-                      <p className="text-sm font-bold text-gray-900">{shop?.region || '—'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <div className="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                      <MapPin size={13} className="text-emerald-600" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Ville</p>
-                      <p className="text-sm font-bold text-gray-900">{shop?.town || '—'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 px-4 py-3">
-                    <div className="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Store size={13} className="text-orange-600" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Adresse</p>
-                      <p className="text-sm font-bold text-gray-900 leading-snug">{shop?.address || '—'}</p>
-                    </div>
-                  </div>
+          {/* ── TERTIARY: copy number ── */}
+          <button
+            onClick={handleCopy}
+            className={`w-full flex items-center justify-center gap-2 text-xs font-bold py-2.5 rounded-xl transition-all border
+              ${copied ? 'bg-green-600 text-white border-green-600' : 'bg-white border-gray-200 hover:border-green-300 text-gray-500'}`}
+          >
+            {copied ? <><CheckCircle2 size={13} /> Numéro copié</> : <><Copy size={13} /> Copier le numéro</>}
+          </button>
+
+          {/* location context */}
+          <div className="bg-gray-50 border border-gray-100 rounded-2xl overflow-hidden divide-y divide-gray-100">
+            {[
+              { label: 'Région',  value: shop?.region,  icon: <MapPin size={13} className="text-emerald-700" /> },
+              { label: 'Ville',   value: shop?.town,    icon: <MapPin size={13} className="text-emerald-600" /> },
+              { label: 'Adresse', value: shop?.address, icon: <Store  size={13} className="text-orange-600"  /> },
+            ].map(r => r.value && (
+              <div key={r.label} className="flex items-center gap-3 px-4 py-3">
+                <div className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">{r.icon}</div>
+                <div>
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">{r.label}</p>
+                  <p className="text-sm font-bold text-gray-900 leading-snug">{r.value}</p>
                 </div>
-              </>
-            ) : (
-              <div className="text-center py-8">
-                <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
-                  <Phone size={24} className="text-gray-400" />
-                </div>
-                <p className="text-gray-500 font-semibold">Numéro non disponible</p>
-                <p className="text-xs text-gray-400 mt-1">Cette boutique n'a pas renseigné de numéro.</p>
               </div>
-            )}
-
-            <p className="text-center text-[10px] text-gray-400 mt-4 leading-relaxed">
-              YamoMarket ne garantit pas les échanges hors plateforme. Restez vigilant.
-            </p>
+            ))}
           </div>
         </div>
-      </div>
-    </>
+      ) : (
+        <div className="text-center py-8">
+          <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
+            <Phone size={24} className="text-gray-400" />
+          </div>
+          <p className="text-gray-500 font-semibold">Numéro non disponible</p>
+          <p className="text-xs text-gray-400 mt-1">Cette boutique n'a pas renseigné de numéro.</p>
+        </div>
+      )}
+
+      <Disclaimer />
+    </ModalShell>
   );
 };
 
@@ -346,18 +375,17 @@ const CallModal = ({ shop, onClose }) => {
 const BoutiqueDetail = () => {
   const { slug } = useParams();
 
-  const [shopDetail,    setShopDetail]    = useState({});
-  const [shopProducts,  setShopProducts]  = useState([]);
-  const [activeCategory,setActiveCategory]= useState('Tous');
-  const [activeTab,     setActiveTab]     = useState('products');
-  const [viewMode,      setViewMode]      = useState('grid');
-  const [searchQuery,   setSearchQuery]   = useState('');
-  const [favs,          setFavs]          = useState([]);
-  const [following,     setFollowing]     = useState(false);
-  const [showMessage,   setShowMessage]   = useState(false);
-  const [showCall,      setShowCall]      = useState(false);
+  const [shopDetail,     setShopDetail]     = useState({});
+  const [shopProducts,   setShopProducts]   = useState([]);
+  const [activeCategory, setActiveCategory] = useState('Tous');
+  const [activeTab,      setActiveTab]      = useState('products');
+  const [viewMode,       setViewMode]       = useState('grid');
+  const [searchQuery,    setSearchQuery]    = useState('');
+  const [favs,           setFavs]           = useState([]);
+  const [following,      setFollowing]      = useState(false);
+  const [showMessage,    setShowMessage]    = useState(false);
+  const [showCall,       setShowCall]       = useState(false);
 
-  /* fetch shop */
   useEffect(() => {
     const fetchShop = async () => {
       try {
@@ -371,8 +399,8 @@ const BoutiqueDetail = () => {
     fetchShop();
   }, [slug]);
 
-  /* fetch shop products */
   useEffect(() => {
+    if (!shopDetail.shop_id) return;
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem('market_token');
@@ -397,7 +425,7 @@ const BoutiqueDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* ── Hero / Cover ── */}
+      {/* ── Hero ── */}
       <section className="relative pt-12 bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 overflow-hidden">
         <div className="absolute -top-16 -right-16 w-64 h-64 bg-white/5 rounded-full pointer-events-none" />
         <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-white/5 rounded-full pointer-events-none" />
@@ -440,18 +468,23 @@ const BoutiqueDetail = () => {
             </div>
 
             {/* actions */}
-            <div className="flex gap-2.5 flex-shrink-0">
+            <div className="flex gap-2.5 flex-shrink-0 flex-wrap">
               <button
                 onClick={() => setFollowing(f => !f)}
-                className='text-sm font-semibold px-5 py-2.5 rounded-xl border transition-all bg-white text-green-800 border-white shadow-lg'> 
+                className="text-sm font-semibold px-5 py-2.5 rounded-xl border transition-all bg-white text-green-800 border-white shadow-lg"
+              >
                 ✓ Abonné
               </button>
+
+              {/* Message → opens modal (WhatsApp primary inside) */}
               <button
                 onClick={() => setShowMessage(true)}
                 className="flex items-center gap-1.5 bg-green-500/20 border border-white/25 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-green-500/30 transition-all"
               >
                 <MessageCircle size={15} /> Message
               </button>
+
+              {/* Call → opens modal (WhatsApp primary inside) */}
               <button
                 onClick={() => setShowCall(true)}
                 className="flex items-center gap-1.5 bg-white/15 border border-white/25 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-white/20 transition-all"
@@ -468,10 +501,10 @@ const BoutiqueDetail = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-4 divide-x divide-gray-100">
             {[
-              { icon: <Package    size={16} />, value: '', label: 'Produits'   },
-              { icon: <TrendingUp size={16} />, value: '',                     label: 'Ventes'     },
-              { icon: <Users      size={16} />, value: '',                     label: 'Abonnés'    },
-              { icon: <Clock      size={16} />, value: '',                     label: 'Réponse'    },
+              { icon: <Package    size={16} />, value: shopProducts.length || '—', label: 'Produits' },
+              { icon: <TrendingUp size={16} />, value: '—', label: 'Ventes'   },
+              { icon: <Users      size={16} />, value: '—', label: 'Abonnés'  },
+              { icon: <Clock      size={16} />, value: '—', label: 'Réponse'  },
             ].map(s => (
               <div key={s.label} className="py-5 px-4 flex flex-col items-center text-center">
                 <div className="text-green-600 mb-1">{s.icon}</div>
@@ -509,7 +542,7 @@ const BoutiqueDetail = () => {
         <div className="flex gap-0 border-b border-gray-200 mb-8">
           {[
             { key: 'products', label: `Produits (${shopProducts.length})` },
-            { key: 'about',    label: 'À propos' }
+            { key: 'about',    label: 'À propos' },
           ].map(t => (
             <button key={t.key} onClick={() => setActiveTab(t.key)}
               className={`px-6 py-3 text-sm font-semibold border-b-2 transition-all ${
@@ -532,11 +565,13 @@ const BoutiqueDetail = () => {
               </div>
               <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl p-1 self-start">
                 <button onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-green-600 text-white' : 'text-gray-400 hover:text-gray-600'}`}
-                  aria-label="Grille"><Grid3X3 size={16} /></button>
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-green-600 text-white' : 'text-gray-400 hover:text-gray-600'}`}>
+                  <Grid3X3 size={16} />
+                </button>
                 <button onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-green-600 text-white' : 'text-gray-400 hover:text-gray-600'}`}
-                  aria-label="Liste"><List size={16} /></button>
+                  className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-green-600 text-white' : 'text-gray-400 hover:text-gray-600'}`}>
+                  <List size={16} />
+                </button>
               </div>
             </div>
 
@@ -575,7 +610,6 @@ const BoutiqueDetail = () => {
         {activeTab === 'about' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
-
               {/* bio */}
               <div className="bg-white border border-gray-100 rounded-2xl p-6">
                 <h3 className="font-bold text-gray-900 text-base mb-3 flex items-center gap-2">
@@ -618,10 +652,9 @@ const BoutiqueDetail = () => {
               </div>
             </div>
 
-            {/* right sidebar */}
+            {/* sidebar */}
             <div className="space-y-5">
-
-              {/* ── Static trust stats ── */}
+              {/* trust stats */}
               <div className="bg-white border border-gray-100 rounded-2xl p-5">
                 <h3 className="font-bold text-gray-900 text-sm mb-4">Pourquoi nous faire confiance ?</h3>
                 <div className="space-y-4">
@@ -652,7 +685,7 @@ const BoutiqueDetail = () => {
                 </div>
               </div>
 
-              {/* CTA buttons → open modals */}
+              {/* CTA buttons */}
               <button
                 onClick={() => setShowMessage(true)}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm py-4 rounded-2xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2"
