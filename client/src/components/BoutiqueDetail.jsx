@@ -502,9 +502,9 @@ const BoutiqueDetail = () => {
           <div className="grid grid-cols-4 divide-x divide-gray-100">
             {[
               { icon: <Package    size={16} />, value: shopProducts.length || '—', label: 'Produits' },
-              { icon: <TrendingUp size={16} />, value: '—', label: 'Ventes'   },
-              { icon: <Users      size={16} />, value: '—', label: 'Abonnés'  },
-              { icon: <Clock      size={16} />, value: '—', label: 'Réponse'  },
+              { icon: <TrendingUp size={16} />, value: '', label: 'Ventes'   },
+              { icon: <Users      size={16} />, value: '', label: 'Abonnés'  },
+              { icon: <Clock      size={16} />, value: '', label: 'Réponse'  },
             ].map(s => (
               <div key={s.label} className="py-5 px-4 flex flex-col items-center text-center">
                 <div className="text-green-600 mb-1">{s.icon}</div>
