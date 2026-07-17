@@ -129,7 +129,7 @@ router.post('/forgot-password', async (req, res) => {
         <body>
           <div class="container">
             <div class="header">
-              <h1>🚌 BusBook</h1>
+              <h1> YamoMarket</h1>
               <p>Password Reset Request</p>
             </div>
 
@@ -156,13 +156,13 @@ router.post('/forgot-password', async (req, res) => {
             </div>
 
             <div class="footer">
-              <p>© 2024 BusBook. All rights reserved.</p>
+              <p>© 2026 YamoMarket. All rights reserved.</p>
               <p>
-                <a href="${process.env.FRONTEND_URL}" class="footer-link">Visit BusBook</a> | 
-                <a href="${process.env.FRONTEND_URL}/contact" class="footer-link">Contact Support</a>
+                <a href="${process.env.FRONTEND_URL}" class="footer-link">Visit YamoMarket</a> | 
+                <a href="${process.env.FRONTEND_URL}/about" class="footer-link">Contact Support</a>
               </p>
               <p style="margin-top: 15px; color: #999;">
-                You received this email because this address is registered with BusBook
+                You received this email because this address is registered with YamoMarket
               </p>
             </div>
           </div>
@@ -172,9 +172,9 @@ router.post('/forgot-password', async (req, res) => {
 
     // Send email
     await transporter.sendMail({
-      from: `"BusBook" <${process.env.EMAIL_USER}>`,
+      from: `"YamoMarket" <${process.env.EMAIL_USER}>`,
       to: user.email,
-      subject: '🔐 Reset Your BusBook Password',
+      subject: '🔐 Reset Your YamoMarket Password',
       html: emailHTML,
       replyTo: process.env.SUPPORT_EMAIL || process.env.EMAIL_USER,
       headers: {
@@ -313,7 +313,7 @@ router.post('/reset-password', async (req, res) => {
             <div class="content">
               <p>Your password has been successfully reset. You can now log in with your new password.</p>
               <p style="margin-top: 20px;">
-                <a href="${process.env.FRONTEND_URL}/login" style="background: linear-gradient(135deg, #2563eb 0%, #a855f7 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">
+                <a href="${process.env.FRONTEND_URL}" style="background: linear-gradient(135deg, #2563eb 0%, #a855f7 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">
                   Go to Login
                 </a>
               </p>
@@ -328,7 +328,7 @@ router.post('/reset-password', async (req, res) => {
 
     // Send confirmation email asynchronously (don't wait for it)
     transporter.sendMail({
-      from: `"BusBook" <${process.env.EMAIL_USER}>`,
+      from: `"YamoMarket" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: '✓ Your Password Has Been Reset',
       html: confirmationHTML
