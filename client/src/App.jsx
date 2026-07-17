@@ -18,6 +18,8 @@ import ProductsPage from './components/ProductsPage';
 import AdsPage from './components/AdsPage';
 import ClientLayout from './components/ClientLayout';
 import TermsAndCondition from './components/TermsAndConditions';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 function AppRoutes() {
 
@@ -33,6 +35,8 @@ function AppRoutes() {
       <Route path="/product/:slug" element={<ClientLayout><ProductDetail /></ClientLayout>} />
       <Route path="/boutique/:slug" element={<ClientLayout><BoutiqueDetail /></ClientLayout>} />
       <Route path="/banner" element={<ClientLayout><AdsPage /></ClientLayout>} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route element={<UserRoute />}>
         <Route path="/user" element={<ClientLayout><UserProfile /></ClientLayout>} />
         <Route path="/my-shop/:shop_id" element={<ClientLayout><MyShopPage /></ClientLayout>} />
