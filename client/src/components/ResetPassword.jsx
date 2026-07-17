@@ -116,7 +116,7 @@ const ResetPassword = () => {
       });
 
       setTimeout(() => {
-        navigate('/login');
+        navigate('/');
       }, 3000);
     } catch (error) {
       console.error('Error:', error);
