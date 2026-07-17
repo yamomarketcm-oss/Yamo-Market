@@ -87,7 +87,9 @@ const LoginModal = ({ onClose, onSwitchToRegister }) => {
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Mot de passe</label>
-                  <button className="text-xs text-green-600 hover:underline font-medium">Mot de passe oublié ?</button>
+                  <Link to='/forgot-password'>
+                    <button className="text-xs text-green-600 hover:underline font-medium">Mot de passe oublié ?</button>
+                  </Link>
                 </div>
                 <div className="relative">
                   <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
