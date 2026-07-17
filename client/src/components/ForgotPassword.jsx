@@ -169,7 +169,7 @@ const ForgotPassword = () => {
                 </ul>
               </div>
               <button
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/')}
                 className="w-full py-3 px-4 bg-gradient-to-r from-green-300 to-green-600 text-white font-semibold rounded-xl hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
                 Back to Login
