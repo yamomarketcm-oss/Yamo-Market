@@ -25,7 +25,7 @@ const ResetPassword = () => {
 
   const validateToken = async () => {
     try {
-      const response = await fetch(`http://yamo-market-server.vercel.app/api/market/validate-reset-token/${token}`, {
+      const response = await fetch(`https://yamo-market-server.vercel.app/api/market/validate-reset-token/${token}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -92,7 +92,7 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://yamo-market-server.vercel.app/api/market/reset-password', {
+      const response = await fetch('https://yamo-market-server.vercel.app/api/market/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
