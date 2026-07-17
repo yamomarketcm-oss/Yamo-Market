@@ -80,13 +80,13 @@ router.post('/forgot-password', async (req, res) => {
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; background: #f9fafb; padding: 20px; border-radius: 8px; }
-            .header { background: linear-gradient(135deg, #2563eb 0%, #a855f7 100%); color: white; padding: 30px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
+            .header { background: linear-gradient(135deg, #10b981 0%, #22c55e 100%)); color: white; padding: 30px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
             .header h1 { margin: 0; font-size: 28px; }
             .content { background: white; padding: 30px; border-radius: 8px; margin-bottom: 20px; }
             .content p { margin: 15px 0; }
             .button-container { text-align: center; margin: 30px 0; }
             .reset-button { 
-              background: linear-gradient(135deg, #2563eb 0%, #a855f7 100%);
+              background: linear-gradient(135deg, #059669 0%, #16a34a 100%);
               color: white;
               padding: 14px 40px;
               text-decoration: none;
@@ -123,7 +123,7 @@ router.post('/forgot-password', async (req, res) => {
               color: #666;
               border-radius: 8px;
             }
-            .footer-link { color: #2563eb; text-decoration: none; }
+            .footer-link { color: #84cc16; text-decoration: none; }
           </style>
         </head>
         <body>
@@ -313,7 +313,7 @@ router.post('/reset-password', async (req, res) => {
             <div class="content">
               <p>Your password has been successfully reset. You can now log in with your new password.</p>
               <p style="margin-top: 20px;">
-                <a href="${process.env.FRONTEND_URL}" style="background: linear-gradient(135deg, #2563eb 0%, #a855f7 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">
+                <a href="${process.env.FRONTEND_URL}" style="background: linear-gradient(135deg, #10b981 0%, #22c55e 100%); color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">
                   Go to Login
                 </a>
               </p>
