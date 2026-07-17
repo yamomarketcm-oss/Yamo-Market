@@ -20,7 +20,7 @@ const ForgotPassword = () => {
         throw new Error('Please enter a valid email address');
       }
 
-      const response = await fetch('http://yamo-market-server.vercel.app/api/market/forgot-password', {
+      const response = await fetch('https://yamo-market-server.vercel.app/api/market/forgot-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
