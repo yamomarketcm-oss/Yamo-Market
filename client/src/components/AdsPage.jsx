@@ -124,7 +124,7 @@ const HeroCarousel = ({ ads }) => {
       {/* arrows */}
       <button onClick={() => go(idx - 1)}
         className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-7 h-7 sm:w-9 sm:h-9 bg-black/25 hover:bg-black/40 backdrop-blur-sm rounded-xl flex items-center justify-center text-white transition-all z-20"
-        aria-label="PrÃ©cÃ©dent">
+        aria-label="Precedent">
         <ChevronLeft size={16} className="sm:hidden" />
         <ChevronLeft size={18} className="hidden sm:block" />
       </button>
@@ -175,7 +175,7 @@ const MediumBanner = ({ ad, Click }) => (
         <p className="text-white font-extrabold text-lg leading-tight">{ad?.title}</p>
         <div className="flex gap-3">
           <span className='flex items-center justify-center gap-0.5'><p className="text-lg sm:text-2xl font-black text-white leading-none mt-0.5">{ad?.price}</p><p className='text-lg sm:text-2xl font-black text-white'>XAF</p></span>
-          <span className="sm:mt-2.5 mt-1 text-white/60 text-sm font-semibold ">{ad?.shop_name} â€¢ {ad?.town}</span>
+          <span className="sm:mt-2.5 mt-1 text-white/60 text-sm font-semibold ">{ad?.shop_name} . {ad?.town}</span>
         </div>
       </div>
     </div>
