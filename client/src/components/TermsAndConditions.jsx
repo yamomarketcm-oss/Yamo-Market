@@ -316,34 +316,6 @@ export default function TermsAndConditions() {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      {/* ── Sticky Header ── */}
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-green-600 to-emerald-700 flex items-center justify-center">
-              <Zap size={15} className="text-white" />
-            </div>
-            <span className="font-black text-gray-900 text-lg tracking-tight">Yamo</span>
-            <span className="text-xs font-bold text-green-600 tracking-widest uppercase">Market</span>
-          </div>
-
-          {/* Pill badge */}
-          <div className="hidden sm:flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-4 py-1.5">
-            <Scale size={12} className="text-green-600" />
-            <span className="text-xs font-semibold text-green-700">Conditions d'utilisation</span>
-          </div>
-
-          {/* Mobile menu toggle */}
-          <button
-            onClick={() => setMenuOpen(v => !v)}
-            className="md:hidden flex items-center gap-1.5 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-xl transition-colors"
-          >
-            {menuOpen ? "Fermer" : "Sections"}
-          </button>
-        </div>
-      </header>
-
       {/* ── Hero ── */}
       <div className="relative bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 overflow-hidden">
         <div className="absolute -top-32 -right-32 w-96 h-96 bg-white/5 rounded-full" />
