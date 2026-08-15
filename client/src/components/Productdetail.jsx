@@ -17,6 +17,23 @@ const REVIEWS_DATA = [
   { name: 'Rodrigue K.', rating: 5, date: 'il y a 2 semaines', text: 'Le meilleur smartphone que j\'ai eu. La caméra est incroyable.' },
 ];
 
+/* ─── WhatsApp helper (same pattern as BoutiqueDetail) ───────────────── */
+const buildWhatsAppURL = (rawPhone, shopName) => {
+  const clean = (rawPhone || '').replace(/[\s\-().+]/g, '');
+  const e164  = clean.startsWith('237') ? clean : `237${clean}`;
+  const greeting = `Bonjour ${shopName || 'la boutique'} ! 👋\nJe vous contacte depuis *Yamo Market*.\nJe suis intéressé(e) par votre produit.`;
+  return `https://wa.me/${e164}?text=${encodeURIComponent(greeting)}`;
+};
+
+const copyToClipboard = async (text) => {
+  try { await navigator.clipboard.writeText(text); }
+  catch {
+    const el = document.createElement('textarea');
+    el.value = text; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+  }
+};
+
 /* ─── StarRow ─────────────────────────────────────── */
 const StarRow = ({ rating, size = 14, showNum = false }) => (
   <div className="flex items-center gap-0.5">
@@ -38,34 +55,23 @@ const RatingBar = ({ label, pct }) => (
   </div>
 );
 
+/* ═══════════════════════════════════════════════════
+   CONTACT MODAL — reformed to be WhatsApp-first,
+   minimal info, matching BoutiqueDetail's MessageModal
+═══════════════════════════════════════════════════ */
 const ContactModal = ({ product, onClose }) => {
-  const [copied, setCopied] = useState(null); // 'phone' | 'email'
- 
-  const phone   = product?.phone    || product?.b_phone    || product?.shop_phone || null;
-  const email   = product?.b_email  || product?.shop_email || product?.email      || null;
-  const address = product?.address  || product?.b_address  || null;
-  const region  = product?.region   || null;
-  const town    = product?.town     || null;
-  const shopName = product?.shop_name || 'le vendeur';
- 
-  const copyToClipboard = async (text, type) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(type);
-      setTimeout(() => setCopied(null), 2000);
-    } catch {
-      // fallback for older browsers
-      const el = document.createElement('textarea');
-      el.value = text;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-      setCopied(type);
-      setTimeout(() => setCopied(null), 2000);
-    }
+  const [copied, setCopied] = useState(false);
+
+  const phone    = product?.phone   || product?.b_phone   || product?.shop_phone || null;
+  const shopName = product?.shop_name || 'la boutique';
+  const hasWA    = !!phone;
+
+  const handleCopy = async () => {
+    await copyToClipboard(phone);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
- 
+
   return (
     <>
       {/* Backdrop */}
@@ -73,22 +79,24 @@ const ContactModal = ({ product, onClose }) => {
         onClick={onClose}
         className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm"
       />
- 
+
       {/* Panel */}
       <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 pointer-events-none">
         <div className="pointer-events-auto w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden">
           {/* top accent */}
           <div className="h-1.5 w-full bg-gradient-to-r from-green-500 via-emerald-400 to-green-600" />
- 
+
           <div className="p-6">
             {/* header */}
             <div className="flex items-start justify-between mb-5">
               <div className="flex-1 min-w-0 pr-3">
-                <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center text-2xl mb-3">🏪</div>
+                <div className="w-11 h-11 rounded-2xl bg-green-100 flex items-center justify-center mb-3">
+                  <MessageCircle size={20} className="text-green-700" />
+                </div>
                 <h2 className="text-lg font-extrabold text-gray-900">Contacter le vendeur</h2>
- 
+
                 {/* shop name + location pill */}
-                <div className="mt-2.5 w-80 inline-flex items-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl px-3.5 py-2.5 shadow-md shadow-green-200/60 max-w-full">
+                <div className="mt-2.5 inline-flex items-center gap-2.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl px-3.5 py-2.5 shadow-md shadow-green-200/60 max-w-full">
                   <div className="w-7 h-7 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center flex-shrink-0 text-sm">
                     🏪
                   </div>
@@ -109,75 +117,54 @@ const ContactModal = ({ product, onClose }) => {
                 <X size={16} className="text-gray-500" />
               </button>
             </div>
- 
-            {/* contact info rows */}
-            <div className="bg-gray-50 border border-gray-100 rounded-2xl overflow-hidden divide-y divide-gray-100">
- 
-              {/* Phone */}
-              <div className="flex items-center gap-3 px-4 py-3.5">
-                <div className="w-8 h-8 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <Phone size={14} className="text-green-700" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Téléphone</p>
-                  <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">
-                    {phone || <span className="text-gray-400 font-normal italic">Non disponible</span>}
-                  </p>
-                </div>
-                {phone && (
+
+            {/* body */}
+            <div className="space-y-3">
+              {hasWA ? (
+                <>
+                  {/* PRIMARY CTA — WhatsApp */}
                   <button
-                    onClick={() => copyToClipboard(phone, 'phone')}
-                    className="w-8 h-8 rounded-lg bg-white border border-gray-200 hover:border-green-400 flex items-center justify-center transition-all flex-shrink-0"
-                    aria-label="Copier le numéro"
+                    onClick={() => window.open(buildWhatsAppURL(phone, shopName), '_blank')}
+                    className="w-full flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe5d] active:scale-[0.98] text-white font-bold text-sm px-5 py-4 rounded-2xl transition-all shadow-lg shadow-green-300/40 group"
                   >
-                    {copied === 'phone'
-                      ? <CheckCircle2 size={13} className="text-green-600" />
-                      : <Copy size={12} className="text-gray-400" />}
+                    <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white flex-shrink-0" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    <div className="flex-1 text-left">
+                      <p className="font-extrabold text-base leading-none">Ouvrir WhatsApp</p>
+                      <p className="text-[11px] text-white/80 mt-0.5 font-normal">Message pré-rempli · réponse rapide</p>
+                    </div>
+                    <ChevronRight size={16} className="flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
                   </button>
-                )}
-              </div>
- 
-              {/* Region */}
-              <div className="flex items-center gap-3 px-4 py-3.5">
-                <div className="w-8 h-8 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                  <MapPin size={14} className="text-emerald-700" />
+
+                  {/* phone number — secondary copy row */}
+                  <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-xl px-3.5 py-2.5">
+                    <Phone size={13} className="text-gray-400 flex-shrink-0" />
+                    <p className="flex-1 text-sm font-bold text-gray-700 truncate">{phone}</p>
+                    <button
+                      onClick={handleCopy}
+                      className={`flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg flex-shrink-0 transition-all
+                        ${copied ? 'bg-green-600 text-white' : 'bg-white border border-gray-200 hover:border-green-300 text-gray-500'}`}
+                    >
+                      {copied
+                        ? <><CheckCircle2 size={11} /> Copié</>
+                        : <><Copy size={11} /> Copier</>}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+                    <Phone size={14} className="text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-amber-800">WhatsApp non renseigné</p>
+                    <p className="text-xs text-amber-600 mt-0.5">Cette boutique n'a pas encore renseigné de numéro.</p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Région</p>
-                  <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">
-                    {region || <span className="text-gray-400 font-normal italic">Non disponible</span>}
-                  </p>
-                </div>
-              </div>
- 
-              {/* Town */}
-              <div className="flex items-center gap-3 px-4 py-3.5">
-                <div className="w-8 h-8 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                  <MapPin size={14} className="text-emerald-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Ville</p>
-                  <p className="text-sm font-bold text-gray-900 mt-0.5 truncate">
-                    {town || <span className="text-gray-400 font-normal italic">Non disponible</span>}
-                  </p>
-                </div>
-              </div>
- 
-              {/* Address */}
-              <div className="flex items-start gap-3 px-4 py-3.5">
-                <div className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Store size={14} className="text-orange-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Adresse</p>
-                  <p className="text-sm font-bold text-gray-900 mt-0.5 leading-snug">
-                    {address || <span className="text-gray-400 font-normal italic">Non disponible</span>}
-                  </p>
-                </div>
-              </div>
- 
+              )}
             </div>
- 
+
             {/* footer note */}
             <p className="text-center text-[10px] text-gray-400 mt-5 leading-relaxed">
               YamoMarket ne garantit pas les échanges hors plateforme. Restez vigilant.
@@ -189,14 +176,14 @@ const ContactModal = ({ product, onClose }) => {
   );
 };
 
-/* ─── Share Modal ─────────────────────────────────── */
+/* ─── Share Modal (unchanged) ─────────────────────── */
 const ShareModal = ({ product, onClose }) => {
   const [copied, setCopied] = useState(false);
- 
+
   const url   = window.location.href;
   const title = product?.product_name || 'Produit sur YamoMarket';
   const text  = `Découvrez "${title}" sur YamoMarket — ${url}`;
- 
+
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(url);
@@ -211,7 +198,7 @@ const ShareModal = ({ product, onClose }) => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
- 
+
   const nativeShare = async () => {
     if (navigator.share) {
       try {
@@ -219,7 +206,7 @@ const ShareModal = ({ product, onClose }) => {
       } catch { /* user cancelled */ }
     }
   };
- 
+
   const CHANNELS = [
     {
       label: 'WhatsApp',
@@ -262,14 +249,14 @@ const ShareModal = ({ product, onClose }) => {
       href: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
     },
   ];
- 
+
   return (
     <>
       <div onClick={onClose} className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm" />
       <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 pointer-events-none">
         <div className="pointer-events-auto w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden">
           <div className="h-1.5 w-full bg-gradient-to-r from-green-500 via-emerald-400 to-green-600" />
- 
+
           <div className="p-6">
             {/* header */}
             <div className="flex items-start justify-between mb-5">
@@ -286,7 +273,7 @@ const ShareModal = ({ product, onClose }) => {
                 <X size={16} className="text-gray-500" />
               </button>
             </div>
- 
+
             {/* social channels */}
             <div className="grid grid-cols-2 gap-2.5 mb-4">
               {CHANNELS.map(ch => (
@@ -302,7 +289,7 @@ const ShareModal = ({ product, onClose }) => {
                 </a>
               ))}
             </div>
- 
+
             {/* copy link row */}
             <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-2xl px-3 py-2.5">
               <div className="flex-1 min-w-0">
@@ -319,7 +306,7 @@ const ShareModal = ({ product, onClose }) => {
                 {copied ? <><CheckCircle2 size={13} /> Copié !</> : <><Copy size={13} /> Copier</>}
               </button>
             </div>
- 
+
             {/* native share if supported */}
             {navigator.share && (
               <button
@@ -719,7 +706,7 @@ const ProductDetail = () => {
             </div>
           )}
         </div>
-        
+
       </div>
       {/* ── Contact Modal ── */}
       {showContact && (
