@@ -628,7 +628,7 @@ const ProductDetail = () => {
 
             {/* Shop card */}
             <Link to={`/boutique/${shop?.shop_slug}`} onClick={() => handleClick(product)} >
-            <div className="bg-white border border-gray-100 rounded-2xl p-4 flex items-center gap-4 hover:border-green-200 transition-colors cursor-pointer group">
+            <div className="bg-white border border-gray-100 rounded-2xl mt-3 p-4 flex items-center gap-4 hover:border-green-200 transition-colors cursor-pointer group">
               <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-2xl flex-shrink-0">🏪</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
