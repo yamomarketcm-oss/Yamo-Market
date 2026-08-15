@@ -611,7 +611,7 @@ const ProductDetail = () => {
             </div>
 
             {/* CTA buttons */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 mb-3">
               <button
                 onClick={() => setShowContact(true)}
                 className="flex-1 bg-green-600 hover:bg-green-700 active:scale-[0.98] text-white font-bold text-sm py-4 rounded-2xl transition-all shadow-lg shadow-green-200 flex items-center justify-center gap-2">
